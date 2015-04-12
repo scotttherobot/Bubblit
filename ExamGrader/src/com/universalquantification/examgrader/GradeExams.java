@@ -371,7 +371,7 @@ public class GradeExams
         ArrayList<Question> answerKey = key.getAnswers();
         int onExam = 1;
 
-        // grade every exam
+        // grade every exam according to the key.
         for (Exam exam : exams)
         {
             System.out.println();
