@@ -16,7 +16,9 @@ public class Exam
 {
 
     private HashMap<Integer, Question> qMap;
-
+    private String studentName;
+    private int studentID;
+    
     /**
      * Create a new exam with given questions
      *
