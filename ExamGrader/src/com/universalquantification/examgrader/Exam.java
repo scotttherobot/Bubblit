@@ -7,6 +7,7 @@ package com.universalquantification.examgrader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * Describes an exam with a list of questions.
@@ -62,7 +63,26 @@ public class Exam
             }
         }
     }
+    
+    public int rawScore() {
+        int raw = 0;
+        
+        for (Entry<Integer,Question> e : this.qMap.entrySet()) {
+            Integer num = e.getKey();
+            Question q = e.getValue();
+            
+            if (q.isCorrect()) {
+                raw++;
+            }
+        }
+        
+        return raw;
+    }
 
+    public double percentCorrect() {
+        return ((double)this.rawScore() / 100.0) * 100;
+    }
+    
     /**
      * Get the list of questions for this exam.
      *

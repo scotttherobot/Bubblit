@@ -367,14 +367,29 @@ public class GradeExams
         }
 
         ArrayList<Question> answerKey = key.getAnswers();
-        int onExam = 1;
-
+        int onExam = 0;
+        
+        // Set up a CSV writer
+        CSVWriter w = new CSVWriter("results.csv");
+        String[] cols = {"exam", "raw score", "percent"};
+        w.setColumns(cols);
+        
         // grade every exam according to the key.
         for (Exam exam : exams) {
             System.out.println();
-            System.out.println("Results for Exam" + onExam++);
+            System.out.println("Results for Exam" + ++onExam);
             System.out.println("Question #\tAnswer\tScore");
             exam.grade(answerKey);
+            
+            // CSV score reporting
+            Integer raw = exam.rawScore();
+            Double percent = exam.percentCorrect();
+            String name = "Exam " + onExam;
+            System.out.println("\traw:" + raw.toString() + "\tpercent:" + percent.toString());
+
+            String[] result = {name, raw.toString(), percent.toString()};
+            w.addLine(result);
+            
             ArrayList<Question> answers = exam.getAnswers();
             Collections.sort(answers);
 
@@ -387,6 +402,8 @@ public class GradeExams
                 System.out.println(question.isCorrect() ? "Correct" : "Wrong");
             }
         }
+        // Write the CSV file
+        w.writeFile();
     }
 
 }
