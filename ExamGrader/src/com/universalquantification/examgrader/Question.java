@@ -5,6 +5,9 @@
  */
 package com.universalquantification.examgrader;
 
+import java.util.HashSet;
+
+
 /**
  * Describes a single question on an exam.
  *
@@ -12,7 +15,7 @@ package com.universalquantification.examgrader;
 public class Question implements Comparable<Question>
 {
     private int qNum;
-    private String choice;
+    private HashSet<String> choices;
     private boolean correct;
 
     /**
@@ -37,18 +40,18 @@ public class Question implements Comparable<Question>
      * Get the choice (a,b,c,d) for the question
      * @return choice
      */
-    public String getChoice()
+    public HashSet getChoices()
     {
-        return choice;
+        return choices;
     }
 
     /**
      * Set the choice for the question
      * @param choice letter to set
      */
-    public void setChoice(String choice)
+    public void addChoice(String choice)
     {
-        this.choice = choice;
+        this.choices.add(choice);
     }
 
     /**
@@ -80,4 +83,8 @@ public class Question implements Comparable<Question>
         return this.qNum - question.qNum;
     }
     
+    public Question()
+    {
+        this.choices = new HashSet<String>();
+    }
 }

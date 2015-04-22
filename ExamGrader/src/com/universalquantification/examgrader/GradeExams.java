@@ -41,7 +41,7 @@ import java.util.List;
  *
  * @author luis
  */
-public class GradeExams
+public class GradeExams 
 {
 
     /**
@@ -50,7 +50,7 @@ public class GradeExams
      * @param page a PDFPage
      * @return a BufferedImage
      */
-    public static BufferedImage createImage(PDFPage page)
+    public static BufferedImage createImage(PDFPage page) 
     {
         // Size of the image to process. Smaller means faster, but less precise.
         int width = 1000;
@@ -73,13 +73,14 @@ public class GradeExams
 
     /**
      * Get the bounds in which an exam appears in an image
+     *
      * @param image Image of the exam to grade
      * @param leftAnchor Image of the left anchor
      * @param rightAnchor Image of the right anchor
      * @return a bounds object with the bounds
      */
     private static Bounds getFormHorizontalBounds(ImageFloat32 image,
-            ImageFloat32 leftAnchor, ImageFloat32 rightAnchor)
+            ImageFloat32 leftAnchor, ImageFloat32 rightAnchor) 
     {
         ImagePoint leftAnchorLoc = getTemplateLocation(image, leftAnchor, 1);
         ImagePoint rightAnchorLoc
@@ -95,13 +96,14 @@ public class GradeExams
 
     /**
      * Get the bounds in which an exam appears in an image
+     *
      * @param image Image of the exam to grade
      * @param leftAnchor Image of the left anchor
      * @param rightAnchor Image of the right anchor
      * @return a bounds object with the bounds
      */
     private static Bounds getFormHorizontalBounds(BufferedImage image,
-            BufferedImage leftAnchor, BufferedImage rightAnchor)
+            BufferedImage leftAnchor, BufferedImage rightAnchor) 
     {
         // convert to usable format
         ImageFloat32 src = new ImageFloat32(image.getWidth(), image.getHeight());
@@ -119,14 +121,15 @@ public class GradeExams
 
     /**
      * Get the location of an anchor in an image
+     *
      * @param image the exam to scan
      * @param template the anchor to scan for
-     * @param expectedMatches the number of expected matches in the image 
-     * @return 
+     * @param expectedMatches the number of expected matches in the image
+     * @return
      */
     private static ImagePoint getTemplateLocation(ImageFloat32 image,
             ImageFloat32 template,
-            int expectedMatches)
+            int expectedMatches) 
     {
 
         // initiate the template matcher
@@ -152,10 +155,11 @@ public class GradeExams
 
     /**
      * Get a black-and-white version of an image
+     *
      * @param image input image
      * @return the resulting black-and-white image
      */
-    private static BufferedImage getBinaryImage(BufferedImage image)
+    private static BufferedImage getBinaryImage(BufferedImage image) 
     {
         // convert into a usable format
         ImageFloat32 input = ConvertBufferedImage.convertFromSingle(image, null,
@@ -180,23 +184,24 @@ public class GradeExams
 
     /**
      * Get filled-in questions for an exam
+     *
      * @param img the image of the exam
      * @param bounds the bounds in which the exam appears in the image
      * @return a list of questions.
      */
     private static ArrayList<Question> getQuestions(BufferedImage img,
-            Bounds bounds)
+            Bounds bounds) 
     {
         ArrayList<Question> questions = new ArrayList<Question>();
-        String[] letters =
-        {
-            "A", "B", "C", "D", "E"
-        };
+        String[] letters
+                = {
+                    "A", "B", "C", "D", "E"
+                };
 
         int numRows = 25;
         int numColumns = 24;
         float cellWidth = (bounds.getMaxX() - bounds.getMinX()) / (float) numColumns;
-        bounds.setMinY(bounds.getMinY() + (int)cellWidth);
+        bounds.setMinY(bounds.getMinY() + (int) cellWidth);
 
         // color that is definitely blank
         int black = img.getRGB(3, 3);
@@ -209,10 +214,10 @@ public class GradeExams
         //g.drawLine(bounds.min_x, 50, bounds.min_x, 150);
         //g.drawLine(20, bounds.min_y, 250, bounds.min_y);
         // go through every cell and determine if it has a bubble in it.
-        for (int onColumn = 0; onColumn < numColumns; onColumn++)
+        for (int onColumn = 0; onColumn < numColumns; onColumn++) 
         {
             // go through every row
-            for (int onRow = 0; onRow < numRows; onRow++)
+            for (int onRow = 0; onRow < numRows; onRow++) 
             {
                 int x0 = (int) (bounds.getMinX() + onColumn * cellWidth);
                 int x1 = x0 + (int) cellWidth;
@@ -228,13 +233,12 @@ public class GradeExams
                 //g.drawLine(x1, y0, x1, y1);
                 //g.drawLine(x1, y1, x0, y1);
                 //g.drawLine(x0, y1, x0, y0);   
-                
                 double numBlacks = 0;
                 // count the number of black pixels in the image
-                for (int color : colors)
+                for (int color : colors) 
                 {
                     // is the color black
-                    if (color == black)
+                    if (color == black) 
                     {
                         numBlacks++;
                     }
@@ -242,7 +246,7 @@ public class GradeExams
 
                 // if the number of black pixels is over a threshold, then it
                 // is filled in.
-                if (numBlacks / (cellWidth * cellWidth) < .80)
+                if (numBlacks / (cellWidth * cellWidth) < .80) 
                 {
                     int colNum = onColumn + 1;
                     int rowNum = onRow + 1;
@@ -251,28 +255,22 @@ public class GradeExams
                     int choice = 0;
 
                     // first column of questions
-                    if (colNum >= 2 && colNum <= 6)
+                    if (colNum >= 2 && colNum <= 6) 
                     {
                         startQ = 0;
                         choice = colNum - 2;
-                    }
-
-                    // second column of questions
-                    else if (colNum >= 8 && colNum <= 12)
+                    } // second column of questions
+                    else if (colNum >= 8 && colNum <= 12) 
                     {
                         startQ = 25;
                         choice = colNum - 8;
-                    }
-
-                    // third column of questions
-                    else if (colNum >= 14 && colNum <= 18)
+                    } // third column of questions
+                    else if (colNum >= 14 && colNum <= 18) 
                     {
                         startQ = 50;
                         choice = colNum - 14;
-                    }
-
-                    // fourth column of questions
-                    else if (colNum >= 20 && colNum <= 24)
+                    } // fourth column of questions
+                    else if (colNum >= 20 && colNum <= 24) 
                     {
                         startQ = 75;
                         choice = colNum - 20;
@@ -281,7 +279,7 @@ public class GradeExams
                     // create the question
                     Question question = new Question();
                     question.setqNum(startQ + rowNum);
-                    question.setChoice(letters[choice]);
+                    question.addChoice(letters[choice]);
                     questions.add(question);
 
                 }
@@ -299,13 +297,13 @@ public class GradeExams
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static void main(String[] args) throws  IOException
+    public static void main(String[] args) throws IOException 
     {
         File pdfFile = new File("Exams.pdf");
         RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");
         FileChannel channel = raf.getChannel();
         MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
-            channel.size());
+                channel.size());
         PDFFile pdf = new PDFFile(buf);
         PDFPage firstPage = pdf.getPage(0);
 
@@ -334,7 +332,7 @@ public class GradeExams
         Exam key = null;
 
         // go through every page and grade it
-        for (int onPage = 1; onPage < pdf.getNumPages() + 1; onPage++)
+        for (int onPage = 1; onPage < pdf.getNumPages() + 1; onPage++) 
         {
             PDFPage page = pdf.getPage(onPage);
             BufferedImage pageImage = createImage(page);
@@ -349,7 +347,7 @@ public class GradeExams
                     bounds);
 
             // if this is the first exam, set it as the key.
-            if (onPage == 1)
+            if (onPage == 1) 
             {
                 key = new Exam(questions);
                 System.out.println("Answer Key");
@@ -358,11 +356,11 @@ public class GradeExams
                 // print out every question
                 for (Question question : questions)
                 {
-                    System.out.println(question.getqNum() + "\t\t" 
-                        + question.getChoice());
+                    System.out.println(question.getqNum() + "\t\t"
+                            + question.getChoices());
                 }
-            }
-            else
+            } 
+            else 
             {
                 exams.add(new Exam(questions));
             }
@@ -372,8 +370,7 @@ public class GradeExams
         int onExam = 1;
 
         // grade every exam according to the key.
-        for (Exam exam : exams)
-        {
+        for (Exam exam : exams) {
             System.out.println();
             System.out.println("Results for Exam" + onExam++);
             System.out.println("Question #\tAnswer\tScore");
@@ -382,11 +379,11 @@ public class GradeExams
             Collections.sort(answers);
 
             // print all the answers and score.
-            for (Question question : answers)
+            for (Question question : answers) 
             {
                 System.out.print(question.getqNum() + "\t\t");
-                System.out.print(question.getChoice() == null ? "[blank]\t"
-                    : question.getChoice() + "\t");
+                System.out.print(question.getChoices().isEmpty() ? "[blank]\t"
+                        : question.getChoices() + "\t");
                 System.out.println(question.isCorrect() ? "Correct" : "Wrong");
             }
         }
