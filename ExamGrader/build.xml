@@ -12,7 +12,8 @@
     <import file="nbproject/build-impl.xml"/>
     
     <target name="-post-compile">
-        <copy file="left_anchor.jpg" todir="${dist.dir}"/>        
+        <copy file="donut_left_anchor.jpg" todir="${dist.dir}"/>
+        <copy file="donut_right_anchor.jpg" todir="${dist.dir}"/>        
         <copy file="Exams.pdf" todir="${dist.dir}"/>     
     </target>
     
