@@ -1,0 +1,104 @@
+/*
+ * CyleSheet
+ */
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('/Fonts/Comfortaa-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Constantine';
+    src: url('/Fonts/Constantine.ttf');
+}
+
+@font-face {
+    font-family: 'Constantia';
+    src: url('/Fonts/Constantine.ttf');
+}
+
+
+.main-pane {
+    -fx-background-color: #2480e8;
+    }
+    
+.left-pane {
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.16) , 6, 1, 0, 0);
+}
+
+.title {
+    -fx-background-image: url("../Resources/Title.PNG");
+}
+
+.divider {
+    -fx-background-image: url("../Resources/Divider-Black.PNG");
+    -fx-opacity: .26;
+}
+
+.add-pane {
+    -fx-background-image: url("../Resources/Dashed-Border.PNG");
+}
+
+.test-list {
+    -fx-background-color:transparent;
+    -fx-focus-color: transparent;
+    -fx-border-style: none;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0 0 50 50;
+    -fx-background-radius: 0 0 50 50;
+}
+
+.file-text {
+    -fx-background-image: url("../Resources/Files-Text.PNG");
+}
+
+.small-add-text {
+    -fx-background-image: url("../Resources/Add-Text.PNG");
+
+}
+.small-add-icon {
+    -fx-background-image: url("../Resources/Add-Sign-Small.PNG");
+}
+
+.action-grade-text {
+    -fx-background-image: url("../Resources/Button-Grade-Text.PNG");
+}
+
+.action-cancel-text {
+    -fx-background-image: url("../Resources/Button-Cancel-Text.PNG");
+}
+
+.action-button-foreground {
+    -fx-background-color: #2480e8;
+    -fx-background-radius: 36;
+}
+
+.action-button-background {
+    -fx-background-color: #000000;
+    -fx-background-radius: 36;
+    -fx-opacity: .22;
+}
+
+.pdf-text {
+    -fx-background-image: url("../Resources/PDF-Text.PNG");
+}
+
+.pages-text {
+    -fx-background-image: url("../Resources/Pages-Text.PNG");
+}
+
+#pdfNum {
+    -fx-font-family: "Constantia";
+    -fx-alignment: center;
+    -fx-font-size: 72;
+    -fx-text-fill: #a5a5a5;
+    -fx-font-smoothing-type: gray;
+}
+
+#pageNum {
+   -fx-font-family: "Constantia";
+   -fx-alignment: center;
+   -fx-font-size: 72;
+   -fx-text-fill: #a5a5a5;
+}
