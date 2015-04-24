@@ -83,6 +83,9 @@ public class Question implements Comparable<Question>
         return this.qNum - question.qNum;
     }
     
+    /**
+     * Constructor.
+     */
     public Question()
     {
         this.choices = new HashSet<String>();
