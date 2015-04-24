@@ -14,6 +14,7 @@ class Bounds
     private int minX;
     private int maxX;
     private int minY;
+    private int maxY;
 
     public int getMinX()
     {
@@ -44,5 +45,21 @@ class Bounds
     {
         this.minY = minY;
     }
-    
+    public int getMaxY()
+    {
+        return maxY;
+    }
+
+    public void setMaxY(int maxY)
+    {
+        this.maxY = maxY;
+    }
+    public String toString()
+    {
+        return "Bounds: [minX " + this.minX + "]"
+            + "[maxX " + this.maxX + "]"
+            + "[minY " + this.minY + "]"
+            + "[maxY " + this.maxY + "]";
+            
+    }
 }
