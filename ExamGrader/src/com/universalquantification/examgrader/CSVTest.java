@@ -5,6 +5,12 @@
  */
 package com.universalquantification.examgrader;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Tests the CSV Writer.
  *
@@ -42,7 +48,24 @@ public class CSVTest
         writer.addLine(l2);
 
         writer.writeFile();
+        
+        // Now, test the reader.
+        CSVReader reader;
+        try
+        {
+            reader = new CSVReader("testout.csv");
+            List<HashMap> rows = reader.getRows();
+        
+            for (HashMap record : rows)
+            {
+                System.out.println("----");
+                System.out.println(record.toString());
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(CSVTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
-
 }
