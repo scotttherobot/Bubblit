@@ -6,6 +6,7 @@
 package com.universalquantification.examgrader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -151,25 +152,33 @@ public class Exam
      *
      * @return string
      */
-    public String toString()
+    public String toString(boolean printCorrect)
     {
         String out = "";
-        out += "Exam for student ID " + this.studentID + "\n";
-        out += "Questions:\n";
 
         ArrayList<Question> questions = new ArrayList<Question>(
-            this.qMap.values());
+                this.qMap.values());
+        Collections.sort(questions);
+        out += "Exam for student ID " + this.studentID + "\n";
+        out += questions.size() + " Questions:\n";
 
         // list questions
         for (Question question : questions)
         {
             out += question.getqNum() + "\t\t";
             out += question.getChoices().isEmpty() ? "[blank]\t"
-                    : question.getChoices() + "\t";
-            out += question.isCorrect() ? "Correct" : "Wrong";
+                    : question.getChoices();
+            if (printCorrect)
+            {
+                out += "\t" + (question.isCorrect() ? "Correct" : "Wrong");
+            }
             out += "\n";
         }
         return out;
     }
 
+    public String toString()
+    {
+        return this.toString(false);
+    }
 }
