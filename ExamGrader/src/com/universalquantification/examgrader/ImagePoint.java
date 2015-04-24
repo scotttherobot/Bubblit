@@ -50,4 +50,9 @@ public class ImagePoint
         this.pY = py;
     }
     
+    public String toString()
+    {
+        return "point [x: " + this.pX + ",y: " + this.pY+ "] ";
+    }
+    
 }
