@@ -35,13 +35,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * Class to grade exams.
  *
  * @author luis
  */
-public class GradeExams 
+public class GradeExams
 {
 
     /**
@@ -50,11 +53,11 @@ public class GradeExams
      * @param page a PDFPage
      * @return a BufferedImage
      */
-    public static BufferedImage createImage(PDFPage page) 
+    public static BufferedImage createImageFromPDF(PDFPage page)
     {
         // Size of the image to process. Smaller means faster, but less precise.
-        int width = 1000;
-        int height = 1294;
+        int width = 1003;
+        int height = 1298;
 
         // create the bounding rectangle and get the image
         Rectangle rect = new Rectangle(0, 0, (int) page.getBBox().getWidth(),
@@ -65,6 +68,7 @@ public class GradeExams
         Image image = page.getImage(width, height, rect, null, true, true);
         Graphics2D bufImageGraphics = bufferedImage.createGraphics();
         bufImageGraphics.drawImage(image, 0, 0, null);
+        bufImageGraphics.dispose();
 
         // display the image from the pdf to the screen
         //ShowImages.showWindow(bufferedImage, "PDF");
@@ -79,17 +83,17 @@ public class GradeExams
      * @param rightAnchor Image of the right anchor
      * @return a bounds object with the bounds
      */
-    private static Bounds getFormHorizontalBounds(ImageFloat32 image,
-            ImageFloat32 leftAnchor, ImageFloat32 rightAnchor) 
+    private static Bounds getFormBounds(ImageFloat32 image,
+            ImageFloat32 leftAnchor, ImageFloat32 rightAnchor)
     {
         ImagePoint leftAnchorLoc = getTemplateLocation(image, leftAnchor, 1);
-        ImagePoint rightAnchorLoc
-            = getTemplateLocation(image, rightAnchor, 1);
+        ImagePoint rightAnchorLoc = getTemplateLocation(image, rightAnchor, 1);
 
         Bounds bounds = new Bounds();
         bounds.setMinX(leftAnchorLoc.getpX());
         bounds.setMaxX(rightAnchorLoc.getpX() + rightAnchor.width);
-        bounds.setMinY(rightAnchorLoc.getpY() + leftAnchor.height);
+        bounds.setMaxY(leftAnchorLoc.getpY() + leftAnchor.height);
+        bounds.setMinY((int) (rightAnchorLoc.getpY() + 1.5 * leftAnchor.height));
 
         return bounds;
     }
@@ -102,8 +106,8 @@ public class GradeExams
      * @param rightAnchor Image of the right anchor
      * @return a bounds object with the bounds
      */
-    private static Bounds getFormHorizontalBounds(BufferedImage image,
-            BufferedImage leftAnchor, BufferedImage rightAnchor) 
+    private static Bounds getFormBounds(BufferedImage image,
+            BufferedImage leftAnchor, BufferedImage rightAnchor)
     {
         // convert to usable format
         ImageFloat32 src = new ImageFloat32(image.getWidth(), image.getHeight());
@@ -116,7 +120,7 @@ public class GradeExams
         ConvertBufferedImage.convertFrom(leftAnchor, left);
         ConvertBufferedImage.convertFrom(rightAnchor, right);
 
-        return getFormHorizontalBounds(src, left, right);
+        return getFormBounds(src, left, right);
     }
 
     /**
@@ -129,7 +133,7 @@ public class GradeExams
      */
     private static ImagePoint getTemplateLocation(ImageFloat32 image,
             ImageFloat32 template,
-            int expectedMatches) 
+            int expectedMatches)
     {
 
         // initiate the template matcher
@@ -159,7 +163,7 @@ public class GradeExams
      * @param image input image
      * @return the resulting black-and-white image
      */
-    private static BufferedImage getBinaryImage(BufferedImage image) 
+    private static BufferedImage getBinaryImage(BufferedImage image)
     {
         // convert into a usable format
         ImageFloat32 input = ConvertBufferedImage.convertFromSingle(image, null,
@@ -189,56 +193,55 @@ public class GradeExams
      * @param bounds the bounds in which the exam appears in the image
      * @return a list of questions.
      */
-    private static ArrayList<Question> getQuestions(BufferedImage img,
-            Bounds bounds) 
+    private static Exam detectExam(BufferedImage img,
+            Bounds bounds)
     {
-        ArrayList<Question> questions = new ArrayList<Question>();
+        ArrayList<Question> questions;
+        HashMap<Integer, Question> qmap = new HashMap<Integer, Question>();
+        int[] studentID = new int[9];
         String[] letters
-                = {
+                =
+                {
                     "A", "B", "C", "D", "E"
                 };
 
-        int numRows = 25;
-        int numColumns = 24;
-        float cellWidth = (bounds.getMaxX() - bounds.getMinX()) / (float) numColumns;
-        bounds.setMinY(bounds.getMinY() + (int) cellWidth);
+        int numRows = 35;
+        int numColumns = 27;
+        float cellWidth = (bounds.getMaxX() - bounds.getMinX())
+                / (float) numColumns;
+        float cellHeight = (bounds.getMaxY() - bounds.getMinY())
+                / (float) numRows;
 
         // color that is definitely blank
         int black = img.getRGB(3, 3);
 
-        // draw the bounds on the image
-        //Graphics2D g = img.createGraphics();
-        //g.setBackground(Color.yellow);
-        //g.setStroke(new BasicStroke(1));
-        //g.drawLine(bounds.max_x, 50, bounds.max_x, 150);
-        //g.drawLine(bounds.min_x, 50, bounds.min_x, 150);
-        //g.drawLine(20, bounds.min_y, 250, bounds.min_y);
         // go through every cell and determine if it has a bubble in it.
-        for (int onColumn = 0; onColumn < numColumns; onColumn++) 
+        for (double onColumn = 0; onColumn < numColumns; onColumn++)
         {
             // go through every row
-            for (int onRow = 0; onRow < numRows; onRow++) 
+            for (double onRow = 0; onRow < numRows; onRow++)
             {
                 int x0 = (int) (bounds.getMinX() + onColumn * cellWidth);
                 int x1 = x0 + (int) cellWidth;
-                int y0 = (int) (bounds.getMinY() + onRow * cellWidth);
-                int y1 = y0 + (int) cellWidth;
+                int y0 = (int) (bounds.getMinY() + onRow * cellHeight);
+                int y1 = y0 + (int) cellHeight;
 
                 int[] colors = img.getRGB(x0, y0,
-                        (int) cellWidth, (int) cellWidth, null, 0,
-                        (int) (cellWidth * cellWidth));
+                        (int) cellWidth, (int) cellHeight, null, 0,
+                        (int) (cellWidth * cellHeight));
 
                 // draw the cell grid on the image
-                //g.drawLine(x0, y0, x1, y0);
-                //g.drawLine(x1, y0, x1, y1);
-                //g.drawLine(x1, y1, x0, y1);
-                //g.drawLine(x0, y1, x0, y0);   
+                //Graphics2D graphics = img.createGraphics();
+                //graphics.drawLine(x0, y0, x1, y0);
+                //graphics.drawLine(x1, y0, x1, y1);
+                //graphics.drawLine(x1, y1, x0, y1);
+                //graphics.drawLine(x0, y1, x0, y0);
                 double numBlacks = 0;
                 // count the number of black pixels in the image
-                for (int color : colors) 
+                for (int color : colors)
                 {
                     // is the color black
-                    if (color == black) 
+                    if (color == black)
                     {
                         numBlacks++;
                     }
@@ -246,164 +249,186 @@ public class GradeExams
 
                 // if the number of black pixels is over a threshold, then it
                 // is filled in.
-                if (numBlacks / (cellWidth * cellWidth) < .80) 
+                if (numBlacks / (cellWidth * cellWidth) < .80)
                 {
-                    int colNum = onColumn + 1;
-                    int rowNum = onRow + 1;
+                    int colNum = (int) onColumn + 1;
+                    int rowNum = (int) onRow + 1;
 
                     int startQ = 0;
                     int choice = 0;
 
+                    boolean valid = false;
+
                     // first column of questions
-                    if (colNum >= 2 && colNum <= 6) 
+                    if (colNum >= 11 && colNum <= 15)
                     {
                         startQ = 0;
-                        choice = colNum - 2;
+                        choice = colNum - 11;
+                        valid = true;
                     } // second column of questions
-                    else if (colNum >= 8 && colNum <= 12) 
+                    else if (colNum >= 17 && colNum <= 21)
                     {
-                        startQ = 25;
-                        choice = colNum - 8;
+                        startQ = 35;
+                        choice = colNum - 17;
+                        valid = true;
                     } // third column of questions
-                    else if (colNum >= 14 && colNum <= 18) 
+                    else if (colNum >= 23 && colNum <= 27)
                     {
-                        startQ = 50;
-                        choice = colNum - 14;
-                    } // fourth column of questions
-                    else if (colNum >= 20 && colNum <= 24) 
+                        startQ = 70;
+                        choice = colNum - 23;
+                        valid = true;
+                    } // the user id field
+                    else if (colNum >= 0 && colNum <= 8 && rowNum >= 10
+                            && rowNum <= 19)
                     {
-                        startQ = 75;
-                        choice = colNum - 20;
+                        studentID[colNum] = rowNum - 10;
                     }
 
                     // create the question
-                    Question question = new Question();
-                    question.setqNum(startQ + rowNum);
-                    question.addChoice(letters[choice]);
-                    questions.add(question);
+                    int qNum = startQ + rowNum;
+                    if (valid)
+                    {
+                        Question question;
+                        if (qmap.containsKey(qNum))
+                        {
+                            question = qmap.get(qNum);
+                        }
+                        else
+                        {
+                            question = new Question();
+                        }
+                        question.setqNum(startQ + rowNum);
+                        question.addChoice(letters[choice]);
+                        qmap.put(qNum, question);
+                    }
 
                 }
             }
         }
-
+        questions = new ArrayList<Question>(qmap.values());
         Collections.sort(questions);
-        return questions;
+        Exam exam = new Exam(questions);
+        exam.setStudentID(studentID);
+        return exam;
     }
 
-    /**
-     * Main function to run the grader.
-     *
-     * @param args command line arguments
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static void main(String[] args) throws IOException 
+    private static BufferedImage loadScaledImage(String path, int width)
     {
-        File pdfFile = new File("Exams.pdf");
+        BufferedImage image = UtilImageIO.loadImage(path);
+        BufferedImage scaled = new BufferedImage(width, width,
+                BufferedImage.TYPE_BYTE_BINARY);
+        Graphics graphics = scaled.createGraphics();
+        graphics.drawImage(image, 0, 0, width, width, null);
+        graphics.dispose();
+        return scaled;
+    }
+
+    private static PDFFile loadPDF(String path) throws FileNotFoundException,
+            IOException
+    {
+        File pdfFile = new File(path);
         RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");
         FileChannel channel = raf.getChannel();
         MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
                 channel.size());
-        PDFFile pdf = new PDFFile(buf);
-        PDFPage firstPage = pdf.getPage(0);
-
-        BufferedImage firstPageImage = createImage(firstPage);
-
-        // width/8.5 --> pixels per inch. PPI/4 --> .25". Anchor is 2 * .25
-        int newAnchorWidth = (int) (2 * ((firstPageImage.getWidth() / 8.5) / 4));
-
-        // Load the left anchor and scale it to match the page's dimensions.
-        BufferedImage leftAnchorImage = UtilImageIO.loadImage("left_anchor.jpg");
-        BufferedImage leftAnchor = new BufferedImage(newAnchorWidth,
-                newAnchorWidth, BufferedImage.TYPE_BYTE_BINARY);
-        Graphics graphics = leftAnchor.createGraphics();
-        graphics.drawImage(
-                leftAnchorImage, 0, 0, newAnchorWidth, newAnchorWidth, null);
-        graphics.dispose();
-
-        // Flip the left image to get the right anchor
-        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-        tx.translate(-leftAnchor.getWidth(null), 0);
-        AffineTransformOp op = new AffineTransformOp(tx,
-                AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        BufferedImage rightAnchor = op.filter(leftAnchor, null);
-
-        ArrayList<Exam> exams = new ArrayList<Exam>();
-        Exam key = null;
-
-        // go through every page and grade it
-        for (int onPage = 1; onPage < pdf.getNumPages() + 1; onPage++) 
-        {
-            PDFPage page = pdf.getPage(onPage);
-            BufferedImage pageImage = createImage(page);
-
-            // get the bounds for this page
-            Bounds bounds = getFormHorizontalBounds(pageImage, leftAnchor,
-                    rightAnchor);
-
-            // get the questions
-            ArrayList<Question> questions = getQuestions(getBinaryImage(
-                    pageImage),
-                    bounds);
-
-            // if this is the first exam, set it as the key.
-            if (onPage == 1) 
-            {
-                key = new Exam(questions);
-                System.out.println("Answer Key");
-                System.out.println("Question #\tAnswer");
-
-                // print out every question
-                for (Question question : questions)
-                {
-                    System.out.println(question.getqNum() + "\t\t"
-                            + question.getChoices());
-                }
-            } 
-            else 
-            {
-                exams.add(new Exam(questions));
-            }
-        }
-
-        ArrayList<Question> answerKey = key.getAnswers();
-        int onExam = 0;
-        
-        // Set up a CSV writer
-        CSVWriter w = new CSVWriter("results.csv");
-        String[] cols = {"exam", "raw score", "percent"};
-        w.setColumns(cols);
-        
-        // grade every exam according to the key.
-        for (Exam exam : exams) {
-            System.out.println();
-            System.out.println("Results for Exam" + ++onExam);
-            System.out.println("Question #\tAnswer\tScore");
-            exam.grade(answerKey);
-            
-            // CSV score reporting
-            Integer raw = exam.rawScore();
-            Double percent = exam.percentCorrect();
-            String name = "Exam " + onExam;
-            System.out.println("\traw:" + raw.toString() + "\tpercent:" + percent.toString());
-
-            String[] result = {name, raw.toString(), percent.toString()};
-            w.addLine(result);
-            
-            ArrayList<Question> answers = exam.getAnswers();
-            Collections.sort(answers);
-
-            // print all the answers and score.
-            for (Question question : answers) 
-            {
-                System.out.print(question.getqNum() + "\t\t");
-                System.out.print(question.getChoices().isEmpty() ? "[blank]\t"
-                        : question.getChoices() + "\t");
-                System.out.println(question.isCorrect() ? "Correct" : "Wrong");
-            }
-        }
-        // Write the CSV file
-        w.writeFile();
+        return new PDFFile(buf);
     }
 
+    /**
+     * Grade every PDF in paths.
+     *
+     * @param paths list of paths to PDFs
+     */
+    public static void grade(ArrayList<String> paths)
+    {
+        System.out.println("Begin grading");
+        for (String path : paths)
+        {
+            System.out.println("Process " + path);
+
+            PDFFile file = null;
+
+            // load the pdf file
+            try
+            {
+                file = loadPDF(path);
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(GradeExams.class.getName()).log(Level.SEVERE,
+                        "File " + path + " Not Found", ex);
+                System.exit(1);
+            }
+
+            // get the first page to set dimensions.
+            BufferedImage firstPageImage = createImageFromPDF(file.getPage(0));
+            int newAnchorWidth = (int) (2 * ((firstPageImage.getWidth() / 8.5)
+                    / 4));
+
+            // load the anchors
+            BufferedImage rightAnchor
+                    = loadScaledImage("donut_right_anchor.jpg", newAnchorWidth);
+            BufferedImage leftAnchor = loadScaledImage("donut_left_anchor.jpg",
+                    newAnchorWidth);
+
+            // the list of graded exams and the answer key
+            ArrayList<Exam> exams = new ArrayList<Exam>();
+            Exam key = null;
+
+            // go through every page in the pdf and grade the exam on it.
+            int numPages = file.getNumPages() + 1;
+            for (int onPage = 1; onPage < numPages; onPage++)
+            {
+                PDFPage page = file.getPage(onPage);
+                BufferedImage pageImage = createImageFromPDF(page);
+
+                // get the bounds for this page
+                Bounds bounds = getFormBounds(pageImage, leftAnchor,
+                        rightAnchor);
+
+                // get the questions and student ID
+                Exam exam = detectExam(getBinaryImage(pageImage), bounds);
+
+                // if this is the first exam, set it as the key.
+                if (onPage == 1)
+                {
+                    key = exam;
+                }
+                else
+                {
+                    exams.add(exam);
+                }
+            }
+
+            // set up the answer key for grading
+            ArrayList<Question> answerKey = key.getAnswers();
+
+            // Set up a CSV writer
+            CSVWriter writer = new CSVWriter(path + "-results.csv");
+            String[] cols =
+            {
+                "exam", "raw score", "percent"
+            };
+            writer.setColumns(cols);
+
+            // grade every exam according to the key.
+            for (Exam exam : exams)
+            {
+                exam.grade(answerKey);
+
+                // CSV score reporting
+                Integer raw = exam.rawScore();
+                Double percent = exam.percentCorrect();
+                String name = "Student " + exam.getStudentID();
+
+                String[] result =
+                {
+                    name, raw.toString(), percent.toString()
+                };
+                writer.addLine(result);
+            }
+            // Write the CSV file
+            writer.writeFile();
+        }
+    }
 }
