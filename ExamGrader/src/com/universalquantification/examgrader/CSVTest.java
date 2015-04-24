@@ -5,33 +5,44 @@
  */
 package com.universalquantification.examgrader;
 
-import java.util.HashSet;
-
 /**
+ * Tests the CSV Writer.
  *
  * @author scottvanderlind
  */
-public class CSVTest {
+public class CSVTest
+{
 
     /**
+     * Runs the tests.
+     *
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
 
-        CSVWriter w = new CSVWriter("testout.csv");
-        
-        String[] cols = {"col a", "col b", "col c", "col d"};
-        w.setColumns(cols);
-        
-        
-        String[] l1 = {"one", "two", "three", "four"};
-        w.addLine(l1);
-        
-        String[] l2 = {"100", "200", "300", "400"};
-        w.addLine(l2);
-        
-        w.writeFile();
-        
+        CSVWriter writer = new CSVWriter("testout.csv");
+
+        String[] cols =
+        {
+            "col a", "col b", "col c", "col d"
+        };
+        writer.setColumns(cols);
+
+        String[] l1 =
+        {
+            "one", "two", "three", "four"
+        };
+        writer.addLine(l1);
+
+        String[] l2 =
+        {
+            "100", "200", "300", "400"
+        };
+        writer.addLine(l2);
+
+        writer.writeFile();
+
     }
-    
+
 }
