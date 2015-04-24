@@ -20,7 +20,7 @@
 
 .main-pane {
     -fx-background-color: #2480e8;
-    }
+}
     
 .left-pane {
     -fx-background-color: #FFFFFF;
@@ -38,6 +38,7 @@
 
 .add-pane {
     -fx-background-image: url("../Resources/Dashed-Border.PNG");
+    -fx-cursor: hand;
 }
 
 .test-list {
@@ -53,12 +54,20 @@
     -fx-background-image: url("../Resources/Files-Text.PNG");
 }
 
+.add-button {
+    -fx-cursor: hand;
+}
+
 .small-add-text {
     -fx-background-image: url("../Resources/Add-Text.PNG");
 
 }
 .small-add-icon {
     -fx-background-image: url("../Resources/Add-Sign-Small.PNG");
+}
+
+.action-button {
+    -fx-cursor: hand;
 }
 
 .action-grade-text {
@@ -101,4 +110,19 @@
    -fx-alignment: center;
    -fx-font-size: 72;
    -fx-text-fill: #a5a5a5;
+}
+
+.large-add-icon-plus {
+    -fx-background-image: url("../Resources/Add-Sign.PNG");
+    -fx-opacity: .4;
+}
+
+.large-add-icon-circle {
+    -fx-background-image: url("../Resources/Add-Circle.PNG");
+    -fx-opacity: .4;
+}
+
+.large-add-icon-text {
+    -fx-background-image: url("../Resources/Add-Text-Large.PNG");
+    -fx-opacity: .4;
 }

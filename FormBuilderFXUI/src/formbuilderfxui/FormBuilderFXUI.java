@@ -79,7 +79,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
- 
 
 /**
  *
@@ -89,20 +88,19 @@ import javafx.stage.Stage;
  */
 
 public class FormBuilderFXUI extends Application {
-    //
     @FXML private ListView<String> listView;
     @FXML private HBox addPane;
     @FXML private AnchorPane activeItemView;
     @FXML private AnchorPane addButton;
     @FXML private HBox actionButtonGrade;
-        @FXML private HBox actionButtonCancel;
+    @FXML private HBox actionButtonCancel;
     @FXML private HBox actionButtonBg;
     @FXML private HBox actionButtonFg;
     
     private FileChooser fbFileChooser;
     private Stage fbStage;
     private Boolean isLoading;
-    public List<File> testFileList;
+    private List<File> testFileList;
     
     @Override public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML/FormBuilder.fxml"));
@@ -127,9 +125,7 @@ public class FormBuilderFXUI extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        launch(args);
-    }
+    
     
     private void setupFileChooser() {
         FileChooser fileChooser = new FileChooser();
@@ -194,7 +190,7 @@ public class FormBuilderFXUI extends Application {
         clip.setArcHeight(25);
         listView.setClip(clip);
         
-        //activeItemView.setVisible(false);
+        activeItemView.setVisible(false);
     }
     
      private void addToList(final File item) {
@@ -232,5 +228,9 @@ public class FormBuilderFXUI extends Application {
         isLoading = false;
         
         actionButtonCancel.setVisible(false);
+    }
+    
+    public List<File> getFileList() {
+        return testFileList;
     }
 }
