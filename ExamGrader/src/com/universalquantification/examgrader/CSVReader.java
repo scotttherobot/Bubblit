@@ -27,16 +27,34 @@ public class CSVReader
     // Our rows
     private List<HashMap> rows = new ArrayList<HashMap>();
     
+    /**
+     * Instantiate with one custom attribute
+     * @param filename - the filename of the CSV
+     * @throws Exception - the exception if the CSV is invalid
+     */
     public CSVReader(String filename) throws Exception 
     {
         this(filename, ",");
     }
     
+    /**
+     * Instantiate with two custom attributes.
+     * @param filename - the filename of the CSV
+     * @param delimiter - the delimiter the CSV is split on
+     * @throws Exception - the exception if the CSV is invalid
+     */
     public CSVReader(String filename, String delimiter) throws Exception
     {
         this(filename, delimiter, "\n");
     }
     
+    /**
+     * Instantiate with three custom attributes.
+     * @param filename - the filename of the CSV
+     * @param delimiter - the delimiter the CSV is split on
+     * @param linereturn - the line return the CSV returns on
+     * @throws Exception  - the exception if the CSV is invalid
+     */
     public CSVReader(String filename, String delimiter, String linereturn) throws Exception
     {
         this.filename = filename;
@@ -45,6 +63,15 @@ public class CSVReader
         parseFile();
     }
     
+    /**
+     * Actually converts the CSV into data structures
+     * 
+     * Opens a CSV file and matches the headers to the lines of data.
+     * As we read lines, add them to the list of records.
+     * @throws Exception - if the number of columns in a data row don't match 
+     *                     the number of columns defined on line 0, we throw 
+     *                     an error.
+     */
     private void parseFile() throws Exception 
     {
         // Open the file
@@ -89,10 +116,40 @@ public class CSVReader
         }
     }
     
-    public List<HashMap> getRows() {
+    public List<HashMap> getRows() 
+    {
         return this.rows;
     }
     
+    /**
+     * Return a record by a known column value
+     * 
+     * For example, to get the record of a student by their ID, call this
+     * with column = "id" and value = {their student id}.
+     * @param column - the column to match on
+     * @param value - the value of the column you'd like to see.
+     * @return 
+     */
+    public HashMap getRecordByColumnValue(String column, String value)
+    {
+        for (HashMap record : this.rows)
+        {
+            if (record.get(column).equals(value))
+            {
+                return record;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Takes a string of delimiter separated values and returns a string array.
+     * 
+     * Kinda like the php funcuton explode();
+     * It strips the set line return and then splits on the designated delimeter.
+     * @param row - the CSV string.
+     * @return - an array of strings that were between the delimiter.
+     */
     private String[] explode(String row)
     {
         String record = row;

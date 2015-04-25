@@ -31,13 +31,13 @@ public class CSVTest
 
         String[] cols =
         {
-            "col a", "col b", "col c", "col d"
+            "id", "col b", "col c", "col d"
         };
         writer.setColumns(cols);
 
         String[] l1 =
         {
-            "one", "two", "three", "four"
+            "123454321", "two", "three", "four"
         };
         writer.addLine(l1);
 
@@ -61,6 +61,11 @@ public class CSVTest
                 System.out.println("----");
                 System.out.println(record.toString());
             }
+            
+            // To get a record by a column value (ie get a record by student id)
+            // use getRecordByColumnValue()
+            System.out.println("ByColumnValue:");
+            System.out.println(reader.getRecordByColumnValue("id", "123454321").toString());
         }
         catch (Exception ex)
         {
