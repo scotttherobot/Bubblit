@@ -433,6 +433,18 @@ public class GradeExams extends SwingWorker<Void, Void>
             }
             // Write the CSV file
             writer.writeFile();
+
+            Report statsReport = new StatsReporter().getReport(
+                    exams, answerKey);
+            CSVWriter statsWriter = new CSVWriter(path + "_stats.csv");
+            statsWriter.setColumns(statsReport.headers);
+            
+            for (String[] row: statsReport.rows) {
+                statsWriter.addLine(row);
+            }
+            
+            statsWriter.writeFile();
+            
         }
         setProgress(100);
         return null;
