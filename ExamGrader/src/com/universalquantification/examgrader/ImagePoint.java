@@ -50,6 +50,10 @@ public class ImagePoint
         this.pY = py;
     }
     
+    /**
+     * Image point to string
+     * @return string representation
+     */
     public String toString()
     {
         return "point [x: " + this.pX + ",y: " + this.pY+ "] ";
