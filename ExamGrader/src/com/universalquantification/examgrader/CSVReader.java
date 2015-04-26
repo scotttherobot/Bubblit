@@ -14,31 +14,34 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * reader for csvs
  *
  * @author scottvanderlind
  */
-public class CSVReader 
+public class CSVReader
 {
- 
+
     private String filename;    // The filename to write
     private String delimiter;   // The column delimiter
     private String linereturn;  // The line return character
 
     // Our rows
     private List<HashMap> rows = new ArrayList<HashMap>();
-    
+
     /**
      * Instantiate with one custom attribute
+     *
      * @param filename - the filename of the CSV
      * @throws Exception - the exception if the CSV is invalid
      */
-    public CSVReader(String filename) throws Exception 
+    public CSVReader(String filename) throws Exception
     {
         this(filename, ",");
     }
-    
+
     /**
      * Instantiate with two custom attributes.
+     *
      * @param filename - the filename of the CSV
      * @param delimiter - the delimiter the CSV is split on
      * @throws Exception - the exception if the CSV is invalid
@@ -47,32 +50,34 @@ public class CSVReader
     {
         this(filename, delimiter, "\n");
     }
-    
+
     /**
      * Instantiate with three custom attributes.
+     *
      * @param filename - the filename of the CSV
      * @param delimiter - the delimiter the CSV is split on
      * @param linereturn - the line return the CSV returns on
-     * @throws Exception  - the exception if the CSV is invalid
+     * @throws Exception - the exception if the CSV is invalid
      */
-    public CSVReader(String filename, String delimiter, String linereturn) throws Exception
+    public CSVReader(String filename, String delimiter, String linereturn)
+            throws Exception
     {
         this.filename = filename;
         this.delimiter = delimiter;
         this.linereturn = linereturn;
         parseFile();
     }
-    
+
     /**
      * Actually converts the CSV into data structures
-     * 
-     * Opens a CSV file and matches the headers to the lines of data.
-     * As we read lines, add them to the list of records.
-     * @throws Exception - if the number of columns in a data row don't match 
-     *                     the number of columns defined on line 0, we throw 
-     *                     an error.
+     *
+     * Opens a CSV file and matches the headers to the lines of data. As we read
+     * lines, add them to the list of records.
+     *
+     * @throws Exception - if the number of columns in a data row don't match
+     * the number of columns defined on line 0, we throw an error.
      */
-    private void parseFile() throws Exception 
+    private void parseFile() throws Exception
     {
         // Open the file
         FileReader infile = null;
@@ -81,24 +86,26 @@ public class CSVReader
         {
             infile = new FileReader(this.filename);
             in = new BufferedReader(infile);
-            
+
             // Read the column names
             String headers = in.readLine();
             String[] columns = explode(headers);
-            
-            
-            // Read the rows. Create a hashmap for each row. Insert it into the rows hashmap.
+
             String row = null;
-            while ((row = in.readLine()) != null) {
+            // Read the rows. Create a hashmap for each row. Insert it into the rows hashmap.
+            while ((row = in.readLine()) != null)
+            {
                 // We have a row. Explode it.
                 String[] values = explode(row);
                 // Map the columns to the values if they're 1:1
                 if (values.length == columns.length)
                 {
-                    HashMap<String, String> record = new HashMap<String, String>();
-                    for (int i = 0; i < values.length; i++)
+                    HashMap<String, String> record
+                        = new HashMap<String, String>();
+                    // add all values to their columns
+                    for (int onVal = 0; onVal < values.length; onVal++)
                     {
-                        record.put(columns[i], values[i]);
+                        record.put(columns[onVal], values[onVal]);
                     }
                     // Add to master hashmap
                     this.rows.add(record);
@@ -112,28 +119,35 @@ public class CSVReader
         }
         catch (IOException e)
         {
-            
+            System.out.println("ioioioreader");
         }
     }
-    
-    public List<HashMap> getRows() 
+
+    /**
+     * Get the rows for the CSV file.
+     * @return list of rows
+     */
+    public List<HashMap> getRows()
     {
         return this.rows;
     }
-    
+
     /**
      * Return a record by a known column value
-     * 
-     * For example, to get the record of a student by their ID, call this
-     * with column = "id" and value = {their student id}.
+     *
+     * For example, to get the record of a student by their ID, call this with
+     * column = "id" and value = {their student id}.
+     *
      * @param column - the column to match on
      * @param value - the value of the column you'd like to see.
-     * @return 
+     * @return record for the row
      */
     public HashMap getRecordByColumnValue(String column, String value)
     {
+        // find the appropriate row
         for (HashMap record : this.rows)
         {
+            // if we found the row, return it
             if (record.get(column).equals(value))
             {
                 return record;
@@ -141,12 +155,13 @@ public class CSVReader
         }
         return null;
     }
-    
+
     /**
      * Takes a string of delimiter separated values and returns a string array.
-     * 
-     * Kinda like the php funcuton explode();
-     * It strips the set line return and then splits on the designated delimeter.
+     *
+     * Kinda like the php funcuton explode(); It strips the set line return and
+     * then splits on the designated delimeter.
+     *
      * @param row - the CSV string.
      * @return - an array of strings that were between the delimiter.
      */
