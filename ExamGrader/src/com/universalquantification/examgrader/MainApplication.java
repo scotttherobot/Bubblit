@@ -180,10 +180,21 @@ public class MainApplication extends javax.swing.JFrame implements
 
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("Contents");
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contentsMenuItemActionPerformed(evt);
+            }
+        });
         helpMenu.add(contentsMenuItem);
+        contentsMenuItem.getAccessibleContext().setAccessibleName("How-To");
 
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
@@ -223,6 +234,27 @@ public class MainApplication extends javax.swing.JFrame implements
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "How to Add Tests: "
+                + "\n\t1) Click the \"Add File\" button."
+                + "\n\t2) Select the PDF file(s) containing the forms you want graded. Make sure that "
+                + "\n\t     the first page of the PDF file is the form representing the key."
+                + "\n\t3) Press \"OK\" and your files will now be queued to be graded."
+                + "\n\nHow to Grade Tests: "
+                + "\n\t1) Check that the PDF files you have in your lists are the forms you want graded."
+                + "\n\t2) Click the \"Grade!\" button."
+                + "\n\t3) When the progress bar displayed is full, the resulting the scoring files will"
+                + "\n\t     be found in the directories of each of your queued files."
+        );
+    }//GEN-LAST:event_contentsMenuItemActionPerformed
+
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        // TODO add your handling code here:
+         JOptionPane.showMessageDialog(this, "Welcome to Bubblit, a grading software that uses computer vision to grade tests."
+        );
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -297,6 +329,7 @@ public class MainApplication extends javax.swing.JFrame implements
                 {
                     "OK"
                 };
+                /*
                 JOptionPane.showOptionDialog(
                         rootPane,
                         "Done grading exams.", "Bubblit",
@@ -304,7 +337,7 @@ public class MainApplication extends javax.swing.JFrame implements
                         buttons, buttons[0]);
                 progressBar.setValue(0);
                 gradeButton.setEnabled(true);
-                gradeButton.setText("Grade");
+                gradeButton.setText("Grade");*/
             }
         }
     }

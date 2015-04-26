@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 /**
@@ -53,7 +54,15 @@ public class GradeExams extends SwingWorker<Void, Void>
      */
     @Override
     public void done() {
-        System.out.println("im done lol");
+        String completeMessage = "Grading complete! You can find the score files"
+                 + "in the original directories of your graded PDF files."
+                + "\n\n The directories are:\n\n";
+        
+        for (String s : paths) {
+            completeMessage += ("\n" + s);
+        }
+        
+        JOptionPane.showMessageDialog(null, completeMessage);
     }
 
     /**
