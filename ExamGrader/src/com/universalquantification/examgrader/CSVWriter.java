@@ -111,7 +111,7 @@ public class CSVWriter
         }
         catch (IOException exception)
         {
-
+            System.out.println("exection cvb werter");
         }
         finally
         {
@@ -136,16 +136,16 @@ public class CSVWriter
         StringBuilder result = new StringBuilder();
 
         // Concatenate each, add a comma if it's not the last
-        for (int i = 0; i < values.length; i++)
+        for (int onVal = 0; onVal < values.length; onVal++)
         {
-            result.append(values[i]);
+            result.append(values[onVal]);
             // IF it's not the last value, add a delimiter
-            if (i < values.length - 1)
+            if (onVal < values.length - 1)
             {
                 result.append(this.delimiter);
             }
             // IF it is the last value, add a line return
-            else if (i == values.length - 1)
+            else if (onVal == values.length - 1)
             {
                 result.append(this.linereturn);
             }
