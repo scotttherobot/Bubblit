@@ -12,18 +12,12 @@ import boofcv.io.image.UtilImageIO;
 import boofcv.struct.feature.Match;
 import boofcv.struct.image.ImageFloat32;
 import boofcv.struct.image.ImageUInt8;
-import boofcv.gui.image.ShowImages;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,12 +28,11 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
 
 /**
@@ -405,48 +398,58 @@ public class GradeExams extends SwingWorker<Void, Void>
             // set up the answer key for grading
             ArrayList<Question> answerKey = key.getAnswers();
 
-            // Set up a CSV writer
-            CSVWriter writer = new CSVWriter(path + "-results.csv");
-            String[] cols
-                    = {
-                        "exam", "raw score", "percent"
-                    };
-            writer.setColumns(cols);
-
+            String[] scoreCols = {
+                "ID", "Name", "Correct"
+            };
+            
+            List<String[]> results = new ArrayList<>();
+            
             // grade every exam according to the key.
             for (Exam exam : exams) {
                 exam.grade(answerKey);
                 System.out.println("Exam: " + exam.toString(true));
                 // CSV score reporting
                 Integer raw = exam.rawScore();
-                Double percent = exam.percentCorrect();
                 String name = "Student " + exam.getStudentID();
 
-                String[] result
-                        = {
-                            name, raw.toString(), percent.toString()
-                        };
-                writer.addLine(result);
+                String[] result = {
+                    String.valueOf(exam.getStudentID()), name, raw.toString()
+                };
+                results.add(result);
                 
                 progress += pageDeltaProgress;
                 setProgress(progress);
             }
-            // Write the CSV file
-            writer.writeFile();
+            
+            writeCSV(path + "_scores_by_scan_order.csv",
+                    new Report(scoreCols, results));
+            
+            Collections.sort(results, new Comparator<String[]>() {
+                public int compare(String[] a, String[] b)
+                {
+                    return a[0].compareTo(b[2]);
+                }      
+            });
+            
+            writeCSV(path + "_scores_by_id.csv",
+                    new Report(scoreCols, results));
 
             Report statsReport = new StatsReporter().getReport(
                     exams, answerKey);
-            CSVWriter statsWriter = new CSVWriter(path + "_stats.csv");
-            statsWriter.setColumns(statsReport.headers);
-            
-            for (String[] row: statsReport.rows) {
-                statsWriter.addLine(row);
-            }
-            
-            statsWriter.writeFile();
+            writeCSV(path + "_stats.csv", statsReport);
             
         }
         setProgress(100);
         return null;
+    }
+    
+    private void writeCSV(String filename, Report report)
+    {   
+        CSVWriter writer = new CSVWriter(filename);
+        writer.setColumns(report.headers);
+        for (String[] row: report.rows) {
+                writer.addLine(row);
+        }
+        writer.writeFile();
     }
 }
