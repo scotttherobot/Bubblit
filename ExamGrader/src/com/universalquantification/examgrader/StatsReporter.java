@@ -19,12 +19,14 @@ import java.util.TreeSet;
  *
  * @author jenwang
  */
-public class StatsReporter {
+public class StatsReporter
+{
 
-    public static final String NUMBER_OF_FAILED_RESPONSES_FORMAT =
-            "Number of Failed Responses '%s'";
+    public static final String NUMBER_OF_FAILED_RESPONSES_FORMAT
+            = "Number of Failed Responses '%s'";
 
-    protected enum Column {
+    protected enum Column
+    {
 
         QUESTION,
         MAXIMUM,
@@ -34,11 +36,13 @@ public class StatsReporter {
         FREQUENCY_OF_MISSED_QUESTION,
         MOST_COMMON_FAILED_RESPONSE;
 
-        public String toString() {
+        public String toString()
+        {
             String[] words = name().split("_");
 
             StringBuilder builder = new StringBuilder();
-            for (String word : words) {
+            for (String word : words)
+            {
                 builder.append(word.charAt(0));
                 builder.append(word.substring(1).toLowerCase());
                 builder.append(" ");
@@ -48,24 +52,30 @@ public class StatsReporter {
         }
     }
 
-    private static class AnswerComparator implements Comparator<Set<String>> {
+    private static class AnswerComparator implements Comparator<Set<String>>
+    {
 
-        public int compare(Set<String> a, Set<String> b) {
-            if (a.size() != b.size()) {
+        public int compare(Set<String> a, Set<String> b)
+        {
+            if (a.size() != b.size())
+            {
                 return a.size() - b.size();
             }
             return answerToString(a).compareTo(answerToString(b));
         }
     }
 
-    private String[] getColumnHeaders(Set<Set<String>> answers) {
+    private String[] getColumnHeaders(Set<Set<String>> answers)
+    {
         String[] cols = new String[Column.values().length + answers.size()];
-        for (Column c : Column.values()) {
+        for (Column c : Column.values())
+        {
             cols[c.ordinal()] = c.toString();
         }
 
         int i = Column.values().length;
-        for (Set<String> answer : answers) {
+        for (Set<String> answer : answers)
+        {
             cols[i] = String.format(NUMBER_OF_FAILED_RESPONSES_FORMAT,
                     answerToString(answer));
             i++;
@@ -74,38 +84,45 @@ public class StatsReporter {
         return cols;
     }
 
-    public Report getReport(List<Exam> exams, List<Question> answerKey) {
-        if (exams.isEmpty()) {
+    public Report getReport(List<Exam> exams, List<Question> answerKey)
+    {
+        if (exams.isEmpty())
+        {
             throw new IllegalArgumentException("Exams must not be empty!");
         }
 
-        if (answerKey.isEmpty()) {
+        if (answerKey.isEmpty())
+        {
             throw new IllegalArgumentException(
                     "There must be at least one question in the answer key.");
         }
 
-        Map<Integer, Map<Set<String>, Integer>> failedAnswersPerQuestion =
-                new HashMap<>();
+        Map<Integer, Map<Set<String>, Integer>> failedAnswersPerQuestion
+                = new HashMap<>();
         SortedSet<Set<String>> seenAnswers = new TreeSet(new AnswerComparator());
         List<Integer> scores = new ArrayList<>();
 
-        for (Question question : answerKey) {
+        for (Question question : answerKey)
+        {
             failedAnswersPerQuestion.put(question.getqNum(),
                     new HashMap<Set<String>, Integer>());
         }
 
-        for (Exam exam : exams) {
+        for (Exam exam : exams)
+        {
             scores.add(exam.rawScore());
 
-            for (Question question : exam.getAnswers()) {
+            for (Question question : exam.getAnswers())
+            {
                 if (failedAnswersPerQuestion.containsKey(question.getqNum())
-                        && !question.isCorrect()) {
+                        && !question.isCorrect())
+                {
                     Set<String> choice = question.getChoices();
 
                     seenAnswers.add(choice);
 
-                    Map<Set<String>, Integer> failedAnswers =
-                            failedAnswersPerQuestion.get(question.getqNum());
+                    Map<Set<String>, Integer> failedAnswers
+                            = failedAnswersPerQuestion.get(question.getqNum());
 
                     Integer count = failedAnswers.containsKey(choice)
                             ? failedAnswers.get(choice) + 1 : 1;
@@ -120,8 +137,9 @@ public class StatsReporter {
         rows.add(getAggregateRow(scores));
 
         for (Integer question : new TreeSet<>(
-                failedAnswersPerQuestion.keySet())) {
-            String[] row = getRowForQuestion(question, 
+                failedAnswersPerQuestion.keySet()))
+        {
+            String[] row = getRowForQuestion(question,
                     failedAnswersPerQuestion.get(question), seenAnswers);
             rows.add(row);
         }
@@ -129,12 +147,14 @@ public class StatsReporter {
         return new Report(getColumnHeaders(seenAnswers), rows);
     }
 
-    private String[] getAggregateRow(List<Integer> scores) {
+    private String[] getAggregateRow(List<Integer> scores)
+    {
         int max = 0;
         int min = Integer.MAX_VALUE;
         double avg = 0;
 
-        for (Integer score : scores) {
+        for (Integer score : scores)
+        {
             min = Math.min(min, score);
             max = Math.max(max, score);
             avg += score;
@@ -156,9 +176,11 @@ public class StatsReporter {
         return row;
     }
 
-    private double getStdev(List<Integer> scores, double avg) {
+    private double getStdev(List<Integer> scores, double avg)
+    {
         double sum = 0;
-        for (Integer score : scores) {
+        for (Integer score : scores)
+        {
             double diff = (score - avg);
             sum += diff * diff;
         }
@@ -168,8 +190,10 @@ public class StatsReporter {
     }
 
     private String getMostCommonFailedResponse(
-            Map<Set<String>, Integer> allIncorrectAnswers) {
-        if (allIncorrectAnswers.isEmpty()) {
+            Map<Set<String>, Integer> allIncorrectAnswers)
+    {
+        if (allIncorrectAnswers.isEmpty())
+        {
             return "-";
         }
 
@@ -177,14 +201,17 @@ public class StatsReporter {
 
         StringBuilder output = new StringBuilder();
 
-        SortedSet<Set<String>> sortedResponses =
-                new TreeSet<Set<String>>(new AnswerComparator());
+        SortedSet<Set<String>> sortedResponses = new TreeSet<Set<String>>(
+                new AnswerComparator());
 
         sortedResponses.addAll(allIncorrectAnswers.keySet());
 
-        for (Set<String> incorrectAnswer : sortedResponses) {
-            if (allIncorrectAnswers.get(incorrectAnswer) == maxAnswers) {
-                if (output.length() != 0) {
+        for (Set<String> incorrectAnswer : sortedResponses)
+        {
+            if (allIncorrectAnswers.get(incorrectAnswer) == maxAnswers)
+            {
+                if (output.length() != 0)
+                {
                     output.append(" ");
                 }
                 output.append(answerToString(incorrectAnswer));
@@ -196,29 +223,32 @@ public class StatsReporter {
     }
 
     private String[] getRowForQuestion(Integer question,
-            Map<Set<String>, Integer> allIncorrectAnswers, 
-            SortedSet<Set<String>> answerColumns) {
+            Map<Set<String>, Integer> allIncorrectAnswers,
+            SortedSet<Set<String>> answerColumns)
+    {
 
         int frequency = 0;
 
         String[] row = new String[Column.values().length + answerColumns.size()];
         Arrays.fill(row, "-");
 
-        for (Map.Entry<Set<String>, Integer> answerEntry :
-                allIncorrectAnswers.entrySet()) {
+        for (Map.Entry<Set<String>, Integer> answerEntry : allIncorrectAnswers.
+                entrySet())
+        {
             frequency += answerEntry.getValue();
         }
 
         row[Column.QUESTION.ordinal()] = question.toString();
-        row[Column.FREQUENCY_OF_MISSED_QUESTION.ordinal()] =
-                String.valueOf(frequency);
-        row[Column.MOST_COMMON_FAILED_RESPONSE.ordinal()] =
-                getMostCommonFailedResponse(allIncorrectAnswers);
-
+        row[Column.FREQUENCY_OF_MISSED_QUESTION.ordinal()] = String.valueOf(
+                frequency);
+        row[Column.MOST_COMMON_FAILED_RESPONSE.ordinal()]
+                = getMostCommonFailedResponse(allIncorrectAnswers);
 
         int i = Column.values().length;
-        for (Set<String> answer : answerColumns) {
-            if (allIncorrectAnswers.containsKey(answer)) {
+        for (Set<String> answer : answerColumns)
+        {
+            if (allIncorrectAnswers.containsKey(answer))
+            {
                 row[i] = String.valueOf(allIncorrectAnswers.get(answer));
             }
             i++;
@@ -227,13 +257,16 @@ public class StatsReporter {
         return row;
     }
 
-    private static String answerToString(Set<String> answer) {
-        if (answer.isEmpty()) {
+    private static String answerToString(Set<String> answer)
+    {
+        if (answer.isEmpty())
+        {
             return "BLANK";
         }
 
         StringBuilder builder = new StringBuilder();
-        for (String a : new TreeSet<>(answer)) {
+        for (String a : new TreeSet<>(answer))
+        {
             builder.append(a);
         }
 
