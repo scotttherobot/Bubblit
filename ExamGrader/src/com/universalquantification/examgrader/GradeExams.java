@@ -1,31 +1,25 @@
 package com.universalquantification.examgrader;
 
 import boofcv.alg.feature.detect.template.TemplateMatching;
-import boofcv.alg.filter.binary.BinaryImageOps;
-import boofcv.alg.filter.binary.GThresholdImageOps;
-import boofcv.alg.filter.binary.ThresholdImageOps;
 import boofcv.core.image.ConvertBufferedImage;
 import boofcv.factory.feature.detect.template.FactoryTemplateMatching;
 import boofcv.factory.feature.detect.template.TemplateScoreType;
-import boofcv.gui.binary.VisualizeBinaryData;
 import boofcv.io.image.UtilImageIO;
 import boofcv.struct.feature.Match;
 import boofcv.struct.image.ImageFloat32;
-import boofcv.struct.image.ImageUInt8;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Stroke;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.URL;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
@@ -361,7 +355,7 @@ public class GradeExams extends SwingWorker<Void, Void>
         return exam;
     }
 
-    private static BufferedImage loadScaledImage(String path, int width)
+    private static BufferedImage loadScaledImage(URL path, int width)
     {
         BufferedImage image = UtilImageIO.loadImage(path);
         BufferedImage scaled = new BufferedImage(width, width,
@@ -441,10 +435,13 @@ public class GradeExams extends SwingWorker<Void, Void>
                     / 4));
 
             // load the anchors
-            BufferedImage rightAnchor
-                    = loadScaledImage("donut_right_anchor.jpg", newAnchorWidth);
-            BufferedImage leftAnchor = loadScaledImage("donut_left_anchor.jpg",
-                    newAnchorWidth);
+            String rightAnchorPath = "resources/donut_right_anchor.jpg";
+            URL ra = this.getClass().getResource(rightAnchorPath);
+            BufferedImage rightAnchor = loadScaledImage(ra, newAnchorWidth);
+
+            String lefttAnchorPath = "resources/donut_left_anchor.jpg";
+            URL la = this.getClass().getResource(lefttAnchorPath);
+            BufferedImage leftAnchor = loadScaledImage(la, newAnchorWidth);
 
             // the list of graded exams and the answer key
             ArrayList<Exam> exams = new ArrayList<Exam>();
