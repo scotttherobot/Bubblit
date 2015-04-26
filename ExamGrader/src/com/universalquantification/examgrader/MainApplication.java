@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -20,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 /**
- *
+ * main program
  * @author Luis
  */
 public class MainApplication extends javax.swing.JFrame implements
@@ -42,7 +44,8 @@ public class MainApplication extends javax.swing.JFrame implements
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
@@ -92,8 +95,10 @@ public class MainApplication extends javax.swing.JFrame implements
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
         addFileButton.setText("Add File");
-        addFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addFileButtonActionPerformed(evt);
             }
         });
@@ -114,8 +119,10 @@ public class MainApplication extends javax.swing.JFrame implements
         gradeButton.setText("Grade!");
         gradeButton.setToolTipText("");
         gradeButton.setAlignmentX(0.5F);
-        gradeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        gradeButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 gradeButtonActionPerformed(evt);
             }
         });
@@ -166,8 +173,10 @@ public class MainApplication extends javax.swing.JFrame implements
 
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -180,8 +189,10 @@ public class MainApplication extends javax.swing.JFrame implements
 
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("Contents");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 contentsMenuItemActionPerformed(evt);
             }
         });
@@ -190,8 +201,10 @@ public class MainApplication extends javax.swing.JFrame implements
 
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 aboutMenuItemActionPerformed(evt);
             }
         });
@@ -220,11 +233,24 @@ public class MainApplication extends javax.swing.JFrame implements
 
     private void gradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradeButtonActionPerformed
         ArrayList<String> paths = new ArrayList<String>();
+        String csvPath = null;
+        
         for (int onPath = 0; onPath < listModel.size(); onPath++)
         {
-            paths.add((String) listModel.getElementAt(onPath));
+            
+            String path = (String) listModel.getElementAt(onPath);
+            if(path.contains(".csv"))
+            {
+                csvPath = path;
+                System.out.println("csv found " + csvPath);
+            }
+            else
+            {
+                paths.add(path);
+            }
+            
         }
-        task = new GradeExams(paths);
+        task = new GradeExams(paths, csvPath);
         task.addPropertyChangeListener(this);
         task.execute();
         gradeButton.setEnabled(false);
@@ -325,19 +351,9 @@ public class MainApplication extends javax.swing.JFrame implements
             progressBar.setValue(progress);
             if (progress == 100)
             {
-                Object[] buttons =
-                {
-                    "OK"
-                };
-                /*
-                JOptionPane.showOptionDialog(
-                        rootPane,
-                        "Done grading exams.", "Bubblit",
-                        0, 0, null,
-                        buttons, buttons[0]);
                 progressBar.setValue(0);
                 gradeButton.setEnabled(true);
-                gradeButton.setText("Grade");*/
+                gradeButton.setText("Grade");
             }
         }
     }
