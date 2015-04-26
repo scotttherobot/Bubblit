@@ -147,10 +147,11 @@ public class Exam
         this.studentID = Integer.parseInt(strid);
     }
 
+
     /**
-     * string representation of exam
-     *
-     * @return string
+     * Exam with the name and questions to string.
+     * @param printCorrect print right or wrong for each question
+     * @return exam in string form
      */
     public String toString(boolean printCorrect)
     {
@@ -168,6 +169,7 @@ public class Exam
             out += question.getqNum() + "\t\t";
             out += question.getChoices().isEmpty() ? "[blank]\t"
                     : question.getChoices();
+            // if we are printing correctness, do it here.
             if (printCorrect)
             {
                 out += "\t" + (question.isCorrect() ? "Correct" : "Wrong");
@@ -177,6 +179,10 @@ public class Exam
         return out;
     }
 
+    /**
+     * String representation of exam
+     * @return string of exam
+     */
     public String toString()
     {
         return this.toString(false);
