@@ -522,7 +522,7 @@ public class GradeExams extends SwingWorker<Void, Void>
             {
                 public int compare(String[] a, String[] b)
                 {
-                    return a[0].compareTo(b[2]);
+                    return Integer.parseInt(a[0]) - Integer.parseInt(b[0]);
                 }
             });
 
