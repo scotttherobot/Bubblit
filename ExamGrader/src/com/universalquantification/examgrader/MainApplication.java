@@ -65,7 +65,10 @@ public class MainApplication extends javax.swing.JFrame implements
         contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
+        fileChooser.setDialogTitle("Choose PDF or CSV");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Bubblit Version 1 - Universal Quantification");
         setPreferredSize(new java.awt.Dimension(400, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
