@@ -1,12 +1,17 @@
 package com.universalquantification.examgrader;
 
 import boofcv.alg.feature.detect.template.TemplateMatching;
+import boofcv.alg.filter.binary.BinaryImageOps;
+import boofcv.alg.filter.binary.GThresholdImageOps;
+import boofcv.alg.filter.binary.ThresholdImageOps;
 import boofcv.core.image.ConvertBufferedImage;
 import boofcv.factory.feature.detect.template.FactoryTemplateMatching;
 import boofcv.factory.feature.detect.template.TemplateScoreType;
+import boofcv.gui.binary.VisualizeBinaryData;
 import boofcv.io.image.UtilImageIO;
 import boofcv.struct.feature.Match;
 import boofcv.struct.image.ImageFloat32;
+import boofcv.struct.image.ImageUInt8;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 import java.awt.Graphics;
@@ -191,25 +196,24 @@ public class GradeExams extends SwingWorker<Void, Void>
     private static BufferedImage getBinaryImage(BufferedImage image)
     {
         // convert into a usable format
-//        ImageFloat32 input = ConvertBufferedImage.convertFromSingle(image, null,
-//                ImageFloat32.class);
-//        ImageUInt8 binary = new ImageUInt8(input.width, input.height);
-//
-//        // Select a global threshold using Otsu's method.
-//        double threshold = GThresholdImageOps.computeOtsu(input, 0, 256);
-//
-//        // Apply the threshold to create a binary image
-//        ThresholdImageOps.threshold(input, binary, (float) threshold, true);
-//
-//        // remove small blobs through erosion and dilation
-//        ImageUInt8 filtered = BinaryImageOps.erode8(binary, 1, null);
-//        filtered = BinaryImageOps.dilate8(filtered, 1, null);
-//
-//        BufferedImage visualFiltered = VisualizeBinaryData.renderBinary(
-//                filtered, null);
-//
-//        return visualFiltered;
-        return image;
+        ImageFloat32 input = ConvertBufferedImage.convertFromSingle(image, null,
+                ImageFloat32.class);
+        ImageUInt8 binary = new ImageUInt8(input.width, input.height);
+
+        // Select a global threshold using Otsu's method.
+        double threshold = GThresholdImageOps.computeOtsu(input, 0, 256);
+
+        // Apply the threshold to create a binary image
+        ThresholdImageOps.threshold(input, binary, (float) threshold, true);
+
+        // remove small blobs through erosion and dilation
+        ImageUInt8 filtered = BinaryImageOps.erode8(binary, 1, null);
+        filtered = BinaryImageOps.dilate8(filtered, 1, null);
+
+        BufferedImage visualFiltered = VisualizeBinaryData.renderBinary(
+                filtered, null);
+
+        return visualFiltered;
     }
 
     /**
