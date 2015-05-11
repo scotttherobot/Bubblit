@@ -1,0 +1,109 @@
+<html>
+<head>
+
+</head>
+<body>
+<h2 id="Introduction">Introduction</h2>
+<p>
+Bubblit
+</p>
+<p>
+Universal Quantification (CY Tan, Jenny Wang, Luis Cuellar, Scott Vanderlind, Santi Pierini)
+</p>
+<p>
+Version 2.0
+</p>
+<p>
+May 11, 2015
+</p>
+<h2 id="DesignOverview">Design Overview</h2>
+<p>
+Our main design priorities are modularity, flexibility, and testing.
+</p>
+<p>
+Specific areas of concern are:
+</p>
+<p>- Isolating UI code from application logic in order to simplify replacing the UI. The app shall support both a console and a Swing UI without any duplication of business logic.</p>
+<p>- Simplify the testing of isolated components. This includes testing as much of the UI as possible.</p>
+<p>- Make it possible to multi-thread the grading for performance improvements.</p>
+<p>- Reduce the number of dependencies of our classes on the libraries we use.</p>
+<p>
+Our application follows the use of the Supervising Controller pattern. The <tt>Controller</tt> class will coordinate model objects to handle user input from the view, which may be any class implementing <tt>AppView</tt>. The view will observe the <tt>Observable</tt> top-level model objects to handle simple UI changes. The Controller manages UI errors by calling a method on the <tt>AppView</tt>.
+</p>
+<h3 id="ObservableModels">Observable Models</h3>
+<p>
+There are three <tt>Observable</tt> models.
+</p>
+<h4 id="InputFileList"><tt>InputFileList</tt></h4>
+<p>
+<tt>InputFileList</tt> manages input files, reporting on the number of pages that have been loaded.
+</p>
+<p>
+<tt>InputFileList</tt> contains a list of <tt>InputFile</tt>, each of which contains an answer key <tt>InputPage</tt> and a list of student <tt>InputPage</tt>. An <tt>InputPage</tt> represesens a single bubble form from an input file that can be converted to an <tt>Exam</tt>.
+</p>
+<h4 id="Grader"><tt>Grader</tt></h4>
+<p>
+A <tt>Grader</tt> grades the <tt>InputFileList</tt> passed to it, produce a <tt>GradedExamCollection</tt> for each <tt>InputFile</tt>. It tracks its own progress based on the number of pages graded thus far.
+</p>
+<p>
+For each <tt>InputPage</tt> (including both student exams and the answer key), the <tt>Grader</tt> will do the following:
+</p>
+<p>
+1. Convert from <tt>InputPage</tt> to <tt>Exam</tt> representations, which is an format-independent representation of a filled in bubble form. <tt>Grader</tt> uses <tt>ExamReader</tt> to perform this process. The <tt>ExamReader</tt> calls <tt>NameRecognitionGateway</tt> and <tt>StudentNameMapper</tt> to recognize and convert the name on the <tt>InputPage</tt> to a <tt>String</tt>.
+</p>
+<p>
+2. For each student <tt>Exam</tt>, score against the answer key <tt>Exam</tt> for the <tt>InputFile</tt> the <tt>Exam</tt> was generated from, notifying any <tt>Observers</tt> when an exam is completed.
+</p>
+<p>
+These tasks will be parallelized.
+</p>
+<h4 id="ReportWriter"><tt>ReportWriter</tt></h4>
+<p>
+A <tt>ReportWriter</tt> accepts a map of <tt>GradedExamCollection</tt>s representing each input PDF.  The mapping maps the output <tt>File</tt> to the <tt>GradedExamCollection</tt>. When prompted, the <tt>ReportWriter</tt> writes all the reports necessary for each <tt>GradedExamCollection</tt>. A single <tt>AggregateReport</tt> object is instantiated, and the overall statistics and results are printed as a CSV text file. For each <tt>Exam</tt> in the <tt>GradedExamCollection</tt>, an <tt>ExamReport</tt> is created. The <tt>ExamReport</tt> writes the results intended to be viewed by the student as an HTML text document.
+</p>
+<h2 id="Tools">Tools</h2>
+<p>
+We are using JDK 7, Ant &gt;= 1.7, and NetBeans &gt;= 7.0.1.
+</p>
+<h2 id="Libraries">Libraries</h2>
+<h3 id="BoofCV">BoofCV</h3>
+<p>
+<a class="ext-link" href="http://boofcv.org/index.php?title=Main_Page"><span class="icon"> </span>BoofCV</a>: BoofCV is a pure-Java implementation of computer vision algorithms. We chose to use this because of its portability. BoofCV is released under an Apache 2.0 license, which allows commercial use so long as the LICENSE is included in the executable.
+</p>
+<h3 id="NeurophOCR">NeurophOCR</h3>
+<p>
+<a class="ext-link" href="http://sourceforge.net/projects/hwrecogntool/"><span class="icon"> </span>Neuroph OCR</a>: We will be using Neuroph OCR for OCR of student names. Neuroph OCR is available under the GNU Library or Lesser General Public License version 2.0 (LGPLv2).
+</p>
+<p>
+Under the LGPLv2, the deployable product must perform the following:
+</p>
+<p>- allow reverse engineering, copying, and modification</p>
+<p>- include "prominent notice" that the library is used and provide a copy of the license</p>
+<p>- be distributed with the source code.</p>
+
+<h3 id="PDFRenderer">PDFRenderer</h3>
+<p>
+<a class="ext-link" href="https://java.net/projects/pdf-renderer"><span class="icon"> </span>PDF-renderer</a>: A library by Sun that has a variety of tools for viewing and transforming PDFs. It allows us to iterate over pages and extract images using a simple API.
+</p>
+<p>
+PDFRenderer is available under The GNU Lesser General Public License, version 2.1 (LGPL-2.1).
+</p>
+<p>
+Under the LGPL-2.1, the deployable product must perform the following:
+</p>
+<p>- provide source code</p>
+<p>- include "prominent notice" that the library is used and provide a copy of the license</p>
+<p>- be accompanied by the source code</p>
+<p>- allow reverse engineering and modification</p>
+<h2 id="ExternalReferences">External References</h2>
+<p>
+Supervising Controller: <a class="ext-link" href="http://martinfowler.com/eaaDev/SupervisingPresenter.html"><span class="icon"> </span>http://martinfowler.com/eaaDev/SupervisingPresenter.html</a>
+</p>
+<p>
+<a class="wiki" href="https://wiki.csc.calpoly.edu/jdSpr15team1/wiki/SRS">SRS</a>
+</p>
+<p>
+<a class="wiki" href="https://wiki.csc.calpoly.edu/jdSpr15team1/wiki/HighLevel">HighLevel</a>
+</p>
+</body>
+</html>
