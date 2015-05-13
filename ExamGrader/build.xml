@@ -49,7 +49,51 @@
                 <arg line="-d src -r"/>
         </java>
     </target>
-    
+    <!--
+                =================
+                SYSTEM TEST SECTION
+                =================
+     -->
+    <target depends="init,compile,jar" description="Run console-based system tests." name="systest">
+        <property name="systemtest.dir" value="systemtest"/>
+        <property name="diffresults" value="${systemtest.dir}/diffresults.txt"/>
+        <property name="error.log" value="${systemtest.dir}/errorlog.txt"/>
+        
+        <!-- Remove any results from previous test runs -->
+        <delete file="${diffresults}"/>
+        <delete file="${error.log}"/>
+        <delete file="${systemtest.dir}/results1.out"/>
+        <echo message="running systest1"/>
+        
+        <!-- Execute the console version of the app with test data -->
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/results1.out"
+            error="${error.log}">
+            <arg line="-i ${systemtest.dir}/Exams.pdf -r ${systemtest.dir}/roster.tsv -o ${systemtest.dir}"/>
+        </java>
+        
+        <!-- Run diff to evaluate results -->
+        
+        <!-- Scores output checking -->
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="${systemtest.dir}/Exams_scores.csv ${systemtest.dir}/results1_scores.csv"/>
+        </exec>
+        
+        <!-- Cummulative output checking -->
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="${systemtest.dir}/Exams_cummulative.csv ${systemtest.dir}/results1_cummulative.csv"/>
+        </exec>
+        
+        <!-- Responses output checking -->
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="${systemtest.dir}/Exams_responses.csv ${systemtest.dir}/results1_responses.csv"/>
+        </exec>
+    </target>
     
     <target name="deploy" depends="jar">
 
