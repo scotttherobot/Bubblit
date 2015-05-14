@@ -51,11 +51,9 @@ public class ExamReader
      * @throws {@link InvalidExamException} when a file cannot be detected.
      */
     public Exam getExam(InputPage file, StudentNameMapper mapper) throws InvalidExamException {
-        // SET exam to empty Exam
-        // SET answerLIST to empty list
-        // SET student to empty student
-        // SET fileImage to file.getBufferedImage()
+        // CALL file.getBufferedImage RETURNING fileImage
         // SET newAnchorWidth to the width of the donut anchor relative to the page
+        // SET answerList to empty list
         
         // SET leftAnchorImage to the left donut image from resources
         // SET rightAnchorImage to the right donut image from resources
@@ -66,7 +64,7 @@ public class ExamReader
         // SET examOffsets to new BubblitFormV2Details object to give us offsets
         // at which we may find the various form aspects with bounds as argument
         
-        // SET bubbleImages to the subImage of fileImage in bounds examOffsets.getCalibrationBubbleBounds()
+        // SET bubbleImages to the subImage of fileImage in bounds examOffsets.getBoundsForCalibrationBubbles()
         // SET fillRatio to 0
         
         // FOR each bubble in bubbleImages
@@ -78,31 +76,31 @@ public class ExamReader
 
         // FOR qNum = 1 to examOffsets.numQuestions + 1
             // SET answer to new Answer
-            // SET bubbleImages = subImage of fileImage in bounds examOffsets.getQuestionBounds(qNum)
+            // CALL examOffsets.getQuestionBounds WITH qNum RETURNINT bubbleBounds
+            // SET bubbleImages = subImage of fileImage in bubbleBounds
             // FOR EACH bubble in bubbleImages
                // SET choiceBubble to new Bubble
-               // SET ratio to CALL getBlackRatio(bubble)
+               // SET ratio to CALL getBlackRatio WITH bubble
                // SET bubble.filledIn to ratio > fillRatio
                // ADD bubble to answer
             // ENDFOR
             // ADD answer to answerList
         // ENDFOR
         
-        // SET firstNameLetters to subImage from fileImage with bounds
-        // examBounds.getFirstNameBounds()
+        // CALL examBounds.getFirstNameBounds RETURNING firstNameBounds
+        // SET firstNameLetters to subImage from fileImage with firstNameBounds
         
-        // SET lastNameLetters to subImage from fileImage with bounds
-        // examBounds.getLastNameBounds()
+        // CALL examBounds.getBoundsForLastName RETURNING lastNameBounds
+        // SET lastNameLetters to subImage from fileImage with lastNameBounds
         
-        // SET usernameLetters to subImage from fileImage with bounds
-        // examBounds.getUsernameBounds()
+        // CALL examBounds.getBoundsForUsername RETURNING usernameBounds
+        // SET usernameLetters to subImage from fileImage with usernameBounds
         
-        // SET username to mapper.detectName(usernameLetters)
+        // CALL mapper.detectName WITH usernameLetters RETURNING username
+        // SET student to new studuent with username 
         
-        // SET exam.username to username
-        
-        // SET exam.answers to answerList
-        
+        // SET exam to new Exam with answerList, student, inputFile
+                        
         // RETURN exam
         return null;
     }
