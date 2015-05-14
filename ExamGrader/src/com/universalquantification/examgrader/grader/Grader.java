@@ -61,13 +61,6 @@ public class Grader extends Observable
         // SET this.pagesGrades to 0
     }
     
-    public Grader()
-    {
-        // SET this.inputFiles to null
-        // SET this.examReader to null
-        // SET this.studentNameMapper to null
-        // SET this.pagesGrades to 0
-    }
     
     /**
      * Cancels execution of current grading and notifies observers.
@@ -91,12 +84,12 @@ public class Grader extends Observable
         
         // FOR each file in this.inputFiles
           // SET answerKeyPage to file.getAnswerKey()
-          // SET examKey to this.examReader.getExam(answerKeyPage, this.mapper)
-          // SET graded to new GradedExamCollection;
+          // CALL this.examReader.getExam WITH answerKeyPage, this.mapper RETURNIN examKey
+          // SET graded to new GradedExamCollection
           // SET graded.examKey to examKey
           // FOR each page in file.getStudentExamPages()
             // SET exam to examReader.getExam(page, this.mapper)
-            // CALL exam.grade(examKey)
+            // CALL exam.grade with examKey
             // ADD exam to graded
           // ENDFOR
         
@@ -114,7 +107,7 @@ public class Grader extends Observable
      */
     public void updateRoster(File file) throws IOException
     {
-        // CALL this.mapper.updateRoster(file)
+        // CALL this.mapper.updateRoster WITH file
     }
 
 }
