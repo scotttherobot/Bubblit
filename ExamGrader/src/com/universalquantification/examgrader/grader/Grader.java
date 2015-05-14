@@ -55,11 +55,18 @@ public class Grader extends Observable
      */
     public Grader(InputFileList inputFileList, ExamReader examReader, StudentNameMapper mapper)
     {
+        // SET this.inputFiles to inputFileList
+        // SET this.examReader to examReader
+        // SET this.studentNameMapper to mapper
+        // SET this.pagesGrades to 0
     }
     
     public Grader()
     {
-        
+        // SET this.inputFiles to null
+        // SET this.examReader to null
+        // SET this.studentNameMapper to null
+        // SET this.pagesGrades to 0
     }
     
     /**
@@ -68,7 +75,6 @@ public class Grader extends Observable
      */
     public void cancel()
     {
-        
     }
 
     /**
@@ -80,6 +86,23 @@ public class Grader extends Observable
     public Map<File, GradedExamCollection> grade()
             throws GradingException
     {
+        // SET fileExamsMap to new Map<File, GradedExamCollection>
+        
+        
+        // FOR each file in this.inputFiles
+          // SET answerKeyPage to file.getAnswerKey()
+          // SET examKey to this.examReader.getExam(answerKeyPage, this.mapper)
+          // SET graded to new GradedExamCollection;
+          // SET graded.examKey to examKey
+          // FOR each page in file.getStudentExamPages()
+            // SET exam to examReader.getExam(page, this.mapper)
+            // CALL exam.grade(examKey)
+            // ADD exam to graded
+          // ENDFOR
+        
+          // MAP file to graded in fileExamsMap
+        // ENDFOR
+        // RETURN fileExamMap
         return null;
     }
     
@@ -91,7 +114,7 @@ public class Grader extends Observable
      */
     public void updateRoster(File file) throws IOException
     {
-        
+        // CALL this.mapper.updateRoster(file)
     }
 
 }
