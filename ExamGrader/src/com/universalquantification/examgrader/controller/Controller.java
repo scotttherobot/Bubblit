@@ -29,7 +29,11 @@ public class Controller {
      */
     public Controller(AppView view)
     {
-        
+        // SET the view field to view
+        // INIT a new StudentNameMapper studentNameMapper
+        // INIT a new ExamReader examReader with studentNameMapper as reader
+        // INIT a new InputFileList as inputFileList field
+        // INIT a new Grader with inputFileList, reader, mapper as grader field
     }
     
     /**
@@ -40,6 +44,9 @@ public class Controller {
      */
     Controller(AppView view, InputFileList inputFileList, Grader grader)
     {
+        // SET the view field to view
+        // SET the inputFileList field to inputFileList
+        // SET the grader field to grader
     }
     
     /**
@@ -51,7 +58,13 @@ public class Controller {
     
     public void changeRosterFile(File rosterFile)
     {
-        
+        // BEGIN
+            // CALL updateRosterFile grader WITH rosterFile
+        // EXCEPTION IOException
+            // CALL setError With "Failed to read the roster file"
+        // EXCEPTION
+            // CALL setError With "Unknown exception reading the roster file"
+        // END
     }
     
     /**
@@ -61,7 +74,15 @@ public class Controller {
      */
     public void grade()
     {
+        // BEGIN
+            // CALL grade grader RETURNING gradingResults
+        // EXCEPTION GradingException
+            // CALL setError view "Grading failed. Please check that the
+            // format is correct"
+        // END
         
+        // INIT reportWriter gradingResults
+        // CALL writeReports reportWriter
     }
     
     /**
@@ -70,6 +91,7 @@ public class Controller {
      */
     public void cancel()
     {
+        // CALL cancel grader
         
     }
     
@@ -80,18 +102,21 @@ public class Controller {
      */
     public void addInputFile(File inputFile)
     {
-        
+        // BEGIN
+            // CALL addInputFile inputFileList WITH inputFile
+        // EXCEPTION IOException
+            // CALL setError view WITH "We could not read the file."
+        // END
     }
     
     /**
      * Deletes an input file from the list of input files to be processed.
-     * This sets an error if the file to be deleted is not found.
      * @param ndx index of the input file in the current list of input files to
      * be processed
      */
     public void deleteInputFile(int ndx)
     {
-        
+        // CALL deleteInputFile inputFileList WITH ndx
     }
             
     
