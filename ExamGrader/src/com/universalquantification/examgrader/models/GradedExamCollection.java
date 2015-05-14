@@ -35,22 +35,18 @@ public class GradedExamCollection
 
     /**
      * Creates a GradedExamCollection in which each exam
-     * in the list is scored by the answer key.
+     * in the list has been scored by the answer key.
      * 
      * @param answerKey Exam the Exam to score other Exams with
      * @param exams List a list of Exams to be scored and saved in the
      * collection
      * @throws IllegalArgumentError if exams is empty
-     * @throws IllegalStateException if trying to grade an already-graded Exam
+     * @pre exams have been graded
      */
-    public GradedExamCollection(Exam answerKey, List<Exam> exams)
+    public GradedExamCollection(Exam answerKey)
     {
         // IF exams is empty
             // RAISE IllegalArgumentException
-        
-        // FOR each exam in exams
-            // CALL grade Exam with answerKey   
-        // END FOR
         
         // SET answerKey field to answerKey
         // SET exams field to exams
