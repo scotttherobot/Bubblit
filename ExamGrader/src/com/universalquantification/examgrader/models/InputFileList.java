@@ -21,6 +21,7 @@ public class InputFileList extends Observable {
      */
     public List<File> getFiles()
     {
+        // RETURN files
         return null;
     }
     
@@ -30,6 +31,7 @@ public class InputFileList extends Observable {
      */
     public int getTotalPages()
     {
+        // RETURN length of files
         return 0;
     }
     
@@ -41,6 +43,10 @@ public class InputFileList extends Observable {
      */
     public void addInputFile(File file)
     {
+        // INIT inputFile as InputFile with file
+        // Add files to inputFiles
+        // CALL setChanged
+        // CALL notifyObservers
     }
     
     /**
@@ -51,6 +57,9 @@ public class InputFileList extends Observable {
      */
     public void deleteInputFile(int ndx)
     {
+        // Delete ndx'th element in inputFiles
+        // CALL setChanged
+        // CALL notifyObservers
         
     }
     

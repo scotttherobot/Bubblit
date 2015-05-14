@@ -39,6 +39,12 @@ public class InputFile {
      */
     public InputFile(File file) throws IOException
     {   
+        // SET file field to file
+        // READ file INTO pdf as a PDF
+        // FOR each page in pdf
+            // INIT inputPage as InputPage with page
+            // ADD inputPage to pages
+        // END FOR
     }
     
     /**
@@ -47,6 +53,7 @@ public class InputFile {
      */
     public InputPage getAnswerKeyPage()
     {
+        // RETURN pages[0]
         return null;
     }
     
@@ -57,6 +64,7 @@ public class InputFile {
      */
     public List<InputPage> getStudentExamPages()
     {
+        // RETURN pages[1:]
         return null;
     }
     
@@ -66,6 +74,7 @@ public class InputFile {
      */
     public int getNumPages()
     {
+        // RETURN length of pages
         return 0;
     }
     
@@ -76,6 +85,7 @@ public class InputFile {
     @Override
     public String toString()
     {
+        // RETURN "InputFile {" concatenated  with file concatenated with "}"
         return "";
     }
     
@@ -86,6 +96,14 @@ public class InputFile {
     @Override
     public boolean equals(Object o)
     {
+          
+        // IF other is null
+            // RETURN false
+        // ELSE IF other is not a InputFile
+            // RETURN FALSE
+        // ELSE
+            // RETURN true iff this object's file is equal to that object's file
+        // END IF
         return false;
     }
     
@@ -96,6 +114,7 @@ public class InputFile {
     @Override
     public int hashCode()
     {
+        // RETURN CALL hashCode file
         return 0;
     }
 }

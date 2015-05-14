@@ -40,7 +40,6 @@ public class Controller {
      */
     Controller(AppView view, InputFileList inputFileList, Grader grader)
     {
-        
     }
     
     /**

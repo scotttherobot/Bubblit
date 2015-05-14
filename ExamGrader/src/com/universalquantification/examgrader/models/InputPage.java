@@ -26,7 +26,8 @@ public class InputPage {
      */
     public InputPage(File file, PDFPage page)
     {
-        
+        // SET file field to file
+        // SET image to image created page
     }
     
     /**
@@ -35,6 +36,7 @@ public class InputPage {
      */
     public BufferedImage getBufferedImage()
     {
+        // RETURN image
         return null;
     }
     
