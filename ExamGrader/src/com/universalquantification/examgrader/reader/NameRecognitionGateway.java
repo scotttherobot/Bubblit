@@ -140,11 +140,7 @@ public class NameRecognitionGateway {
             }
         }
              
-        Bounds bounds = new Bounds();
-        bounds.setMaxX(maxx);
-        bounds.setMinX(minx);
-        bounds.setMaxY(maxy);
-        bounds.setMinY(miny);
+        Bounds bounds = new Bounds(maxx, minx, maxy, miny);
         return bounds;
     }
     
@@ -175,10 +171,10 @@ public class NameRecognitionGateway {
             BufferedImage letter = img.getSubimage(x0, y0, x1 - x0, y1 - y0);
             Bounds letterOnly = getBounds(letter);
             letter = letter.getSubimage(
-                    letterOnly.getMinX(),
-                    letterOnly.getMinY(),
-                    letterOnly.getMaxX() - letterOnly.getMinX(),
-                    letterOnly.getMaxY() - letterOnly.getMinY()
+                    letterOnly.minX,
+                    letterOnly.minY,
+                    letterOnly.maxX - letterOnly.minX,
+                    letterOnly.maxY - letterOnly.minY
             );
             letters.add(letter);
         }
