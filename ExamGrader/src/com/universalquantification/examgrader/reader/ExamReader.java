@@ -60,15 +60,13 @@ public class ExamReader
         // SET leftAnchorImage to the left donut image from resources
         // SET rightAnchorImage to the right donut image from resources
         
-        // CALL getFormBounds(fileImage, leftAnchorImage, rightAnchorImage)
-        // SET bounds to the result of getFormBounds
-        // SET examImage to the subImage fromFileImage in bounds
+        // SET bounds to CALL getFormBounds(fileImage, leftAnchorImage, rightAnchorImage)
+        // SET examImage to the subImage from fileImage in bounds
 
         // SET examOffsets to new BubblitFormV2Details object to give us offsets
         // at which we may find the various form aspects with bounds as argument
         
-        // SET bubbleImages to the subImage of fileImage in bounds
-        //   examOffsets.getCalibrationBubbleBounds()
+        // SET bubbleImages to the subImage of fileImage in bounds examOffsets.getCalibrationBubbleBounds()
         // SET fillRatio to 0
         
         // FOR each bubble in bubbleImages
@@ -86,11 +84,7 @@ public class ExamReader
             // FOR EACH bubble in bubbleImages
                // SET choiceBubble to new Bubble
                // SET ratio to CALL getBlackRatio(bubble)
-               // IF ratio > fillRation THEN
-                 // SET bubble.filledIn = TRUE
-               // ELSE
-                 // SET bubble.filledIn = FALSE
-               // ENDIF
+               // SET bubble.filledIn to ratio > fillRatio
                // ADD bubble to answer
             // ENDFOR
             // ADD answer to answerList
