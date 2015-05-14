@@ -15,7 +15,10 @@ import java.util.Map;
  */
 public class ReportWriter
 {
-    private File outputDirectoryOverride;
+    /**
+     * The directory where the reports shall be written
+     */
+    private File outputDirectory;
     
     /**
      * Instantiate a writer to a particular file path.
@@ -23,8 +26,9 @@ public class ReportWriter
      * be used.
      * @param outputDirectoryOverride - the base directory to write reports to
      */
-    public ReportWriter(File outputDirectoryOverride)
+    public ReportWriter(File outputDirectory)
     {
+        // SET this.outputDirectory to outputDirectory
     }
     
     /**
@@ -37,6 +41,15 @@ public class ReportWriter
      */
     public void writeReports(Map<File, GradedExamCollection> collection) throws IOException
     {
+        // FOR EACH file, examCollection in the collection map
+            // INIT a new AggregateReport with file + "_aggregate", examCollection
+            // CALL AggregateReport.writeReport
+            //
+            // FOR EACH exam in the examCollection
+                // INIT a new ExamReport with exam, file + "_" + exam.student.id
+                // CALL ExamReport.writeReport
+            // END FOR
+        // END FOR
     }
     
 }

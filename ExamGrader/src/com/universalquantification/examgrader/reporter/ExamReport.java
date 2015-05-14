@@ -7,6 +7,7 @@ package com.universalquantification.examgrader.reporter;
 
 import com.universalquantification.examgrader.models.Exam;
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * an ExamReport is a per-student report of exam results.
@@ -20,6 +21,26 @@ import java.io.File;
 public class ExamReport
 {
     /**
+     * The exam for which a report will be written.
+     */
+    private Exam exam;
+    
+    /**
+     * The destination file the report will be written to.
+     */
+    private File outfile;
+    
+    /**
+     * The variables that will be put into the template.
+     */
+    private HashMap<String, Object> scope;
+    
+    /**
+     * The name of the template file to compile.
+     */
+    private static String examReportTemplateName;
+
+    /**
      * Instantiates a new ExamReport given a graded exam and a file
      * to write to
      * @param exam - the graded exam
@@ -27,6 +48,10 @@ public class ExamReport
      */
     public ExamReport(Exam exam,  File writeFile)
     {
+        // SET this.exam to exam
+        // SET this.outfile to writeFile
+        
+        // CALL scope.put with "exam" and this.exam
     }
     
     /**
@@ -34,6 +59,9 @@ public class ExamReport
      */
     public void writeReport()
     {
+        // INIT a new MustacheFactory mf
+        // SET generator to mf.compile with examReportTemplateName
+        // CALL generator.execute with outfile and scope
     }
     
 }
