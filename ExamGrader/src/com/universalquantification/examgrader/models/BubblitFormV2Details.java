@@ -22,8 +22,8 @@ public class BubblitFormV2Details
         // SET this.width to formBounds.maxx - formBounds.minx
         // SET this.height to formBounds.maxy - formBounds.miny
         this.bounds = formBounds;
-        this.width = formBounds.getMaxX() - formBounds.getMinX();
-        this.height = formBounds.getMaxY() - formBounds.getMinY();
+        this.width = formBounds.maxX - formBounds.minX;
+        this.height = formBounds.maxY - formBounds.minY;
     }
     
     /**
