@@ -76,9 +76,7 @@ public class ExamReader
         
         // SET fillRatio = fillRatio/number of calibration bubbles
 
-        // FOR onColumn = 0 TO 4
-          // FOR onRow = 0 TO 25
-            // SET qNum = onColumn * 25 + onRow
+        // FOR qNum = 1 to examOffsets.numQuestions + 1
             // SET answer to new Answer
             // SET bubbleImages = subImage of fileImage in bounds examOffsets.getQuestionBounds(qNum)
             // FOR EACH bubble in bubbleImages
