@@ -44,6 +44,7 @@ public class CharacterRecognizer
     public char[] recognizeCharacter(BufferedImage img)
     {
         // recognize the character
+        // SET character possibilities list TO NeurophOCR.recognizeImage(img)
         ImageRecognitionPlugin imageRecognition = (ImageRecognitionPlugin) nnet.
                 getPlugin(ImageRecognitionPlugin.IMG_REC_PLUGIN_NAME);
         HashMap<String, Double> possibilities = imageRecognition.recognizeImage(img);
@@ -85,16 +86,25 @@ public class CharacterRecognizer
      */
     private char[] getTopPossibilities(HashMap<String, Double> possibilities)
     {
+        // SET top chars to list of size TOP CHARS
         char[] top = new char[TOP_CHARS];
         List<String> mapKeys = new ArrayList<String>(possibilities.keySet());
+        
+        // SET probs to list of CharProbability
         ArrayList<CharProbability> probs = new ArrayList<CharProbability>();
 
+        // FOR EACH character possibility from the Neuroph results
         for(String key : mapKeys)
         {
+            // ADD a new CharProbability to probs with character and probability
             probs.add(new CharProbability(key.charAt(0), possibilities.get(key)));
         }
+        // ENDFOR
         
+        // SORT the probs
         Collections.sort(probs);
+        
+        // SET top to the most likely characters
         for(int i = 0; i < TOP_CHARS; i++)
         {
             top[i] = probs.get(i).c;
