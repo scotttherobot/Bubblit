@@ -27,6 +27,7 @@ public class StudentNameMapper
      */
     public StudentNameMapper(Reader roster) throws IOException
     {
+         // SET new Roster using Reader
     }
 
     /**
@@ -40,6 +41,27 @@ public class StudentNameMapper
      */
     public Student getName(char[][] usrName)
     {
+        // FOR EACH column in Roster CALL getRecordByColumnValue from Roster
+            
+            // IF length of name == # of rows in userName (length of OCR name)   
+                // STORE that name from roster into an array to check later
+            // ENDIF
+        // ENDFOR EACH
+        
+        // FOR EACH name in new array
+            
+            // COMPARE letters in the name to the corresponding row in userName
+            // CHECK for matches
+            // STORE the name that matched the closest
+        
+        // ENDFOR EACH
+        
+        // GET corresponding student information from roster file
+        // SET Student first name field
+        // SET Student Last name field
+        // SET Student ID field
+        
+        //RETURN Student
         return null;
     }
     
@@ -50,7 +72,7 @@ public class StudentNameMapper
      */
     public void updateRoster(Reader reader) throws IOException
     {
-        
+        // SET Roster
     }
  
 
