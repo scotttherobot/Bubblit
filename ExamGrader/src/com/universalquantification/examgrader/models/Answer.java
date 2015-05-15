@@ -31,6 +31,8 @@ public class Answer implements Comparable<Answer>
      */
     public Answer(Set<Bubble> choices, int question)
     {
+        // SET choices field to choices
+        // SET number to question
     }
 
     /**
@@ -47,6 +49,29 @@ public class Answer implements Comparable<Answer>
     public int compareTo(Answer o)
     {
         return 0;
+        // INIT returnValue to 0
+        // READ choices of o as otherChoices 
+        // READ number of o as otherNumber
+        // 
+        // IF number is less than otherNumber
+            // SET returnValue to -1
+        // ELSE IF number is greater than otherNumber
+            // SET returnValue to 1
+        // ENDIF
+        //
+        // IF returnValue is equal to 0
+            // FOR each choice in choices
+                // SET idx to the index of choice
+                // READ the item in index idx of otherChoices as otherChoice
+                // 
+                // IF otherChoice and choice are not equal
+                    // returnValue = 1
+                    // ENDFOR
+                // 
+            // ENDFOR
+        // ENDIF
+        //
+        // RETURN returnValue    
     }
 
     /**
@@ -62,17 +87,29 @@ public class Answer implements Comparable<Answer>
     public boolean equals(Object o)
     {
         return false;
-    }
-
-    /**
-     * Returns a hash code value for this Answer.
-     * 
-     * @return The hash code value for this Answer.
-     */
-    @Override
-    public int hashCode()
-    {
-        return 0;
+        // IF o is of type Answer
+            // READ choices of o as otherChoices 
+            // READ number of o as otherNumber
+            // 
+            // IF number is not equal to otherNumber
+                // RETURN false
+            // ENDIF
+            //
+            // IF returnValue is equal to 0
+                // FOR each choice in choices
+                    // SET idx to the index of choice
+                    // READ the item in index idx of otherChoices as otherChoice
+                    // 
+                    // IF otherChoice and choice are not equal
+                        // RETURN false
+                    // 
+                // ENDFOR
+            // ENDIF
+            //
+            // RETURN true
+        // ELSE
+            // RETURN false
+        // ENDIF
     }
 
     /**
@@ -84,5 +121,15 @@ public class Answer implements Comparable<Answer>
     public String toString()
     {
         return null;
+        // SET string to number followed by a ") "
+        //
+        // FOR each choice in choices
+            // IF choice.isFilled
+                // SET idx to the index of choice
+                // SET character to 'A' plus idx
+                //
+                // CALL concat on string with character
+            // ENDIF
+        // ENDFOR
     }
 }

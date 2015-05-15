@@ -21,7 +21,8 @@ public class Bubble
      * identifiable. For example, 'A', 'B', 'C', and 'D'.
      */
     public Bubble(boolean isFilled, String label) {
-        
+        // SET the field isFilled to isFilled
+        // SET the field label to label
     }
     
     /**
@@ -31,7 +32,7 @@ public class Bubble
      * filled.
      */
     public Bubble(boolean isFilled) {
-        
+        // SET the field isFilled to isFilled
     }
  
     /**
@@ -40,6 +41,7 @@ public class Bubble
      * @return A boolean representing whether or not the bubble is filled.
      */
     public boolean isFilled() {
+        // RETURN isFilled
         return false;
     }
 
@@ -54,17 +56,17 @@ public class Bubble
     @Override
     public boolean equals(Object o)
     {
+        // IF o is of type Bubble
+            // READ isFilled of o as otherFilled
+            //
+            // IF isFilled and otherFilled are both true
+                // RETURN true
+            // ELSE
+                // RETURN false
+            // ENDIF
+        // ELSE
+            // RETURN false
+        // ENDIF
         return false;
-    }
-
-    /**
-     * Returns a hash code value for this Answer.
-     * 
-     * @return The hash code value for this Answer.
-     */
-    @Override
-    public int hashCode()
-    {
-        return 0;
     }
 }

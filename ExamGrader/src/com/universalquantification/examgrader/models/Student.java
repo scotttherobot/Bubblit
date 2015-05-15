@@ -5,7 +5,7 @@ package com.universalquantification.examgrader.models;
  * first name, last name, and identification number. A student record can also
  * be printed for convenience.
  * 
- * @author Universal Quantification
+ * @author C.Y. Tan
  */
 public class Student 
 {

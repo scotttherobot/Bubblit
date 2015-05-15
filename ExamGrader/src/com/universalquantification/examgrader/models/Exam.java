@@ -45,6 +45,9 @@ public class Exam
      */
     public Exam(ArrayList<Answer> answers, Student student, InputPage inputPage) 
     {
+        // SET the answers field to answers
+        // SET the student field to student
+        // SET examFile to inputPage
     } 
     
     /**
@@ -55,6 +58,7 @@ public class Exam
     public InputPage getExamFile() 
     {
         return null;
+        // RETURN examFile
     }
     
     /**
@@ -66,6 +70,13 @@ public class Exam
     public Answer getAnswer(int question)
     {
         return null;
+        // BEGIN 
+            // READ answer from answerMap for the key question as readAnswer
+            //
+            // RETURN readAnswer
+        // EXCEPTION 
+            // CALL error with "Answer for given number not found on exam."
+        // END
     }
 
     /**
@@ -76,9 +87,8 @@ public class Exam
     public Student getStudentRecord() 
     {
         return null;
+        // RETURN student
     }
-    
-    
     
     /**
      * Returns whether or not a given question number was correct.
@@ -90,6 +100,11 @@ public class Exam
     public boolean isQuestionCorrect(int question)
     {
         return false;
+        // IF correctQuestions contains question
+            // RETURN true
+        // ELSE
+            // RETURN false
+        // ENDIF
     }
 
     /**
@@ -100,6 +115,7 @@ public class Exam
     public Set<Integer> getCorrectQuestions()
     {
         return null;
+        // RETURN correctQuestions
     }
 
      /**
@@ -109,6 +125,16 @@ public class Exam
      */
     public Set<Integer> getIncorrectQuestions()
     {
+        // INIT incorrectQuestions as a set
+        // INIT iterator as an iterator for answerMap
+        // 
+        // WHILE iterator.hasNext() is true
+            // CALL next on iterator RETURNING entry
+            // IF correctQuestions does not contain the key for entry
+            // CALL add on incorrectQuestions with the key for entry
+        // ENDWHILE
+        //
+        // RETURN incorrectQuestions
         return null;
     }
     
@@ -121,6 +147,8 @@ public class Exam
      */
     public int getRawScore()
     {
+        // CALL size on correctQuestions RETURNING score
+        // RETURN score
         return 0;
     }
     
@@ -132,6 +160,12 @@ public class Exam
      */
     public int getPercentScore() 
     {
+        // CALL getRawScore RETURNING rawScore
+        // CALL size on answerMap RETURNING questionCount
+        // 
+        // SET percentScore to rawScore divided by questionCount
+        //
+        // RETURN percentScore
         return 0;
     }
     
@@ -142,6 +176,23 @@ public class Exam
      */
     public void grade(Exam answerKey)
     {
-        
+        // READ answerMap for answerKey as answerKey
+        // INIT iterator as an iterator for answerKey
+        // 
+        // WHILE iterator.hasNext() is true
+            // CALL next on iterator RETURNING entry
+            // SET key to the key for entry
+            // CALL containsKey on answerMap with key RETURNING hasKey
+            //
+            // IF hasKey
+                // SET thisAnswer as the Answer in answerMap
+                // SET correctAnswer as the Answer in answerKey
+                // 
+                // CALL equals on thisAnswer with correctAnswer RETURNING isRight
+                // 
+                // IF isRight AND correctQuestions does not contain key
+                    // CALL add on correctQuestions with key
+            // ENDIF
+        // ENDWHILE
     }
 }
