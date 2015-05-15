@@ -40,6 +40,11 @@ public class Grader extends Observable
     private int pagesGraded;
     
     /**
+     * Total number of pages this grader must grade.
+     */
+    private final int pagesToGrade;
+    
+    /**
      * Student mapper to be used
      */
     private StudentNameMapper studentNameMapper;
@@ -59,6 +64,8 @@ public class Grader extends Observable
         // SET this.examReader to examReader
         // SET this.studentNameMapper to mapper
         // SET this.pagesGrades to 0
+        // SET this.pagesToGrade to number of pages in inputFileList
+        pagesToGrade = 0;
     }
     
     
@@ -91,6 +98,8 @@ public class Grader extends Observable
             // SET exam to examReader.getExam(page, this.mapper)
             // CALL exam.grade with examKey
             // ADD exam to graded
+            // CALL setChanged
+            // CALL notifyObservers
           // ENDFOR
         
           // MAP file to graded in fileExamsMap
@@ -108,6 +117,24 @@ public class Grader extends Observable
     public void updateRoster(File file) throws IOException
     {
         // CALL this.mapper.updateRoster WITH file
+    }
+    
+    /**
+     * Get the number of pages graded so far. Used by observers.
+     * @return the number of pages graded so far.
+     */
+    public int getPagesGraded()
+    {
+        return pagesGraded;
+    }
+    
+    /**
+     * Get the total number of pages to grade. Used by observers.
+     * @return the number of pages to grade.
+     */
+    public int getTotalPagesToGrade()
+    {
+        return pagesToGrade;
     }
 
 }
