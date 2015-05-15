@@ -47,6 +47,24 @@ public class NameRecognitionGateway {
      */
     public char[][] detectName(BufferedImage image)
     {
+        // LOAD buffered image
+        // IOEXCEPTION caught if buffered image fails to load
+        
+        // CALL getBinaryImage to RETURN black and white image
+        // CALL invertBW to RETURN inverted image
+        
+        // CALL getLetters on image to crop each letter into its own buffered image 
+        // STORE each buffered image in ArrayList
+        
+        //FOR EACH buffered image in ArrayList
+        
+            // CALL recognizeCharacter from class CharacterRecognizer
+            // STORE each result in a new row of a 2D char array
+        
+        // END FOR EACH
+            
+        // RETURN the 2D char array
+        
         return null;
     }
     
