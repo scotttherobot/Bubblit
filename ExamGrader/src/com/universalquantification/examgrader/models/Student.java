@@ -28,6 +28,13 @@ public class Student
      */
     public Student(String firstName, String lastName, String id) 
     {
+        // SET the firstName field to firstName
+        // SET the lastName field to lastName
+        // SET the id field to id
+        
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.id = id;
     }
     
     /**
@@ -37,7 +44,9 @@ public class Student
      */
     public String getFirstName() 
     {
-        return null;    
+        // RETURN firstName  
+        
+        return firstName;
     }
     
     /**
@@ -47,7 +56,9 @@ public class Student
      */
     public String getLastName() 
     {
-        return null;
+        // RETURN lastName  
+        
+        return lastName;
     }
     
     /**
@@ -56,7 +67,9 @@ public class Student
      * @return The identification number in the student record.
      */
     public String getId() {
-        return null;
+        // RETURN id  
+        
+        return id;
     }
     
     /**
@@ -65,6 +78,9 @@ public class Student
      * @param firstName The first name in the student record.
      */
     public void setFirstName(String firstName) { 
+        // SET the firstName field to firstName
+        
+        this.firstName = firstName;
     }
     
     /**
@@ -73,6 +89,9 @@ public class Student
      * @param lastName The last name in the student record.
      */
     public void setlastName(String lastName) { 
+        // SET the lastName field to lastName
+        
+        this.lastName = lastName;
     }
     
     /**
@@ -80,6 +99,9 @@ public class Student
      * 
      * @param id The identification number in the student record.
      */
-    public void setId(String id) { 
+    public void setId(String id) {
+        // SET the lastName id to id
+        
+        this.id = id;
     }
 }

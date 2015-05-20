@@ -1,6 +1,9 @@
 package com.universalquantification.examgrader.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,15 +23,15 @@ public class Exam
     /**
      * A map of question numbers to answers.
      */
-    private Map<Integer, Answer> answerMap;
+    private final Map<Integer, Answer> answerMap;
     /**
      * The input page the exam was generated from.
      */
-    private InputPage examFile; 
+    private final InputPage examFile; 
     /**
      * The student associated with the Exam.
      */
-    private Student student;
+    private final Student student;
     /**
      * Questions that were correct. This set will be null until grade()
      * is called.
@@ -48,6 +51,15 @@ public class Exam
         // SET the answers field to answers
         // SET the student field to student
         // SET examFile to inputPage
+        
+        this.student = student;
+        this.examFile = inputPage;
+        
+        answerMap = new HashMap();
+        
+        for (Answer a : answers) {
+            answerMap.put(a.getNumber(), a);
+        }
     } 
     
     /**
@@ -57,8 +69,9 @@ public class Exam
      */
     public InputPage getExamFile() 
     {
-        return null;
         // RETURN examFile
+        
+        return examFile;
     }
     
     /**
@@ -69,7 +82,6 @@ public class Exam
      */
     public Answer getAnswer(int question)
     {
-        return null;
         // BEGIN 
             // READ answer from answerMap for the key question as readAnswer
             //
@@ -77,6 +89,14 @@ public class Exam
         // EXCEPTION 
             // CALL error with "Answer for given number not found on exam."
         // END
+        
+        Answer a = answerMap.get(question);
+        
+        if (a == null) {
+            throw new IllegalArgumentException("No such numbered question on this exam.");
+        }
+        
+        return a;
     }
 
     /**
@@ -86,8 +106,9 @@ public class Exam
      */
     public Student getStudentRecord() 
     {
-        return null;
         // RETURN student
+        
+        return student;
     }
     
     /**
@@ -99,12 +120,20 @@ public class Exam
      */
     public boolean isQuestionCorrect(int question)
     {
-        return false;
         // IF correctQuestions contains question
             // RETURN true
         // ELSE
             // RETURN false
         // ENDIF
+        
+        Answer a = getAnswer(question);
+        int questionNumber = a.getNumber();
+        
+        for (Integer i : correctQuestions) {
+            if (i == questionNumber) return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -114,8 +143,9 @@ public class Exam
      */
     public Set<Integer> getCorrectQuestions()
     {
-        return null;
         // RETURN correctQuestions
+        
+        return correctQuestions;
     }
 
      /**
@@ -135,7 +165,18 @@ public class Exam
         // ENDWHILE
         //
         // RETURN incorrectQuestions
-        return null;
+        
+        Set<Integer> incorrectQuestions = new HashSet<>();
+        
+        for (Map.Entry pair : answerMap.entrySet()) {
+            int questionNumber = (int) pair.getKey();
+            
+            if (!isQuestionCorrect(questionNumber)) {
+                incorrectQuestions.add(questionNumber);
+            }
+        }
+
+        return incorrectQuestions;
     }
     
     
@@ -149,7 +190,8 @@ public class Exam
     {
         // CALL size on correctQuestions RETURNING score
         // RETURN score
-        return 0;
+        
+        return correctQuestions.size();
     }
     
     /**
@@ -166,7 +208,8 @@ public class Exam
         // SET percentScore to rawScore divided by questionCount
         //
         // RETURN percentScore
-        return 0;
+        
+        return (correctQuestions.size() / answerMap.size());
     }
     
     /**
@@ -194,5 +237,23 @@ public class Exam
                     // CALL add on correctQuestions with key
             // ENDIF
         // ENDWHILE
+        
+        Map<Integer, Answer> correctAnswerMap = answerKey.answerMap;
+        
+        correctQuestions = new HashSet<>();
+        
+        for (Map.Entry pair : correctAnswerMap.entrySet()) {
+            int questionNumber = (int) pair.getKey();
+            Answer thisAnswer = answerMap.get(questionNumber);
+            Answer otherAnswer;
+            
+            if (thisAnswer != null) {
+                otherAnswer = (Answer) pair.getValue();
+                
+                if (thisAnswer.equals(otherAnswer)) {
+                    correctQuestions.add(questionNumber);
+                }
+            }
+        }
     }
 }

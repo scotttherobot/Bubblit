@@ -1,5 +1,7 @@
 package com.universalquantification.examgrader.models;
 
+import java.util.Objects;
+
 /**
  * Bubble represents an answer bubble. A Bubble can either be filled or not 
  * filled. A Bubble can be labeled for convenience.
@@ -23,6 +25,9 @@ public class Bubble
     public Bubble(boolean isFilled, String label) {
         // SET the field isFilled to isFilled
         // SET the field label to label
+        
+        this.isFilled = isFilled;
+        this.label = label;
     }
     
     /**
@@ -33,6 +38,7 @@ public class Bubble
      */
     public Bubble(boolean isFilled) {
         // SET the field isFilled to isFilled
+        this.isFilled = isFilled;
     }
  
     /**
@@ -42,7 +48,7 @@ public class Bubble
      */
     public boolean isFilled() {
         // RETURN isFilled
-        return false;
+        return isFilled;
     }
 
      /**
@@ -67,6 +73,26 @@ public class Bubble
         // ELSE
             // RETURN false
         // ENDIF
+        
+        if (this.getClass() == o.getClass()) {
+            Bubble other = (Bubble) o;
+            
+            return (isFilled == other.isFilled);
+        }
+        
         return false;
+    }
+
+    /**
+     * Generates a hash code for the Bubble.
+     * 
+     * @return A hash code for the Bubble.
+     */
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + (this.isFilled ? 1 : 0);
+        hash = 11 * hash + Objects.hashCode(this.label);
+        return hash;
     }
 }

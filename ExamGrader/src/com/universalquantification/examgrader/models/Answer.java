@@ -33,6 +33,19 @@ public class Answer implements Comparable<Answer>
     {
         // SET choices field to choices
         // SET number to question
+        this.choices = choices;
+        number = question;
+    }
+    
+    /**
+     * Returns the number of this answer.
+     * 
+     * @return The number for this question.
+     */
+    public int getNumber() {
+        // RETURN number
+        
+        return number;
     }
 
     /**
@@ -48,7 +61,7 @@ public class Answer implements Comparable<Answer>
     @Override
     public int compareTo(Answer o)
     {
-        return 0;
+
         // INIT returnValue to 0
         // READ choices of o as otherChoices 
         // READ number of o as otherNumber
@@ -71,7 +84,33 @@ public class Answer implements Comparable<Answer>
             // ENDFOR
         // ENDIF
         //
-        // RETURN returnValue    
+        // RETURN returnValue
+        
+        int returnValue = 0;
+        Set<Bubble> otherChoices = o.choices;
+        int otherNumber = o.number;
+        
+        if (number < otherNumber) {
+            returnValue = -1;
+        }
+        else if (number > otherNumber) {
+            returnValue = 1;
+        }
+        
+        if (returnValue == 0) {
+            Object[] choicesArray = choices.toArray();
+            Object[] otherChoicesArray = otherChoices.toArray();
+            
+            for (int idx = 0; idx < choicesArray.length; idx++) {
+                if (!((Bubble) choicesArray[idx]).equals((Bubble) otherChoicesArray[idx])) {
+                    returnValue = -1;
+                    
+                    break;
+                }
+            }
+        }
+        
+        return returnValue;
     }
 
     /**
@@ -86,7 +125,6 @@ public class Answer implements Comparable<Answer>
     @Override
     public boolean equals(Object o)
     {
-        return false;
         // IF o is of type Answer
             // READ choices of o as otherChoices 
             // READ number of o as otherNumber
@@ -110,6 +148,31 @@ public class Answer implements Comparable<Answer>
         // ELSE
             // RETURN false
         // ENDIF
+        
+        if (this.getClass() == o.getClass())
+        {
+            Answer other = (Answer) o;
+            int otherNumber = other.number;
+            Object[] choicesArray;
+            Object[] otherChoicesArray;
+            
+            if (number != otherNumber) {
+                return false;
+            }
+            
+            choicesArray = choices.toArray();
+            otherChoicesArray = other.choices.toArray();
+            
+            for (int idx = 0; idx < choicesArray.length; idx++) {
+                if (!((Bubble) choicesArray[idx]).equals((Bubble) otherChoicesArray[idx])) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -120,7 +183,6 @@ public class Answer implements Comparable<Answer>
     @Override
     public String toString()
     {
-        return null;
         // SET string to number followed by a ") "
         //
         // FOR each choice in choices
@@ -131,5 +193,20 @@ public class Answer implements Comparable<Answer>
                 // CALL concat on string with character
             // ENDIF
         // ENDFOR
+        
+        String message = number + ") ";
+        int index = 0;
+        
+        for (Bubble choice : choices) {
+            if (choice.isFilled()) {
+                String letter = Character.toString((char) (65 + index));
+                
+                message = message.concat(letter);
+            }
+            
+            index++;
+        }
+        
+        return message;
     }
 }
