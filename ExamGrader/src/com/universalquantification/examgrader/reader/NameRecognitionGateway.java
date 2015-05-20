@@ -9,8 +9,16 @@ import boofcv.core.image.ConvertBufferedImage;
 import boofcv.gui.binary.VisualizeBinaryData;
 import boofcv.struct.image.ImageFloat32;
 import boofcv.struct.image.ImageUInt8;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * The NameRecognitionGateway class reads student name 
@@ -23,7 +31,6 @@ public class NameRecognitionGateway {
     
     private CharacterRecognizer cr; // Create a new character recognizer for OCR
     private BufferedImage letters;  // Image to read letters from
-    
     /**
      * Creates an instance of NameRecognitionGateway with a BufferedImage
      * to perform OCR on.
@@ -35,37 +42,77 @@ public class NameRecognitionGateway {
         this.cr = new CharacterRecognizer();
         this.letters = letters;
     }
-    
+    //take single image
     /**
-     * Does OCR on an image and gets a possible username with individual 
-     * character possibilities for each spot included 
+     * Does OCR on a single character image and 
+     * gets an array of possible characters
      *
      * @param image input image to do OCR on
-     * @return the a 2D char array that represents each individual
+     * @return the a char array that represents each individual
      * character in the username, with alternate possible choices for each 
      * character based on probability.
      */
-    public char[][] detectName(BufferedImage image)
+    public char[] detectCharacter(BufferedImage image)
     {
+        /* ARE WE RECEIVING ALL CHARACTERS OR 1 AT A TIME? */
+        
+        CharacterRecognizer cr = new CharacterRecognizer();
+        BufferedImage letters = null;
+        
         // LOAD buffered image
         // IOEXCEPTION caught if buffered image fails to load
+//        try
+//        {
+            letters = image; //ImageIO.read(new File("letters.png"));
+//        }
+//        catch (IOException ex)
+//        {
+//            Logger.getLogger(NameRecognitionGateway.class.getName()).
+//                    log(Level.SEVERE, null, ex);
+//        }
         
         // CALL getBinaryImage to RETURN black and white image
+        BufferedImage bn = getBinaryImage(letters);
         // CALL invertBW to RETURN inverted image
+        invertBW(bn);
         
-        // CALL getLetters on image to crop each letter into its own buffered image 
-        // STORE each buffered image in ArrayList
+        // **NOT FOR SINGLE CHARACTER IMAGES** CALL getLetters on image to crop each letter into its own buffered image
+        // **NOT FOR SINGLE CHARACTER IMAGES** STORE each buffered image in ArrayList
         
-        //FOR EACH buffered image in ArrayList
+        // **NOT FOR SINGLE CHARACTER IMAGES** FOR EACH buffered image in ArrayList
         
             // CALL recognizeCharacter from class CharacterRecognizer
-            // STORE each result in a new row of a 2D char array
+            char[] topChars = cr.recognizeCharacter(bn);
+            // **NOT FOR SINGLE CHARACTER IMAGES** STORE each result in a new row of a 2D char array
         
-        // END FOR EACH
+        // **NOT FOR SINGLE CHARACTER IMAGES**  END FOR EACH
             
-        // RETURN the 2D char array
+        // **NOT FOR SINGLE CHARACTER IMAGES** RETURN the 2D char array
         
-        return null;
+        return topChars;
+    }
+
+    public static BufferedImage resize(BufferedImage img, int newW, int newH)
+    {
+                
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH,
+                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
+    }
+
+    private static double determineImageScale(int sourceWidth, int sourceHeight,
+            int targetWidth, int targetHeight)
+    {
+
+        double scalex = (double) targetWidth / sourceWidth;
+        double scaley = (double) targetHeight / sourceHeight;
+        return Math.min(scalex, scaley);
     }
     
     /**

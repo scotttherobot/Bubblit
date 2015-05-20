@@ -1,0 +1,84 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.universalquantification.examgrader.reader;
+
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import junit.framework.TestCase;
+
+/**
+ *
+ * @author admin
+ */
+public class NameRecognitionGatewayTest extends TestCase {
+    
+    public NameRecognitionGatewayTest(String testName) {
+        super(testName);
+    }
+    
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
+    
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
+
+    /**
+     * Test of detectCharacter method, of class NameRecognitionGateway.
+     */
+    public void testDetectCharacter() {
+        System.out.println("detectCharacter");
+        BufferedImage image = null;
+        NameRecognitionGateway instance = null;
+        char[] expResult = null;
+        char[] result = instance.detectCharacter(image);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of invertBW method, of class NameRecognitionGateway.
+     */
+    public void testInvertBW() {
+        System.out.println("invertBW");
+        BufferedImage img = null;
+        NameRecognitionGateway.invertBW(img);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getBounds method, of class NameRecognitionGateway.
+     */
+    public void testGetBounds() {
+        System.out.println("getBounds");
+        BufferedImage img = null;
+        Bounds expResult = null;
+        Bounds result = NameRecognitionGateway.getBounds(img);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getLetters method, of class NameRecognitionGateway.
+     */
+    public void testGetLetters() {
+        System.out.println("getLetters");
+        BufferedImage img = null;
+        int numLetters = 0;
+        ArrayList<BufferedImage> expResult = null;
+        ArrayList<BufferedImage> result = NameRecognitionGateway.getLetters(img, numLetters);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+    
+}
