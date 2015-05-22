@@ -119,7 +119,7 @@ public class ExamReader
 //        graphics.drawLine(bounds.minX, bounds.minY, bounds.minX, bounds.maxY);
 //        graphics.drawLine(bounds.maxX, bounds.minY, bounds.maxX, bounds.maxY);
 //       graphics.drawLine(bounds.minX, bounds.maxY, bounds.maxX, bounds.maxY);
-       //ShowImages.showDialog(fileImage);
+        //ShowImages.showDialog(fileImage);
         BubblitFormV2Details formDetails = new BubblitFormV2Details(bounds);
 
         Bounds cbBounds = formDetails.getBoundsForCalibrationBubbles();
@@ -148,7 +148,7 @@ public class ExamReader
 
         for (int qNum = 1; qNum <= 100; qNum++)
         {
-            HashSet<Bubble> questionBubbles = new LinkedHashSet<Bubble>();
+            ArrayList<Bubble> questionBubbles = new ArrayList<Bubble>();
 
             Bounds qb = formDetails.getBoundsForQuestion(qNum);
             BufferedImage q = fileImage.getSubimage(
@@ -176,28 +176,65 @@ public class ExamReader
             answers.add(new Answer(questionBubbles, qNum));
         }
 
-        char[][] firstNamePossibilities = extractNameField(
-                fileImage, formDetails.getBoundsForFirstName(),
-                BubblitFormV2Details.kNumFirstNameLetters);
+        Bounds lastNameBounds = formDetails.getBoundsForLastName();
+        BufferedImage lastNameField = fileImage.getSubimage(
+            lastNameBounds.minX, lastNameBounds.minY,
+            lastNameBounds.maxX - lastNameBounds.minX, 
+            lastNameBounds.maxY - lastNameBounds.minY
+        );
         
-        char[][] lastNamePossibilities = extractNameField(
-                fileImage, formDetails.getBoundsForLastName(),
-                BubblitFormV2Details.kNumLastNameLetters);
+        Bounds firstNameBounds = formDetails.getBoundsForLastName();
+        BufferedImage firstNameField = fileImage.getSubimage(
+            firstNameBounds.minX, firstNameBounds.minY,
+            firstNameBounds.maxX - firstNameBounds.minX, 
+            firstNameBounds.maxY - firstNameBounds.minY
+        );
 
-        // TODO: set these from the name mapper
-        String firstName = "Luis";
-        String lastName = "Cuellar";
-        String username = "lcuellar";
+        StochasticString firstNamePossibilities = extractStochasticNameField(
+                firstNameField, BubblitFormV2Details.kNumFirstNameLetters);
+
+        StochasticString lastNamePossibilities = extractStochasticNameField(
+                lastNameField, BubblitFormV2Details.kNumLastNameLetters);
+
+        Student student = new Student(
+                firstNamePossibilities, lastNamePossibilities,
+                firstNameField, lastNameField
+        );
         
-        Student student = new Student(firstName, lastName, username);      
         Exam exam = new Exam(answers, student, file);
-        
+
         return exam;
     }
 
-    private char[][] extractNameField(BufferedImage img, Bounds nameBounds,
+    private StochasticString extractStochasticNameField(BufferedImage img,
             int numLetters)
     {
+        StochasticString str = new StochasticString();
+
+        BufferedImage nameCharacters[] = splitImageHorizontally(img,
+                numLetters, 0.08, 0.02);
+
+        for (int i = 0; i < nameCharacters.length; i++)
+        {
+            removeBorders(nameCharacters[i]);
+            if (getBlackRatio(nameCharacters[i]) > 0.02)
+            {
+
+                str.append(this.nameRecognitionGateway.
+                        detectStochasticCharacter(nameCharacters[i]));
+            }
+
+        }
+
+        return str;
+    }
+
+    private StochasticString extractStochasticNameField(BufferedImage img,
+            Bounds nameBounds,
+            int numLetters)
+    {
+        StochasticString str = new StochasticString();
+
         BufferedImage f = img.getSubimage(
                 nameBounds.minX, nameBounds.minY,
                 nameBounds.maxX - nameBounds.minX, nameBounds.maxY
@@ -211,26 +248,14 @@ public class ExamReader
             removeBorders(nameCharacters[i]);
             if (getBlackRatio(nameCharacters[i]) > 0.02)
             {
-                //ShowImages.showDialog(nameCharacters[i]);
+
+                str.append(this.nameRecognitionGateway.
+                        detectStochasticCharacter(nameCharacters[i]));
             }
 
         }
-        char[][] ret =
-        {
-            {
-                'L', 'I', 'N'
-            },
-            {
-                'U', 'O', 'O'
-            },
-            {
-                'I', 'L', 'H'
-            },
-            {
-                'S', 'K', 'H'
-            }
-        };
-        return ret;
+
+        return str;
     }
 
     private static BufferedImage getTopLeftCorner(BufferedImage original)
@@ -378,7 +403,7 @@ public class ExamReader
         // Find the points which match the template the best
         matcher.setTemplate(template, expectedMatches);
         matcher.process(image);
-        System.out.println(matcher.getResults().size);
+        //System.out.println(matcher.getResults().size);
         List<Match> found = matcher.getResults().toList();
 
         ImagePoint point = new ImagePoint();
