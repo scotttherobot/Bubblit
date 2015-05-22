@@ -37,10 +37,8 @@ public class InputPage
         this.file = file;
         Rectangle rect = new Rectangle(0, 0, (int) page.getBBox().getWidth(),
                 (int) page.getBBox().getHeight());
-        System.out.println("start");
         Image pageImage = page.getImage(kPageWidth, kPageHeight, rect, null,
                 true, true);
-        System.out.println("end");
         BufferedImage bImage = new BufferedImage(kPageWidth, kPageHeight,
                 BufferedImage.TYPE_INT_RGB);
         Graphics2D bufImageGraphics = bImage.createGraphics();
