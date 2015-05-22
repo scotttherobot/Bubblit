@@ -55,7 +55,7 @@ public class NameRecognitionGatewayTest extends TestCase {
                     log(Level.SEVERE, null, ex);  
         }
         
-        NameRecognitionGateway instance = new NameRecognitionGateway(image);
+        NameRecognitionGateway instance = new NameRecognitionGateway();
         // char[] expResult = null;
         char[] result = instance.detectCharacter(image);
         // assertEquals(expResult, result);
