@@ -57,37 +57,16 @@ public class NameRecognitionGateway {
         /* ARE WE RECEIVING ALL CHARACTERS OR 1 AT A TIME? */
         
         CharacterRecognizer cr = new CharacterRecognizer();
-        BufferedImage letters = null;
-        
-        // LOAD buffered image
-        // IOEXCEPTION caught if buffered image fails to load
-//        try
-//        {
-            letters = image; //ImageIO.read(new File("letters.png"));
-//        }
-//        catch (IOException ex)
-//        {
-//            Logger.getLogger(NameRecognitionGateway.class.getName()).
-//                    log(Level.SEVERE, null, ex);
-//        }
+        BufferedImage letters = image;
         
         // CALL getBinaryImage to RETURN black and white image
         BufferedImage bn = getBinaryImage(letters);
         // CALL invertBW to RETURN inverted image
         invertBW(bn);
-        
-        // **NOT FOR SINGLE CHARACTER IMAGES** CALL getLetters on image to crop each letter into its own buffered image
-        // **NOT FOR SINGLE CHARACTER IMAGES** STORE each buffered image in ArrayList
-        
-        // **NOT FOR SINGLE CHARACTER IMAGES** FOR EACH buffered image in ArrayList
-        
-            // CALL recognizeCharacter from class CharacterRecognizer
-            char[] topChars = cr.recognizeCharacter(bn);
-            // **NOT FOR SINGLE CHARACTER IMAGES** STORE each result in a new row of a 2D char array
-        
-        // **NOT FOR SINGLE CHARACTER IMAGES**  END FOR EACH
-            
-        // **NOT FOR SINGLE CHARACTER IMAGES** RETURN the 2D char array
+        // CALL resize to scale image to 40 by 40 pixels
+        bn = resize(bn, 40, 40);
+        // CALL recognizeCharacter from class CharacterRecognizer
+        char[] topChars = cr.recognizeCharacter(bn);
         
         return topChars;
     }

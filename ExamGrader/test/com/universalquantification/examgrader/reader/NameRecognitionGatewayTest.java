@@ -20,6 +20,8 @@ import junit.framework.TestCase;
  */
 public class NameRecognitionGatewayTest extends TestCase {
     
+    static final String RESOURCE_PATH = "OCRTestImages/";
+    
     public NameRecognitionGatewayTest(String testName) {
         super(testName);
     }
@@ -38,12 +40,15 @@ public class NameRecognitionGatewayTest extends TestCase {
      * Test of detectCharacter method, of class NameRecognitionGateway.
      */
     public void testDetectCharacter() {
-        System.out.println("detectCharacter");
+        
+        
+        String fileName = RESOURCE_PATH + "A_2.png";
+        System.out.println("detectCharacter: " + fileName);
         BufferedImage image = null;
         
         try {
             
-            image = ImageIO.read(new File("A.png"));
+            image = ImageIO.read(new File(fileName));
             
         }catch (IOException ex) {    
             Logger.getLogger(NameRecognitionGatewayTest.class.getName()).
