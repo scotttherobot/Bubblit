@@ -1,5 +1,8 @@
 package com.universalquantification.examgrader.reader;
 
+import boofcv.gui.image.ShowImages;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -53,6 +56,34 @@ public class CharacterRecognizer
         return getTopPossibilities(possibilities);
     }
     
+    public StochasticCharacter recognizeStochasticCharacter(BufferedImage img)
+    {
+        // recognize the character
+        // SET character possibilities list TO NeurophOCR.recognizeImage(img)
+        Bounds letterOnly = getBounds(img);
+        img = img.getSubimage(
+                letterOnly.minX,
+                letterOnly.minY,
+                letterOnly.maxX - letterOnly.minX,
+                letterOnly.maxY - letterOnly.minY
+        );
+        double scale = determineImageScale(img.getWidth(), img.getHeight(), 40, 40);
+        img = resize(img, 40, 40);
+        //System.out.println("recognizing this:");
+        //ShowImages.showDialog(img);
+        ImageRecognitionPlugin imageRecognition = (ImageRecognitionPlugin) nnet.
+                getPlugin(ImageRecognitionPlugin.IMG_REC_PLUGIN_NAME);
+        HashMap<String, Double> possibilities = imageRecognition.recognizeImage(img);
+        StochasticCharacter character = new StochasticCharacter();
+        
+        for(String key : possibilities.keySet())
+        {
+            //System.out.println(key.charAt(0) + " ==> " +  possibilities.get(key));
+            character.setProbability(key.charAt(0), possibilities.get(key));
+        }
+        
+        return character;
+    }
 
     /**
      * Internal class to keep track of characters and their probability.
@@ -111,5 +142,69 @@ public class CharacterRecognizer
         }
         
         return top;
+    }
+        public static BufferedImage resize(BufferedImage img, int newW, int newH)
+    {
+
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH,
+                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
+    }
+
+    private static double determineImageScale(int sourceWidth, int sourceHeight,
+            int targetWidth, int targetHeight)
+    {
+
+        double scalex = (double) targetWidth / sourceWidth;
+        double scaley = (double) targetHeight / sourceHeight;
+        return Math.min(scalex, scaley);
+    }
+    
+        /**
+     * get the smallest bounding box for a BW image by finding the first/last
+     * pixels for X & Y. It basically removes margins.
+     * @param img
+     * @return 
+     */
+    public static Bounds getBounds(BufferedImage img)
+    {
+        int w = img.getWidth();
+        int h = img.getHeight();
+        int black = -16777216;
+        int white = -1;
+        
+        int minx = w;
+        int maxx = 0;
+        int miny = h;
+        int maxy = 0;
+        
+        for(int x = 0; x < w; x++)
+        {
+            for(int y = 0; y < h; y++)
+            {
+                int color = img.getRGB(x, y);
+                if(color == black)
+                {
+                    minx = x < minx ? x : minx;
+                    maxx = x > maxx ? x : maxx;
+                    
+                    miny = y < miny ? y : miny;
+                    maxy = y > maxy ? y : maxy;
+                }
+                else if(color != white)
+                {
+                    System.out.println("WHAT THE SHIT");
+                }
+            }
+        }
+             
+        Bounds bounds = new Bounds(minx, maxx, miny,  maxy);
+        return bounds;
     }
 }
