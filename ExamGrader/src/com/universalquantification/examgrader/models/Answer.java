@@ -1,6 +1,6 @@
 package com.universalquantification.examgrader.models;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Answer represents an answer on the exam. It is comprised of a set of 
@@ -16,7 +16,7 @@ public class Answer implements Comparable<Answer>
     /**
      * A Set of bubbles associated with this answer.
      */
-    private Set<Bubble> choices;
+    private List<Bubble> choices;
     /**
      * Question number of the answer.
      */
@@ -29,7 +29,7 @@ public class Answer implements Comparable<Answer>
      * @param question A number representing which question this Answer is the 
      * answer to.
      */
-    public Answer(Set<Bubble> choices, int question)
+    public Answer(List<Bubble> choices, int question)
     {
         // SET choices field to choices
         // SET number to question
@@ -87,7 +87,7 @@ public class Answer implements Comparable<Answer>
         // RETURN returnValue
         
         int returnValue = 0;
-        Set<Bubble> otherChoices = o.choices;
+        List<Bubble> otherChoices = o.choices;
         int otherNumber = o.number;
         
         if (number < otherNumber) {
@@ -98,6 +98,10 @@ public class Answer implements Comparable<Answer>
         }
         
         if (returnValue == 0) {
+            // get the first difference
+            // get the second difference
+           
+            // take the one with the least label
             Object[] choicesArray = choices.toArray();
             Object[] otherChoicesArray = otherChoices.toArray();
             
@@ -111,6 +115,13 @@ public class Answer implements Comparable<Answer>
         }
         
         return returnValue;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return this.number + 31 * this.choices.hashCode();
+        
     }
 
     /**
@@ -153,23 +164,8 @@ public class Answer implements Comparable<Answer>
         {
             Answer other = (Answer) o;
             int otherNumber = other.number;
-            Object[] choicesArray;
-            Object[] otherChoicesArray;
-            
-            if (number != otherNumber) {
-                return false;
-            }
-            
-            choicesArray = choices.toArray();
-            otherChoicesArray = other.choices.toArray();
-            
-            for (int idx = 0; idx < choicesArray.length; idx++) {
-                if (!((Bubble) choicesArray[idx]).equals((Bubble) otherChoicesArray[idx])) {
-                    return false;
-                }
-            }
-            
-            return true;
+           
+            return otherNumber == number && other.choices.equals(this.choices);
         }
         
         return false;
