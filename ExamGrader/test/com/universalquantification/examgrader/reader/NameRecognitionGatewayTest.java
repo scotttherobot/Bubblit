@@ -20,7 +20,7 @@ import junit.framework.TestCase;
  */
 public class NameRecognitionGatewayTest extends TestCase {
     
-    static final String RESOURCE_PATH = "OCRTestImages/";
+    static final String PATH = "OCRTestImages/";
     
     public NameRecognitionGatewayTest(String testName) {
         super(testName);
@@ -42,7 +42,7 @@ public class NameRecognitionGatewayTest extends TestCase {
     public void testDetectCharacter() {
         
         
-        String fileName = RESOURCE_PATH + "B_2.png";
+        String fileName = PATH + "A_1.png";
         System.out.println("detectCharacter: " + fileName);
         BufferedImage image = null;
         

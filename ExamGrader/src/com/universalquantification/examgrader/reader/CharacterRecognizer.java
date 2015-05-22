@@ -31,7 +31,7 @@ public class CharacterRecognizer
     public CharacterRecognizer()
     {
         // initiate the OCR lib
-        InputStream nnetStream = this.getClass().getResourceAsStream(RESOURCE_PATH + "/LetterOCR.nnet");
+        InputStream nnetStream = this.getClass().getResourceAsStream(RESOURCE_PATH + "/neuralNetwork.nnet");
         nnet = NeuralNetwork.load(nnetStream);
     }
 
