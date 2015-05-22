@@ -42,7 +42,7 @@ public class NameRecognitionGatewayTest extends TestCase {
     public void testDetectCharacter() {
         
         
-        String fileName = RESOURCE_PATH + "A_2.png";
+        String fileName = RESOURCE_PATH + "B_2.png";
         System.out.println("detectCharacter: " + fileName);
         BufferedImage image = null;
         
