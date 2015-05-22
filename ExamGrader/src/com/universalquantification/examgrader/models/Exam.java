@@ -256,4 +256,25 @@ public class Exam
             }
         }
     }
+    
+    /**
+     * Get the string representation for this exam.
+     * @return the string representation
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Exam\n");
+        sb.append("Student: ");
+        sb.append(this.student.toString());
+        sb.append("\nQuestions:\n");
+        // Append the question string to the string
+        for(Integer qNum : this.answerMap.keySet())
+        {
+            sb.append("\t");
+            sb.append(this.answerMap.get(qNum).toString());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }
