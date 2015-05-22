@@ -49,29 +49,12 @@ public class ExamReader
     private NameRecognitionGateway nameRecognitionGateway;
 
     /**
-     * The mapper to query when we get results from the gateway
-     */
-    private StudentNameMapper mapper;
-
-    /**
-     * Initializes an ExamReader with a student name mapper.
+     * Initializes an ExamReader with a name recognition gateway.
      *
-     * @param mapper mapper to use
-     */
-    public ExamReader(StudentNameMapper mapper)
-    {
-        this.mapper = mapper;
-    }
-
-    /**
-     * Initializes an ExamReader with a student name mapper.
-     *
-     * @param mapper mapper to use
      * @param gateway gateway to use
      */
-    public ExamReader(StudentNameMapper mapper, NameRecognitionGateway gateway)
+    public ExamReader(NameRecognitionGateway gateway)
     {
-        this.mapper = mapper;
         this.nameRecognitionGateway = gateway;
     }
 
@@ -79,12 +62,11 @@ public class ExamReader
      * Detect and parse an exam from a given input file.
      *
      * @param file The input page to scan
-     * @param mapper the StudentNameMapper to query when determining student
      * names.
      * @return an Exam with questions and student name filled in.
      * @throws {@link InvalidExamException} when a file cannot be detected.
      */
-    public Exam getExam(InputPage file, StudentNameMapper mapper) throws
+    public Exam getExam(InputPage file) throws
             InvalidExamException
     {
         ArrayList<Answer> answers = new ArrayList<Answer>();
