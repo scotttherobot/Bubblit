@@ -47,8 +47,7 @@ public class InputFile {
         this.file = file;
 
         // READ file INTO pdf as a PDF      
-        File pdfFile = new File("Exams.pdf");
-        RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");
+        RandomAccessFile raf = new RandomAccessFile(file, "r");
         FileChannel channel = raf.getChannel();
         MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
                 channel.size());
@@ -61,7 +60,6 @@ public class InputFile {
             
             // INIT inputPage as InputPage with page    
             InputPage inputPage = new InputPage(file, pdf.getPage(i));
-            
             // ADD inputPage to pages
             pages.add(inputPage);
         }
