@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.models;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,13 +44,17 @@ public class GradedExamCollection
      * @throws IllegalArgumentError if exams is empty
      * @pre exams have been graded
      */
-    public GradedExamCollection(Exam answerKey)
+    public GradedExamCollection(Exam answerKey, List<Exam> exams)
     {
         // IF exams is empty
             // RAISE IllegalArgumentException
+        if (exams.isEmpty())
+        {
+            throw new IllegalArgumentException("No exams passed in.");
+        }
         
-        // SET answerKey field to answerKey
-        // SET exams field to exams
+        this.answerKey = answerKey;
+        this.studentExams = exams;
     }
 
     /**
@@ -59,7 +64,7 @@ public class GradedExamCollection
     public Exam getAnswerKey()
     {
         // RETURN answerKey
-        return null;
+        return answerKey;
     }
     
     /**
@@ -73,7 +78,7 @@ public class GradedExamCollection
     public Exam get(int n)
     {
         // CALL get studentExams WITH n
-        return null;
+        return studentExams.get(n);
     }
 
     /**
@@ -82,8 +87,8 @@ public class GradedExamCollection
      */
     public Set<Integer> getQuestions()
     {
-        // CALL getQuestions exams
-        return null;
+        // CALL getQuestions answerKey
+        return answerKey.getQuestions();
     }
 
     /**
@@ -93,7 +98,7 @@ public class GradedExamCollection
     public int getNumExams()
     {
         // CALL size studentExams
-        return 0;
+        return studentExams.size();
     }
 
     /**
@@ -102,14 +107,19 @@ public class GradedExamCollection
      */
     public double getAverageScore()
     {
+        int sum = 0;
         // SET sum to 0
         // FOR exam in studentExams
+        for (Exam exam: studentExams)
+        {
             // CALL getRawScore exam RETURNING examScore
             // ADD examScore TO sum
+            sum += exam.getRawScore();
+        }
         // END FOR
         
         // RETURN sum divided by number of exams
-        return 0;
+        return 1.0 * sum / getNumExams();
     }
 
     /**
@@ -119,18 +129,29 @@ public class GradedExamCollection
     public double getStdDeviation()
     {
         // CALL getAverageScore RETURNING averageScore 
+        double averageScore = getAverageScore();
         // SET sumOfSquares to 0
+        double sumOfSquares = 0;
+        
         // FOR exam in exams
+        for (Exam exam: studentExams)
+        {
             // CALL getRawScore exam RETURNING examScore
+            int examScore = exam.getRawScore();
+            
             // SET difference to the difference between examScore and
-                // averageScore to sumOfSquares
-            // ADD difference squared to sumOfSquares        
-        // END FOR
+                // averageScore
+            double difference = examScore - averageScore;
+            
+            // ADD difference squared to sumOfSquares     
+            sumOfSquares += Math.pow(difference, 2);   
+        }
+            // END FOR
         
         // RETURN the square root of sumOfSquares divided by one less than
         // the number of exams 
-
-        return 0;
+        
+        return Math.sqrt(sumOfSquares / (getNumExams() - 1));
     }
 
     /**
@@ -143,18 +164,33 @@ public class GradedExamCollection
      */
     public Map<Answer, Integer> getAnswerFrequency(int question)
     {
+        
         // INIT frequencies map
+        Map<Answer, Integer> frequencies = new HashMap<>();
         
         // FOR exam in studentExams
+        for (Exam exam: studentExams)
+        {
             // CALL getAnswer exam WITH question RETURNING answer
+            Answer answer = exam.getAnswer(question);
+            
             // IF frequencies does not contain a key for answer
+            if (!frequencies.containsKey(answer))
+            {
                 // SET frequencies[answer] to 1
+                frequencies.put(answer, 1);
+            }
             // ELSE
+            else
+            {
                 // SET frequencies[answer] to frequencies[answer] + 1
+                frequencies.put(answer, frequencies.get(answer) + 1);
+            }
+            // END IF
         // END FOR
-        
-        // RETURN frequency
-        return null;
+        }
+        // RETURN frequencies
+        return frequencies;
     }
 
     /**
@@ -164,10 +200,7 @@ public class GradedExamCollection
     @Override
     public int hashCode()
     {
-        // CALL hashCode on studentExams RETURNING studentExamCode
-        // CALL hashCode on answerKey RETURNING answerKeyCode
-        // RETURN answerKeyCode * 31 + studentExamCode
-        return -1;
+        return studentExams.hashCode() + 31 * answerKey.hashCode();
     }
     
     /**
@@ -177,16 +210,27 @@ public class GradedExamCollection
     @Override
     public boolean equals(Object o)
     {
-        
         // IF other is null
+        if (o == null)
+        {
             // RETURN false
+            return false;
+        }
         // ELSE IF other is not a GradedExamCollection
+        else if (!(o instanceof GradedExamCollection))
+        {
             // RETURN FALSE
+            return false;
+        }
         // ELSE
+        else
+        {
             // RETURN true iff this object's answerKey is equal to other's
                 // AND this object's studentExams are equal to other's
-        // END IF
-        return false;
+            GradedExamCollection c = (GradedExamCollection) o;
+            return answerKey.equals(c.answerKey) &&
+                    studentExams.equals(c.studentExams) ;
+        }
     }
     
     /**
@@ -196,11 +240,9 @@ public class GradedExamCollection
     @Override
     public String toString()
     {
-        // CALL toString answerKey RETURNING answerKeyOutput
-        // CALL toString studentExams RETURNING studentExamsOutput
-        // RETURN 'GradedExamCollection(' concatenated with answerKey
+        // RETURN 'GradedExamCollection(' concatenated with answerKeyOutput
             // concatenated with studentExams concatenated with ')'
-        return null;
+        return "GradedExamCollection(" + answerKey + ", " + studentExams + ")";
     }
     
 }
