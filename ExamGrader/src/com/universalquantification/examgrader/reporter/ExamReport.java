@@ -5,9 +5,22 @@
  */
 package com.universalquantification.examgrader.reporter;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import com.universalquantification.examgrader.models.Exam;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * an ExamReport is a per-student report of exam results.
@@ -28,7 +41,7 @@ public class ExamReport
     /**
      * The destination file the report will be written to.
      */
-    private File outfile;
+    private Writer outfile;
     
     /**
      * The variables that will be put into the template.
@@ -36,9 +49,9 @@ public class ExamReport
     private HashMap<String, Object> scope;
     
     /**
-     * The name of the template file to compile.
+     * The template reader.
      */
-    private static String examReportTemplateName;
+    private Reader template;
 
     /**
      * Instantiates a new ExamReport given a graded exam and a file
@@ -46,12 +59,14 @@ public class ExamReport
      * @param exam - the graded exam
      * @param writeFile - the output file
      */
-    public ExamReport(Exam exam,  File writeFile)
+    public ExamReport(Exam exam, Writer writeFile, Reader template)
     {
         // SET this.exam to exam
+        this.exam = exam;
         // SET this.outfile to writeFile
-        
+        this.template = template;
         // CALL scope.put with "exam" and this.exam
+        this.scope.put("exam", this.exam);
     }
     
     /**
@@ -59,9 +74,43 @@ public class ExamReport
      */
     public void writeReport()
     {
+        try
+        {
+            // INIT a new String with the return of CALL renderHTML
+            String html = this.renderHTML();
+            // CALL write with the html string
+            this.outfile.write(html);
+            // CALL flush 
+            this.outfile.flush();
+            // CALL close
+            this.outfile.close();
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(ExamReport.class.getName()).log(Level.SEVERE, null,
+                    ex);
+        }
+    }
+    
+    /**
+     * Renders the HTML and returns it as a string.
+     * @return 
+     */
+    public String renderHTML()
+    {
+        // INIT a new StringWriter
+        StringWriter html = new StringWriter();
+       
         // INIT a new MustacheFactory mf
+        MustacheFactory mf = new DefaultMustacheFactory();
         // SET generator to mf.compile with examReportTemplateName
+        Mustache m = mf.compile(this.template, "Exam Report");
         // CALL generator.execute with outfile and scope
+        m.execute(html, this.scope);
+        // CALL writer.flush
+        html.flush();
+        
+        return html.toString();
     }
     
 }
