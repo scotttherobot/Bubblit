@@ -1,4 +1,4 @@
-package com.universalquantification.examgrader.reader;
+package com.universalquantification.examgrader.grader;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -41,14 +41,16 @@ public class Roster
         String line = input.nextLine();
         String[] columns = explode(line);
         
+        boolean doContinue = true;
+        
         line = input.nextLine();
         // The line after the roster starts with a tab
-        while (!line.startsWith("\t"))
+        while (!line.startsWith("\t") && doContinue)
         {
             // We have a row. Explode it.
             String[] values = explode(line);
             // Map the columns to the values if they're 1:1
-            if (values.length == columns.length)
+            if (values.length == columns.length -1)
             {
                 HashMap<String, String> record
                     = new HashMap<String, String>();
@@ -62,10 +64,17 @@ public class Roster
             }
             else
             {
-                System.out.println("ERROR: COLUMN/VALUE MISMATCH!");
+                //System.out.println("ERROR: COLUMN/VALUE MISMATCH! " + line);
+                //System.out.println(values.length + "!=" + columns.length);
             }
             
-            line = input.nextLine();
+            if(input.hasNext()){
+                line = input.nextLine();
+            }
+            else {
+                doContinue = false;
+            }
+            
         }
     }
     
@@ -108,5 +117,14 @@ public class Roster
         record = record.replace("\n", "");
         // Split on the delimiter and return
         return row.split("\t");
+    }
+    
+    /**
+     * Get the number of students on this roster.
+     * @return the number of students.
+     */
+    public int getNumStudents()
+    {
+        return this.students.size();
     }
 }
