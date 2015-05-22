@@ -49,10 +49,9 @@ public class StudentNameMapperTest extends TestCase {
     public void testUpdateRoster() throws Exception {
         System.out.println("updateRoster");
         Reader reader = null;
-        StudentNameMapper instance = null;
+        StudentNameMapper instance = new StudentNameMapper(reader);
         instance.updateRoster(reader);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
     
 }
