@@ -54,15 +54,14 @@ public class ExamReaderTest extends TestCase
 
         InputPage file;
 
-        StudentNameMapper mapper = new StudentNameMapper(null);
         NameRecognitionGateway gateway = new NameRecognitionGateway();
-        ExamReader instance = new ExamReader(mapper, gateway);
+        ExamReader instance = new ExamReader(gateway);
         Exam expResult = null;
         for (int i = 1; i < pdf.getNumPages() + 1; i++)
         {
             System.out.println("===Exam " + i + "======");
             file = new InputPage(pdfFile, pdf.getPage(i));
-            Exam result = instance.getExam(file, mapper);
+            Exam result = instance.getExam(file);
             System.out.println(result.toString());
         }
 
