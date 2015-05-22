@@ -1,7 +1,10 @@
 package com.universalquantification.examgrader.models;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Observable;
+import java.io.IOException;
 
 import java.util.List;
 
@@ -15,6 +18,11 @@ public class InputFileList extends Observable {
     
     private List<InputFile> files;
     
+    public InputFileList()
+    {
+        files = new ArrayList<>();
+    }
+    
     /**
      * Returns the paths of all the files in the list
      * @return paths of all the files in the list
@@ -22,7 +30,21 @@ public class InputFileList extends Observable {
     public List<File> getFiles()
     {
         // RETURN files
-        return null;
+        List<File> fileNames = new ArrayList<>();
+        for (InputFile file : files)
+        {
+            fileNames.add(file.getFileName());
+        }
+        return fileNames;
+    }
+    
+    /**
+     * Returns all the input files in the list.
+     * @return all the input files in the list
+     */
+    public List<InputFile> getInputFiles()
+    {
+        return files;
     }
     
     /**
@@ -31,8 +53,14 @@ public class InputFileList extends Observable {
      */
     public int getTotalPages()
     {
+        int total = 0;
         // RETURN length of files
-        return 0;
+        for (InputFile file : files)
+        {
+            total += file.getNumPages();
+        }
+        
+        return total;
     }
     
     /**
@@ -41,12 +69,17 @@ public class InputFileList extends Observable {
      * @throws IOException if the file could not be read
      * @throws FileFormatException if the file was of the wrong format
      */
-    public void addInputFile(File file)
+    public void addInputFile(File file) throws IOException
     {
         // INIT inputFile as InputFile with file
+        InputFile inputFile = new InputFile(file);
         // Add files to inputFiles
+        files.add(inputFile);
+        
         // CALL setChanged
+        setChanged();
         // CALL notifyObservers
+        notifyObservers();
     }
     
     /**
@@ -58,8 +91,13 @@ public class InputFileList extends Observable {
     public void deleteInputFile(int ndx)
     {
         // Delete ndx'th element in inputFiles
+        
+        files.remove(ndx);
+        
         // CALL setChanged
         // CALL notifyObservers
+        setChanged();
+        notifyObservers();
         
     }
     
