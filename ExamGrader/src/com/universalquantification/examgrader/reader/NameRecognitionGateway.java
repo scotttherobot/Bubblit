@@ -30,17 +30,15 @@ import javax.imageio.ImageIO;
 public class NameRecognitionGateway {
     
     private CharacterRecognizer cr; // Create a new character recognizer for OCR
-    private BufferedImage letters;  // Image to read letters from
     /**
      * Creates an instance of NameRecognitionGateway with a BufferedImage
      * to perform OCR on.
      *
      * @param letters - buffered image of writing to do OCR on
      */
-    public NameRecognitionGateway(BufferedImage letters)
+    public NameRecognitionGateway()
     {
         this.cr = new CharacterRecognizer();
-        this.letters = letters;
     }
     //take single image
     /**
@@ -71,6 +69,16 @@ public class NameRecognitionGateway {
         return topChars;
     }
 
+        public StochasticCharacter detectStochasticCharacter(BufferedImage image)
+    {
+        /* ARE WE RECEIVING ALL CHARACTERS OR 1 AT A TIME? */
+        
+        CharacterRecognizer cr = new CharacterRecognizer();
+        //BufferedImage bn = getBinaryImage(image);
+        //invertBW(bn);
+        return cr.recognizeStochasticCharacter(image);
+    }
+    
     public static BufferedImage resize(BufferedImage img, int newW, int newH)
     {
                 
