@@ -1,26 +1,23 @@
 package com.universalquantification.examgrader.grader;
 
-import com.sun.pdfview.PDFFile;
 import com.universalquantification.examgrader.grader.ExamRosterMatcher.MatchResult;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
+import com.universalquantification.examgrader.models.InputFile;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.models.InputPage;
 import com.universalquantification.examgrader.reader.ExamReader;
 import com.universalquantification.examgrader.reader.InvalidExamException;
-import com.universalquantification.examgrader.reader.StudentNameMapper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -45,11 +42,11 @@ public class Grader extends Observable
     /**
      * List of input files to be read.
      */
-    private InputFileList inputFiles;
+    private final InputFileList inputFiles;
     /**
      * Reader to read the list of files.
      */
-    private ExamReader examReader;
+    private final ExamReader examReader;
 
     /**
      * Pages that have been graded so far.
@@ -62,9 +59,9 @@ public class Grader extends Observable
     private final int pagesToGrade;
 
     /**
-     * Student mapper to be used
+     * The path to the roster file
      */
-    private StudentNameMapper studentNameMapper;
+    private final String rosterFile;
 
     /**
      * Constructs a new Grader instance. Reads files off of the inputFileList,
@@ -73,13 +70,13 @@ public class Grader extends Observable
      *
      * @param inputFileList list of files to grade.
      * @param examReader reader to be used for reading the inputFiles.
-     * @param mapper the student name mapper that gives us a name from a
+     * @param rosterFile the path to the TSV file
      * username
      * @pre inputFiles have been read in and confirmed to be of the correct
      * format
      */
     public Grader(InputFileList inputFileList, ExamReader examReader,
-            StudentNameMapper mapper)
+            String rosterFile)
     {
         // SET this.inputFiles to inputFileList
         // SET this.examReader to examReader
@@ -89,7 +86,7 @@ public class Grader extends Observable
         pagesToGrade = inputFileList.getTotalPages();
         this.inputFiles = inputFileList;
         this.examReader = examReader;
-        this.studentNameMapper = mapper;
+        this.rosterFile = rosterFile;
     }
 
     /**
@@ -106,6 +103,8 @@ public class Grader extends Observable
      *
      * @return a Map mapping an input file to a {@link GradedExamCollection}
      * @throws GradingException
+     * @throws java.io.FileNotFoundException
+     * @throws com.universalquantification.examgrader.reader.InvalidExamException
      * @pre has been constructed.
      */
     public Map<File, GradedExamCollection> grade()
@@ -131,69 +130,73 @@ public class Grader extends Observable
         // RETURN fileExamMap
         ExamRosterMatcher matcher = new ExamRosterMatcher();
         ArrayList<Exam> exams = new ArrayList<Exam>();
-        List<File> files = this.inputFiles.getFiles();
-        File pdfFile = files.get(0);
-
-        RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");
-        FileChannel channel = raf.getChannel();
-        MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
-                channel.size());
-        PDFFile pdf = new PDFFile(buf);
-
-        for (int i = 1; i < pdf.getNumPages() + 1; i++)
-        {
-           // System.out.println("===Exam " + i + "======");
-            InputPage file = new InputPage(pdfFile, pdf.getPage(i));
-            Exam result = examReader.getExam(file, null);
-            exams.add(result);
-        }
-
-        FileReader rosterFile = new FileReader("students.tsv");
-        Roster studentReader = new Roster(rosterFile);
-
+        List<InputFile> files = this.inputFiles.getInputFiles();
+        LinkedHashMap<File, GradedExamCollection> gradedFiles
+                = new LinkedHashMap<File, GradedExamCollection>();
+        FileReader rosterFileReader = new FileReader(this.rosterFile);
+        Roster studentReader = new Roster(rosterFileReader);
         List<RosterEntry> rosters = RosterParser.parseRoster(studentReader);
-        // Go do the matching
-        final List<MatchResult> matches = ExamRosterMatcher.
-                match(exams, rosters);
-
-        Set<RosterEntry> matchedEntries = new HashSet<>();
-
-        // Sort by confidence level (ascending).
-        Collections.sort(matches, new Comparator<MatchResult>()
+        
+        for (InputFile file : files)
         {
-            @Override
-            public int compare(MatchResult o1, MatchResult o2)
+            InputPage answerPage = file.getAnswerKeyPage();
+            Exam answerKey = examReader.getExam(answerPage);
+            List<InputPage> examPages = file.getStudentExamPages();
+            
+            for (InputPage examPage : examPages)
             {
-                return Double.compare(o1.confidence, o2.confidence);
+                Exam exam = examReader.getExam(examPage);
+                exam.grade(answerKey);
+                exams.add(exam);
             }
-        });
 
-        // Process and print each match result.
-        for (MatchResult result : matches)
-        {
-            matchedEntries.add(result.match);
-            System.out.format("[%.3f] %s %s ==> %s %s\n", result.confidence,
-                    result.form.getStudentRecord().getStochasticFirst().
-                    toString(),
-                    result.form.getStudentRecord().getStochasticLast().
-                    toString(),
-                    result.match.getFirst(),
-                    result.match.getLast());
+            // do roster matching
+            final List<MatchResult> matches = ExamRosterMatcher.match(exams,
+                    rosters);
+            Set<RosterEntry> matchedEntries = new HashSet<>();
+
+            // Sort by confidence level (ascending).
+            Collections.sort(matches, new Comparator<MatchResult>()
+            {
+                @Override
+                public int compare(MatchResult o1, MatchResult o2)
+                {
+                    return Double.compare(o1.confidence, o2.confidence);
+                }
+            });
+
+            // Process and print each match result.
+            // TODO: give these results to the GUI
+            for (MatchResult result : matches)
+            {
+                matchedEntries.add(result.match);
+                System.out.format("[%.3f] %s %s ==> %s %s\n", result.confidence,
+                        result.form.getStudentRecord().getStochasticFirst().
+                        toString(),
+                        result.form.getStudentRecord().getStochasticLast().
+                        toString(),
+                        result.match.getFirst(),
+                        result.match.getLast());
+            }
+
+            int unmatched = matchedEntries.size() - rosters.size();
+
+            // Alert if there are any unmatched entries.
+            if (unmatched == 0)
+            {
+                System.out.println("No entries unmatched (perfect permutation)");
+            }
+            else
+            {
+                System.out.println("Unmatched roster entries: " + unmatched);
+            }
+
+            GradedExamCollection gradedCollection = new GradedExamCollection(
+                    answerKey, exams);
+            gradedFiles.put(file.getFileName(), gradedCollection);
         }
 
-        int unmatched = matchedEntries.size() - rosters.size();
-
-        // Alert if there are any unmatched entries.
-        if (unmatched == 0)
-        {
-            System.out.println("No entries unmatched (perfect permutation)");
-        }
-        else
-        {
-            System.out.println("Unmatched roster entries: " + unmatched);
-        }
-
-        return null;
+        return gradedFiles;
     }
 
     /**
