@@ -147,7 +147,18 @@ public class Exam
         
         return correctQuestions;
     }
-
+    
+    /**
+     * Returns all the questions.
+     * 
+     * @return a set of all the questions.
+     */
+    public Set<Integer> getQuestions()
+    {
+        // RETURN keys of the answerMap
+        return answerMap.keySet();
+    }
+    
      /**
      * Returns the set of incorrect answers from grading.
      * 
@@ -200,7 +211,7 @@ public class Exam
      * @throws IllegalStateException if the Exam has not been graded before
      * @return A percent score representing the percentage of correct answers.
      */
-    public int getPercentScore() 
+    public double getPercentScore() 
     {
         // CALL getRawScore RETURNING rawScore
         // CALL size on answerMap RETURNING questionCount
@@ -209,7 +220,7 @@ public class Exam
         //
         // RETURN percentScore
         
-        return (correctQuestions.size() / answerMap.size());
+        return 1.0 * correctQuestions.size() / answerMap.size();
     }
     
     /**
