@@ -20,18 +20,18 @@ import junit.framework.TestCase;
  */
 public class ExamReaderTest extends TestCase
 {
-    
+
     public ExamReaderTest(String testName)
     {
         super(testName);
     }
-    
+
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
     }
-    
+
     @Override
     protected void tearDown() throws Exception
     {
@@ -44,29 +44,31 @@ public class ExamReaderTest extends TestCase
     public void testGetExam() throws Exception
     {
         System.out.println("getExam");
-        
+
         File pdfFile = new File("ExamsScannedDalbey.pdf");
         RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");
         FileChannel channel = raf.getChannel();
-        MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,channel.size());
+        MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
+                channel.size());
         PDFFile pdf = new PDFFile(buf);
-        
+
         InputPage file;
-        
+
         StudentNameMapper mapper = new StudentNameMapper(null);
-        ExamReader instance = new ExamReader(mapper);
+        NameRecognitionGateway gateway = new NameRecognitionGateway();
+        ExamReader instance = new ExamReader(mapper, gateway);
         Exam expResult = null;
-        for(int i = 1; i < pdf.getNumPages() + 1; i++)
+        for (int i = 1; i < pdf.getNumPages() + 1; i++)
         {
             System.out.println("===Exam " + i + "======");
-             file = new InputPage(pdfFile, pdf.getPage(i));
-             Exam result = instance.getExam(file, mapper);
-             System.out.println(result.toString());
+            file = new InputPage(pdfFile, pdf.getPage(i));
+            Exam result = instance.getExam(file, mapper);
+            System.out.println(result.toString());
         }
-        
+
         //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
-    
+
 }
