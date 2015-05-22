@@ -1,9 +1,13 @@
 
 package com.universalquantification.examgrader.models;
 
+import com.sun.pdfview.PDFFile;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +23,7 @@ public class InputFile {
     /**
      * File name
      */
-    private File name;
+    private File file;
     
     /**
      * List of InputPages created from loading the reader
@@ -40,11 +44,38 @@ public class InputFile {
     public InputFile(File file) throws IOException
     {   
         // SET file field to file
-        // READ file INTO pdf as a PDF
+        this.file = file;
+
+        // READ file INTO pdf as a PDF      
+        File pdfFile = new File("Exams.pdf");
+        RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");
+        FileChannel channel = raf.getChannel();
+        MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
+                channel.size());
+        PDFFile pdf = new PDFFile(buf);
+        
         // FOR each page in pdf
-            // INIT inputPage as InputPage with page
+        pages = new ArrayList<>();
+        for (int i = 0; i < pdf.getNumPages(); i++)
+        {
+            
+            // INIT inputPage as InputPage with page    
+            InputPage inputPage = new InputPage(file, pdf.getPage(i));
+            
             // ADD inputPage to pages
-        // END FOR
+            pages.add(inputPage);
+        }
+        // END FOR */
+
+    }
+    
+    /**
+     * Returns the name of the file.
+     * @return File object for the file
+     */
+    public File getFileName()
+    {
+        return file;
     }
     
     /**
@@ -54,7 +85,7 @@ public class InputFile {
     public InputPage getAnswerKeyPage()
     {
         // RETURN pages[0]
-        return null;
+        return pages.get(0);
     }
     
     
@@ -65,7 +96,7 @@ public class InputFile {
     public List<InputPage> getStudentExamPages()
     {
         // RETURN pages[1:]
-        return null;
+        return pages.subList(1, pages.size());
     }
     
     /**
@@ -75,7 +106,7 @@ public class InputFile {
     public int getNumPages()
     {
         // RETURN length of pages
-        return 0;
+        return pages.size();
     }
     
     /**
@@ -86,7 +117,7 @@ public class InputFile {
     public String toString()
     {
         // RETURN "InputFile {" concatenated  with file concatenated with "}"
-        return "";
+        return "InputFile {" + file + "}";
     }
     
     /**
@@ -96,15 +127,21 @@ public class InputFile {
     @Override
     public boolean equals(Object o)
     {
-          
         // IF other is null
             // RETURN false
         // ELSE IF other is not a InputFile
             // RETURN FALSE
+
+        if (o == null || !(o instanceof InputFile))
+        {
+            return false;
+        }
         // ELSE
             // RETURN true iff this object's file is equal to that object's file
         // END IF
-        return false;
+        InputFile other = (InputFile) o;
+        
+        return other.file == this.file;
     }
     
     /**
@@ -115,6 +152,6 @@ public class InputFile {
     public int hashCode()
     {
         // RETURN CALL hashCode file
-        return 0;
+        return file.hashCode();
     }
 }
