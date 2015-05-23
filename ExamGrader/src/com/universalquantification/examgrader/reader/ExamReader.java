@@ -61,10 +61,10 @@ public class ExamReader
     /**
      * Detect and parse an exam from a given input file.
      *
-     * @param file The input page to scan
-     * names.
+     * @param file The input page to scan names.
      * @return an Exam with questions and student name filled in.
-     * @throws {@link InvalidExamException} when a file cannot be detected.
+     * @throws
+     * com.universalquantification.examgrader.reader.InvalidExamException
      */
     public Exam getExam(InputPage file) throws
             InvalidExamException
@@ -158,18 +158,18 @@ public class ExamReader
             answers.add(new Answer(questionBubbles, qNum));
         }
 
+        Bounds firstNameBounds = formDetails.getBoundsForFirstName();
+        BufferedImage firstNameField = fileImage.getSubimage(
+                firstNameBounds.minX, firstNameBounds.minY,
+                firstNameBounds.maxX - firstNameBounds.minX,
+                firstNameBounds.maxY - firstNameBounds.minY
+        );
+
         Bounds lastNameBounds = formDetails.getBoundsForLastName();
         BufferedImage lastNameField = fileImage.getSubimage(
-            lastNameBounds.minX, lastNameBounds.minY,
-            lastNameBounds.maxX - lastNameBounds.minX, 
-            lastNameBounds.maxY - lastNameBounds.minY
-        );
-        
-        Bounds firstNameBounds = formDetails.getBoundsForLastName();
-        BufferedImage firstNameField = fileImage.getSubimage(
-            firstNameBounds.minX, firstNameBounds.minY,
-            firstNameBounds.maxX - firstNameBounds.minX, 
-            firstNameBounds.maxY - firstNameBounds.minY
+                lastNameBounds.minX, lastNameBounds.minY,
+                lastNameBounds.maxX - lastNameBounds.minX,
+                lastNameBounds.maxY - lastNameBounds.minY
         );
 
         StochasticString firstNamePossibilities = extractStochasticNameField(
@@ -182,12 +182,19 @@ public class ExamReader
                 firstNamePossibilities, lastNamePossibilities,
                 firstNameField, lastNameField
         );
-        
+
         Exam exam = new Exam(answers, student, file);
 
         return exam;
     }
 
+    /**
+     * Given an image of a name field, extract the characters using OCR.
+     *
+     * @param img the image of the field
+     * @param numLetters the number of letters in this field
+     * @return a {@link StochasticString} representing possible names
+     */
     private StochasticString extractStochasticNameField(BufferedImage img,
             int numLetters)
     {
@@ -211,35 +218,12 @@ public class ExamReader
         return str;
     }
 
-    private StochasticString extractStochasticNameField(BufferedImage img,
-            Bounds nameBounds,
-            int numLetters)
-    {
-        StochasticString str = new StochasticString();
-
-        BufferedImage f = img.getSubimage(
-                nameBounds.minX, nameBounds.minY,
-                nameBounds.maxX - nameBounds.minX, nameBounds.maxY
-                - nameBounds.minY);
-
-        BufferedImage nameCharacters[] = splitImageHorizontally(f,
-                numLetters, 0.08, 0.02);
-
-        for (int i = 0; i < nameCharacters.length; i++)
-        {
-            removeBorders(nameCharacters[i]);
-            if (getBlackRatio(nameCharacters[i]) > 0.02)
-            {
-
-                str.append(this.nameRecognitionGateway.
-                        detectStochasticCharacter(nameCharacters[i]));
-            }
-
-        }
-
-        return str;
-    }
-
+    /**
+     * Get the top left corner of the exam according the the form details
+     *
+     * @param original the image of the entire exam
+     * @return the sub image of the top left corner
+     */
     private static BufferedImage getTopLeftCorner(BufferedImage original)
     {
         int height = (int) (original.getHeight()
@@ -256,6 +240,12 @@ public class ExamReader
         return subImage;
     }
 
+    /**
+     * Get the bottom right corner of the exam according the the form details
+     *
+     * @param original the image of the entire exam
+     * @return the sub image of the bottom right corner
+     */
     private static BufferedImage getBottomRightCorner(BufferedImage original)
     {
         int startHorizontal = (int) (original.getWidth() * (1.0f
@@ -396,6 +386,13 @@ public class ExamReader
         return point;
     }
 
+    /**
+     * Load a square buffered image from a URL with the given width
+     *
+     * @param path the URL of the file
+     * @param width the width for the image
+     * @return
+     */
     private static BufferedImage loadScaledImage(URL path, int width)
     {
         BufferedImage image = UtilImageIO.loadImage(path);
@@ -466,6 +463,14 @@ public class ExamReader
         }
     }
 
+    /**
+     * Split a buffered image into a given number of sub images. Removes a given amount of x and y padding.
+     * @param img the image to split
+     * @param numSections the number of horizontal sections to split it into
+     * @param xPadding the percentage of left/right padding to remove
+     * @param yPadding the percentage of top/bottom padding to remove
+     * @return an array of sub image
+     */
     private BufferedImage[] splitImageHorizontally(BufferedImage img,
             int numSections, double xPadding, double yPadding)
     {
@@ -488,12 +493,23 @@ public class ExamReader
         return images;
     }
 
+    /**
+     * Split an image into a number of sections without removing padding
+     * @param img the image to split
+     * @param numSections the number of sections to split into
+     * @return an array of sub images
+     */
     private BufferedImage[] splitImageHorizontally(BufferedImage img,
             int numSections)
     {
         return splitImageHorizontally(img, numSections, 0, 0);
     }
 
+    /**
+     * Get the ratio of black pixels to total pixels in a buffered image
+     * @param img the image to process
+     * @return the ratio of black pixels
+     */
     private double getBlackRatio(BufferedImage img)
     {
         double numPixels = img.getHeight() * img.getWidth();
@@ -514,6 +530,10 @@ public class ExamReader
         return numBlack / numPixels;
     }
 
+    /**
+     * Remove top and left black borders from a buffered image.
+     * @param img the image to remove borders from
+     */
     private void removeBorders(BufferedImage img)
     {
         int black = -16777216;
