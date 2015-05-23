@@ -117,11 +117,15 @@ public class Answer implements Comparable<Answer>
         return returnValue;
     }
     
+    /**
+     * Returns a hash code for the object.
+     * 
+     * @return The hash code for the object
+     */
     @Override
     public int hashCode()
     {
-        return this.number + 31 * this.choices.hashCode();
-        
+        return this.number + 31 * this.choices.hashCode(); 
     }
 
     /**

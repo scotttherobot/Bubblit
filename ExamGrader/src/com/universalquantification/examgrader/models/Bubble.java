@@ -77,7 +77,7 @@ public class Bubble
         if (this.getClass() == o.getClass()) {
             Bubble other = (Bubble) o;
             
-            return (isFilled == other.isFilled);
+            return (isFilled == other.isFilled && label.equals(other.label));
         }
         
         return false;

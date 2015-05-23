@@ -17,6 +17,10 @@ import static org.mockito.Mockito.*;
  * @author jenwang
  */
 public class ExamHelper {
+    public static Student createStudent(String firstName, String lastName) {
+        return new Student(firstName, lastName, "id " + lastName, 
+                mock(BufferedImage.class), mock(BufferedImage.class));
+    }
     
     public static Answer createAnswer(Integer answerBits, int questionNum)
     {;
@@ -44,8 +48,7 @@ public class ExamHelper {
             answers.add(createAnswer(answerBits.get(i), i + 1));
         }
         
-        return new Exam(answers, new Student(firstName, lastName,
-                "id " + lastName, mock(BufferedImage.class), mock(BufferedImage.class)), mock(InputPage.class));
+        return new Exam(answers, createStudent(firstName, lastName), mock(InputPage.class));
     }
     
 }

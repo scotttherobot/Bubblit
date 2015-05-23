@@ -279,6 +279,7 @@ public class Exam
         sb.append("Student: ");
         sb.append(this.student.toString());
         sb.append("\nQuestions:\n");
+        
         // Append the question string to the string
         for(Integer qNum : this.answerMap.keySet())
         {
@@ -286,6 +287,7 @@ public class Exam
             sb.append(this.answerMap.get(qNum).toString());
             sb.append("\n");
         }
+        
         return sb.toString();
     }
 }
