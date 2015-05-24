@@ -94,7 +94,19 @@ public class ExamReader
         //ShowImages.showWindow(leftAnchor, "left anchor");
 
         Bounds bounds = getFormBounds(fileImage, leftAnchor, rightAnchor);
-
+        
+        // If no anchors were found then this page is not an exam.
+        if(bounds == null)
+        {
+            throw new InvalidExamException();
+        }
+        
+        // If the bounds are invalid, this page is not an exam.
+        if(bounds.minX >= bounds.maxX || bounds.minY >= bounds.maxY)
+        {
+            throw new InvalidExamException();
+        }
+        
 //       Graphics2D graphics = fileImage.createGraphics();
 //       graphics.setColor(Color.red);
 //       graphics.drawLine(bounds.minX, bounds.minY, bounds.maxX, bounds.minY);
@@ -279,7 +291,7 @@ public class ExamReader
      * @param image Image of the exam to grade
      * @param leftAnchorImage Image of the left anchor
      * @param rightAnchorImage Image of the right anchor
-     * @return a bounds object with the bounds
+     * @return a bounds object with the bounds or null if the markers weren't found.
      */
     private static Bounds getFormBounds(BufferedImage image,
             BufferedImage leftAnchorImage, BufferedImage rightAnchorImage)
@@ -319,12 +331,18 @@ public class ExamReader
         ConvertBufferedImage.convertFrom(topLeftCorner, leftCorner);
         ConvertBufferedImage.convertFrom(bottomRightCorner, rightCorner);
 
-        // TODO: maybe draw the loc that was found
         ImagePoint leftAnchorLoc
                 = getTemplateLocation(leftCorner, leftAnchor, 1);
+        if(leftAnchorLoc == null)
+        {
+            return null;
+        }
         ImagePoint rightAnchorLoc
                 = getTemplateLocation(rightCorner, rightAnchor, 1);
-
+        if(rightAnchorLoc == null)
+        {
+            return null;
+        }
         // draw box over donut
 //        Graphics2D graphics = bottomRightCorner.createGraphics();
 //        graphics.setColor(Color.red);
@@ -362,7 +380,7 @@ public class ExamReader
      * @param image the exam to scan
      * @param template the anchor to scan for
      * @param expectedMatches the number of expected matches in the image
-     * @return
+     * @return the ImagePoint at which the template was found or null if none were found.
      */
     private static ImagePoint getTemplateLocation(ImageUInt8 image,
             ImageUInt8 template,
@@ -381,6 +399,10 @@ public class ExamReader
         matcher.setTemplate(template, expectedMatches);
         matcher.process(image);
         //System.out.println(matcher.getResults().size);
+        if(matcher.getResults().size == 0)
+        {
+            return null;
+        }
         List<Match> found = matcher.getResults().toList();
 
         ImagePoint point = new ImagePoint();
