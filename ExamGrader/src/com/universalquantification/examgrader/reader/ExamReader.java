@@ -164,14 +164,14 @@ public class ExamReader
                 firstNameBounds.maxX - firstNameBounds.minX,
                 firstNameBounds.maxY - firstNameBounds.minY
         );
-
+        //ShowImages.showDialog(firstNameField);
         Bounds lastNameBounds = formDetails.getBoundsForLastName();
         BufferedImage lastNameField = fileImage.getSubimage(
                 lastNameBounds.minX, lastNameBounds.minY,
                 lastNameBounds.maxX - lastNameBounds.minX,
                 lastNameBounds.maxY - lastNameBounds.minY
         );
-
+        //ShowImages.showDialog(lastNameField);
         StochasticString firstNamePossibilities = extractStochasticNameField(
                 firstNameField, BubblitFormV2Details.kNumFirstNameLetters);
 
@@ -205,12 +205,17 @@ public class ExamReader
 
         for (int i = 0; i < nameCharacters.length; i++)
         {
+            //ShowImages.showDialog(nameCharacters[i]);
             removeBorders(nameCharacters[i]);
+            //ShowImages.showDialog(nameCharacters[i]);
             if (getBlackRatio(nameCharacters[i]) > 0.02)
             {
-
-                str.append(this.nameRecognitionGateway.
-                        detectStochasticCharacter(nameCharacters[i]));
+                StochasticCharacter chr = this.nameRecognitionGateway.
+                        detectStochasticCharacter(nameCharacters[i]);
+                if(chr != null)
+                {
+                    str.append(chr);
+                }
             }
 
         }
@@ -542,14 +547,16 @@ public class ExamReader
         int width = img.getWidth();
         int numBlacks = 0;
         int[] whiteRow = new int[width + height];
+        int colsToClear = (int) (0.15 * width);
+        int rowsToClear = (int) (0.15 * height);
+
+        
         for (int i = 0; i < width + height; i++)
         {
             whiteRow[i] = white;
         }
-        boolean doClear = true;
-
         // remove the top border
-        for (int onRow = 0; onRow < height && doClear; onRow++)
+        for (int onRow = 0; onRow < rowsToClear; onRow++)
         {
             numBlacks = 0;
             for (int onCol = 0; onCol < width; onCol++)
@@ -560,7 +567,8 @@ public class ExamReader
                     numBlacks++;
                 }
             }
-            if (numBlacks > .5 * width)
+
+            if (numBlacks > .25 * width)
             {
                 //setRGB(int startX, int startY, int w, int h, int[] rgbArray, int offset, int scansize)
                 //rgbArray[offset + (y-startY)*scansize + (x-startX)];
@@ -574,15 +582,10 @@ public class ExamReader
                         1 // scansize
                 );
             }
-            else
-            {
-                doClear = false;
-            }
         }
 
-        doClear = true;
         // remove the left border
-        for (int onCol = 0; onCol < width && doClear; onCol++)
+        for (int onCol = 0; onCol < colsToClear; onCol++)
         {
             numBlacks = 0;
             for (int onRow = 0; onRow < height; onRow++)
@@ -593,7 +596,7 @@ public class ExamReader
                 }
             }
 
-            if (numBlacks > .5 * height)
+            if (numBlacks > .25 * height)
             {
                 //setRGB(int startX, int startY, int w, int h, int[] rgbArray, int offset, int scansize)
                 //rgbArray[offset + (y-startY)*scansize + (x-startX)];
@@ -606,10 +609,6 @@ public class ExamReader
                         0, //offset
                         1 // scansize
                 );
-            }
-            else
-            {
-                doClear = false;
             }
         }
     }
