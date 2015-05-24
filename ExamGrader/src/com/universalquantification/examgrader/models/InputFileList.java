@@ -48,6 +48,19 @@ public class InputFileList extends Observable {
     }
     
     /**
+     * Clears the input file list
+     */
+    public void clear()
+    {
+        // CALL clear on files
+        files.clear();
+        // CALL setChanged
+        setChanged();
+        // CALL notifyObservers
+        notifyObservers();
+    }
+    
+    /**
      * Returns the sum of all the pages in the InputFiles
      * @return total number of pages
      */

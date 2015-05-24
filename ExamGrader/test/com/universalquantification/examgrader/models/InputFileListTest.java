@@ -45,4 +45,22 @@ public class InputFileListTest extends TestCase {
         assertEquals(0, inputFileList.getTotalPages());
     }
     
+    public void testClear() throws Exception
+    {
+        File file = new File("Exams.pdf");
+        InputFileList inputFileList = new InputFileList();
+        
+        Observer observer = mock(Observer.class);
+        inputFileList.addObserver(observer);
+        inputFileList.addInputFile(file);
+        
+        assertEquals(inputFileList.getFiles(), Arrays.asList(file));
+        assertEquals(1, inputFileList.getTotalPages());
+        
+        verify(observer, times(1)).update(inputFileList, null);
+        
+        inputFileList.clear();
+        verify(observer, times(2)).update(inputFileList, null);
+    }
+    
 }

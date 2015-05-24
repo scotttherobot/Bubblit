@@ -5,6 +5,10 @@
  */
 package com.universalquantification.examgrader;
 
+import com.universalquantification.examgrader.controller.Controller;
+import com.universalquantification.examgrader.grader.Grader;
+import com.universalquantification.examgrader.models.InputFileList;
+import com.universalquantification.examgrader.ui.AppView;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -12,6 +16,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,17 +33,67 @@ import javax.swing.UnsupportedLookAndFeelException;
  * main program
  * @author Luis
  */
-public class MainApplication extends javax.swing.JFrame implements
-        PropertyChangeListener
+public class MainApplication extends javax.swing.JFrame implements AppView, Observer
 {
+    
+    private Controller controller;
 
     /**
      * Creates new form NewApplication
      */
-    public MainApplication()
+    public MainApplication() throws IOException
     {
+        controller = new Controller(this);
         initComponents();
         removeFileButton.setEnabled(false);
+    }
+    
+    public void showError(String e)
+    {
+        
+          /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    new MainApplication().setVisible(true);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+            }
+        });
+        
+        JOptionPane.showMessageDialog(this, 
+                e
+        );
+    }
+    
+    public void update(Observable o, Object arg)
+    {
+        if (o instanceof InputFileList)
+        {
+            InputFileList list = (InputFileList) o;
+            fileList.setListData(list.getFiles().toArray());
+        }
+        else if (o instanceof Grader)
+        {
+            final Grader grader = (Grader) o;
+            
+            java.awt.EventQueue.invokeLater(new Runnable()
+            {
+                public void run()
+                {
+                
+                    progressBar.setMaximum(grader.getTotalPagesToGrade());
+                    progressBar.setValue(grader.getPagesGraded());
+                }
+            });
+        }
     }
 
     /**
@@ -254,7 +310,16 @@ public class MainApplication extends javax.swing.JFrame implements
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
             File file = fileChooser.getSelectedFile();
-            listModel.addElement(file.getAbsolutePath());
+            
+            
+            if (file.getName().endsWith(".tsv"))
+            {
+                controller.changeRosterFile(file);
+            }
+            else
+            {
+                controller.addInputFile(file);
+            }
         }
         else
         {
@@ -263,34 +328,28 @@ public class MainApplication extends javax.swing.JFrame implements
     }//GEN-LAST:event_addFileButtonActionPerformed
 
     private void gradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradeButtonActionPerformed
-        ArrayList<String> paths = new ArrayList<String>();
-        String csvPath = null;
-        JOptionPane.showMessageDialog(this, 
-                "Not yet implemented"
-        );
-        /*
-        for (int onPath = 0; onPath < listModel.size(); onPath++)
-        {
-            
-            String path = (String) listModel.getElementAt(onPath);
-            if(path.contains(".tsv"))
-            {
-                csvPath = path;
-                System.out.println("tsv found " + csvPath);
-            }
-            else
-            {
-                paths.add(path);
+ 
+       
+        SwingWorker<Void, Void> task = new SwingWorker<Void, Void>() {
+
+            @Override
+            public Void doInBackground() {
+                controller.grade();
+                return null;
             }
             
-        }
-        
-        task = new GradeExams(paths, csvPath);
-        task.addPropertyChangeListener(this);
+             @Override
+             protected void done() {
+                gradeButton.setEnabled(true);
+                gradeButton.setText("Grade!");
+             }       
+
+        };
+                
         task.execute();
         gradeButton.setEnabled(false);
         gradeButton.setText("Please wait, grading...");
-        */
+
     }//GEN-LAST:event_gradeButtonActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -323,7 +382,7 @@ public class MainApplication extends javax.swing.JFrame implements
         int selectedIndex = fileList.getSelectedIndex();
         
         if (selectedIndex != -1) {
-            listModel.remove(selectedIndex);
+            controller.deleteInputFile(selectedIndex);
             removeFileButton.setEnabled(false);
         }
     }//GEN-LAST:event_removeFileButtonActionPerformed
@@ -404,31 +463,21 @@ public class MainApplication extends javax.swing.JFrame implements
         {
             public void run()
             {
-                new MainApplication().setVisible(true);
+                try
+                {
+                    new MainApplication().setVisible(true);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
             }
         });
         
         
     }
 
-    /**
-     * Invoked when task's progress property changes.
-     */
-    @Override
-    public void propertyChange(PropertyChangeEvent evt)
-    {
-        if ("progress" == evt.getPropertyName())
-        {
-            int progress = (Integer) evt.getNewValue();
-            progressBar.setValue(progress);
-            if (progress == 100)
-            {
-                progressBar.setValue(0);
-                gradeButton.setEnabled(true);
-                gradeButton.setText("Grade");
-            }
-        }
-    }
     //private GradeExams task;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

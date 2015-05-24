@@ -1,9 +1,17 @@
 package com.universalquantification.examgrader.controller;
 
+import antlr.debug.InputBufferListener;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.models.InputFileList;
+import com.universalquantification.examgrader.reader.ExamReader;
+import com.universalquantification.examgrader.reader.StudentNameMapper;
 import com.universalquantification.examgrader.ui.AppView;
 import java.io.File;
+import java.io.IOException;
+import com.universalquantification.examgrader.models.GradedExamCollection;
+import com.universalquantification.examgrader.reader.NameRecognitionGateway;
+import com.universalquantification.examgrader.reporter.ReportWriter;
+import java.util.Map;
 
 /**
  * The Controller mediates between a view of the app, handling input from the 
@@ -20,20 +28,25 @@ public class Controller {
      */
     private InputFileList inputFileList;
 
-    private Grader grader;
-    
     private AppView appView;
+    
+    private File rosterFile;
     
     /**
      * Initializes a controller with a new InputFileList and Grader.
      */
-    public Controller(AppView view)
+    public Controller(AppView view) throws IOException
     {
+        
         // SET the view field to view
+        this.appView = view;
+        // INIT a new InputFileList as inputFileList field
+        this.inputFileList = new InputFileList();
+        
         // INIT a new StudentNameMapper studentNameMapper
         // INIT a new ExamReader examReader with studentNameMapper as reader
-        // INIT a new InputFileList as inputFileList field
         // INIT a new Grader with inputFileList, reader, mapper as grader field
+        this.inputFileList.addObserver(appView);
     }
     
     /**
@@ -47,6 +60,8 @@ public class Controller {
         // SET the view field to view
         // SET the inputFileList field to inputFileList
         // SET the grader field to grader
+        this.appView = view;
+        this.inputFileList = inputFileList;
     }
     
     /**
@@ -58,13 +73,7 @@ public class Controller {
     
     public void changeRosterFile(File rosterFile)
     {
-        // BEGIN
-            // CALL updateRosterFile grader WITH rosterFile
-        // EXCEPTION IOException
-            // CALL setError With "Failed to read the roster file"
-        // EXCEPTION
-            // CALL setError With "Unknown exception reading the roster file"
-        // END
+        this.rosterFile = rosterFile;
     }
     
     /**
@@ -75,14 +84,44 @@ public class Controller {
     public void grade()
     {
         // BEGIN
+        try
+        {
+            if (inputFileList.getInputFiles().isEmpty())
+            {
+                appView.showError("You must add an input file.");
+                return;
+            }
+            
+            if (rosterFile == null)
+            {
+                appView.showError("You must add a roster file.");
+                return;
+            }
+            // INIT grader
+            Grader grader = new Grader(inputFileList,
+                new ExamReader(new NameRecognitionGateway()), rosterFile.getAbsolutePath());
+            grader.addObserver(appView);
             // CALL grade grader RETURNING gradingResults
+            Map<File, GradedExamCollection> results = grader.grade();
+            
+            // CALL clear on InputFileList
+            inputFileList.clear();
+            
+            // INIT reportWriter gradingResults
+        
+            // CALL writeReports reportWriter
+            new ReportWriter(null).writeReports(results);
+        }
         // EXCEPTION GradingException
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            appView.showError("An error occured with message: " + e.getMessage());
             // CALL setError view "Grading failed. Please check that the
             // format is correct"
+        }
         // END
         
-        // INIT reportWriter gradingResults
-        // CALL writeReports reportWriter
     }
     
     /**
@@ -91,8 +130,6 @@ public class Controller {
      */
     public void cancel()
     {
-        // CALL cancel grader
-        
     }
     
     /**
@@ -103,9 +140,17 @@ public class Controller {
     public void addInputFile(File inputFile)
     {
         // BEGIN
+        try
+        {
             // CALL addInputFile inputFileList WITH inputFile
+            inputFileList.addInputFile(inputFile);
+        }
         // EXCEPTION IOException
+        catch (IOException e)
+        {
             // CALL setError view WITH "We could not read the file."
+            appView.showError("We could not read the file.");
+        }
         // END
     }
     
@@ -117,6 +162,7 @@ public class Controller {
     public void deleteInputFile(int ndx)
     {
         // CALL deleteInputFile inputFileList WITH ndx
+        inputFileList.deleteInputFile(ndx);
     }
             
     
