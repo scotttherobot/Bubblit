@@ -55,7 +55,7 @@ public class InputFile {
         
         // FOR each page in pdf
         pages = new ArrayList<>();
-        for (int i = 0; i < pdf.getNumPages(); i++)
+        for (int i = 1; i < pdf.getNumPages() + 1; i++)
         {
             
             // INIT inputPage as InputPage with page    
@@ -83,7 +83,7 @@ public class InputFile {
     public InputPage getAnswerKeyPage()
     {
         // RETURN pages[0]
-        return pages.get(0);
+        return pages.get(1);
     }
     
     
