@@ -144,4 +144,14 @@ public class Student
     {
         return this.stochasticLast;
     }
+    
+    public BufferedImage getFirstNameImage()
+    {
+        return this.firstNameImage;
+    }
+    
+    public BufferedImage getLastNameImage()
+    {
+        return this.lastNameImage;
+    }
 }
