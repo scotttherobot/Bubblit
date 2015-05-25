@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.grader;
 
+import boofcv.gui.image.ShowImages;
 import com.universalquantification.examgrader.grader.ExamRosterMatcher.MatchResult;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,11 +59,23 @@ public class Grader extends Observable
      * Total number of pages this grader must grade.
      */
     private final int pagesToGrade;
-
+    
+    /**
+     * Files that have been graded so far.
+     */
+    private int filesGraded;
+    
+    /**
+     * Total number of files this grader must grade.
+     */
+    private final int filesToGrade;
+    
     /**
      * The path to the roster file
      */
     private final String rosterFile;
+    
+    private boolean doGrade;
 
     /**
      * Constructs a new Grader instance. Reads files off of the inputFileList,
@@ -70,8 +84,7 @@ public class Grader extends Observable
      *
      * @param inputFileList list of files to grade.
      * @param examReader reader to be used for reading the inputFiles.
-     * @param rosterFile the path to the TSV file
-     * username
+     * @param rosterFile the path to the TSV file username
      * @pre inputFiles have been read in and confirmed to be of the correct
      * format
      */
@@ -87,6 +100,8 @@ public class Grader extends Observable
         this.inputFiles = inputFileList;
         this.examReader = examReader;
         this.rosterFile = rosterFile;
+        doGrade = true;
+        this.filesToGrade = this.inputFiles.getInputFiles().size();
     }
 
     /**
@@ -96,6 +111,14 @@ public class Grader extends Observable
      */
     public void cancel()
     {
+        doGrade = false;
+        setChanged();
+        notifyObservers();
+    }
+    
+    public boolean isCancelled()
+    {
+        return !doGrade;
     }
 
     /**
@@ -104,7 +127,8 @@ public class Grader extends Observable
      * @return a Map mapping an input file to a {@link GradedExamCollection}
      * @throws GradingException
      * @throws java.io.FileNotFoundException
-     * @throws com.universalquantification.examgrader.reader.InvalidExamException
+     * @throws
+     * com.universalquantification.examgrader.reader.InvalidExamException
      * @pre has been constructed.
      */
     public Map<File, GradedExamCollection> grade()
@@ -136,18 +160,25 @@ public class Grader extends Observable
         FileReader rosterFileReader = new FileReader(this.rosterFile);
         Roster studentReader = new Roster(rosterFileReader);
         List<RosterEntry> rosters = RosterParser.parseRoster(studentReader);
-        
-        for (InputFile file : files)
+
+        Iterator<InputFile> filesIterator = files.iterator();
+        while (filesIterator.hasNext() && this.doGrade)
         {
+            InputFile file = filesIterator.next();
             InputPage answerPage = file.getAnswerKeyPage();
             Exam answerKey = examReader.getExam(answerPage);
             List<InputPage> examPages = file.getStudentExamPages();
-            
-            for (InputPage examPage : examPages)
+
+            Iterator<InputPage> pageIterator = examPages.iterator();
+            while (pageIterator.hasNext() && this.doGrade)
             {
+                InputPage examPage = pageIterator.next();
                 Exam exam = examReader.getExam(examPage);
                 exam.grade(answerKey);
                 exams.add(exam);
+                this.pagesGraded++;
+                setChanged();
+                notifyObservers();
             }
 
             // do roster matching
@@ -164,19 +195,23 @@ public class Grader extends Observable
                     return Double.compare(o1.confidence, o2.confidence);
                 }
             });
-
+            setChanged();
+            notifyObservers(matches);
             // Process and print each match result.
             // TODO: give these results to the GUI
+
             for (MatchResult result : matches)
             {
                 matchedEntries.add(result.match);
-                System.out.format("[%.3f] %s %s ==> %s %s\n", result.confidence,
-                        result.form.getStudentRecord().getStochasticFirst().
-                        toString(),
-                        result.form.getStudentRecord().getStochasticLast().
-                        toString(),
-                        result.match.getFirst(),
-                        result.match.getLast());
+//                System.out.format("[%.3f] %s %s ==> %s %s\n", result.confidence,
+//                        result.form.getStudentRecord().getStochasticFirst().
+//                        toString(),
+//                        result.form.getStudentRecord().getStochasticLast().
+//                        toString(),
+//                        result.match.getFirst(),
+//                        result.match.getLast());
+                //ShowImages.showDialog(result.form.getStudentRecord().getFirstNameImage());
+                //ShowImages.showDialog(result.form.getStudentRecord().getLastNameImage());
             }
 
             int unmatched = matchedEntries.size() - rosters.size();
@@ -184,16 +219,17 @@ public class Grader extends Observable
             // Alert if there are any unmatched entries.
             if (unmatched == 0)
             {
-                System.out.println("No entries unmatched (perfect permutation)");
+                //System.out.println("No entries unmatched (perfect permutation)");
             }
             else
             {
-                System.out.println("Unmatched roster entries: " + unmatched);
+                //System.out.println("Unmatched roster entries: " + unmatched);
             }
 
             GradedExamCollection gradedCollection = new GradedExamCollection(
                     answerKey, exams);
             gradedFiles.put(file.getFileName(), gradedCollection);
+            filesGraded++;
         }
 
         return gradedFiles;
@@ -231,4 +267,13 @@ public class Grader extends Observable
         return pagesToGrade;
     }
 
+    public int getTotalFilesToGrade()
+    {
+        return filesToGrade;
+    }
+    
+    public int getFilesGraded()
+    {
+        return filesGraded;
+    }
 }
