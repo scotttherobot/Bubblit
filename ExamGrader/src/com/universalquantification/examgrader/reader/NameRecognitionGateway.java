@@ -14,12 +14,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-
 /**
  * The NameRecognitionGateway class reads student name 
  * information from the exam form
@@ -166,18 +160,18 @@ public class NameRecognitionGateway {
      */
     public static Bounds getBounds(BufferedImage img)
     {
-        int w = img.getWidth();
-        int h = img.getHeight();
+        int width = img.getWidth();
+        int height = img.getHeight();
         int black = -16777216;
         
-        int minx = w;
+        int minx = width;
         int maxx = 0;
-        int miny = h;
+        int miny = height;
         int maxy = 0;
         
-        for(int x = 0; x < w; x++)
+        for (int x = 0; x < width; x++)
         {
-            for(int y = 0; y < h; y++)
+            for(int y = 0; y < height; y++)
             {
                 int color = img.getRGB(x, y);
                 if(color == black)

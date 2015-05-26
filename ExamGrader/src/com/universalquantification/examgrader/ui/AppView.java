@@ -21,6 +21,11 @@ public interface AppView extends Observer {
      */
     public void showError(String error);
     
+    /**
+     * Verify that the exams are labeled with the correct matches.
+     * @param results results to check
+     * @param roster roster to use
+     */
     public void checkRoster(Map<File, List<MatchResult>> results, List<RosterEntry> roster);
     
 }
