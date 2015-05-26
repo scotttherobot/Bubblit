@@ -1,18 +1,21 @@
 package com.universalquantification.examgrader.grader;
+
 import com.universalquantification.examgrader.models.Exam;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A utility class to match a list of {@link RosterEntry}s with a list of
+ * {@link Exam}s.
  *
- * @author luis
+ * @author William Chargin, Luis Cuellar
  */
 public class ExamRosterMatcher
 {
-    
+
     /**
-     * A match result for a single form,
-     * indicating the matching roster entry and the confidence level.
+     * A match result for a single form, indicating the matching roster entry
+     * and the confidence level.
      *
      * @author William Chargin
      * @version 15 May 2015
@@ -31,20 +34,17 @@ public class ExamRosterMatcher
         public final RosterEntry match;
 
         /**
-         * The confidence level that this match is correct,
-         * from {@code 0} to {@code 1}.
+         * The confidence level that this match is correct, from {@code 0} to
+         * {@code 1}.
          */
         public final double confidence;
 
         /**
          * Creates a {@code MatchResult} with the given data.
          *
-         * @param form
-         *      the form whose match was found
-         * @param match
-         *      the best guess for the roster entry
-         * @param confidence
-         *      the confidence level that the guess is correct
+         * @param form the form whose match was found
+         * @param match the best guess for the roster entry
+         * @param confidence the confidence level that the guess is correct
          */
         public MatchResult(Exam form, RosterEntry match, double confidence)
         {
@@ -59,17 +59,14 @@ public class ExamRosterMatcher
     /**
      * Matches each of the given forms with one of the roster entries.
      *
-     * @param form
-     *      the list of forms to match
-     * @param entries
-     *      the candidate students who could be matched
-     * @return
-     *      a list of results
+     * @param forms the list of exams
+     * @param entries the candidate students who could be matched
+     * @return a list of results
      */
     public static List<MatchResult> match(List<Exam> forms,
             List<RosterEntry> entries)
     {
-        List<MatchResult> result = new ArrayList<>();
+        List<MatchResult> result = new ArrayList<MatchResult>();
 
         // Match each form individually (no cross-referencing).
         for (Exam form : forms)
@@ -91,9 +88,13 @@ public class ExamRosterMatcher
             }
 
             // Compute the lengths to normalize the confidence level.
-            int lfirst = Math.max(form.getStudentRecord().getStochasticFirst().length(),
+            int lfirst = Math.max(form.getStudentRecord()
+                    .getStochasticFirst()
+                    .length(),
                     bestEntry.getFirst().length());
-            int llast = Math.max(form.getStudentRecord().getStochasticLast().length(),
+            int llast = Math.max(form.getStudentRecord()
+                    .getStochasticLast()
+                    .length(),
                     bestEntry.getLast().length());
             double confidence = 1 - bestWeight / (lfirst + llast);
 
