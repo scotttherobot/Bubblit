@@ -297,7 +297,7 @@ public class BubblitFormV2Details
     /**
      * Get the width of a donut relative to the width of the page.
      * @param width the width of the document
-     * @return 
+     * @return the width of the donut
      */
     public static int getAnchorWidth(int width)
     {
