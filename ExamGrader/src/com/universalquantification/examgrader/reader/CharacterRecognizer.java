@@ -206,7 +206,7 @@ public class CharacterRecognizer
      * pixels for X & Y. It basically removes margins.
      *
      * @param img
-     * @return
+     * @return the bounds for the smallest bounding box.
      */
     public static Bounds getBounds(BufferedImage img)
     {
