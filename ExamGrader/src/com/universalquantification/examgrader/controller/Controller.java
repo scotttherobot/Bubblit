@@ -1,16 +1,21 @@
 package com.universalquantification.examgrader.controller;
 
-import antlr.debug.InputBufferListener;
 import com.universalquantification.examgrader.grader.Grader;
+import com.universalquantification.examgrader.grader.MatchResult;
+import com.universalquantification.examgrader.grader.Roster;
+import com.universalquantification.examgrader.grader.RosterEntry;
+import com.universalquantification.examgrader.grader.RosterParser;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.reader.ExamReader;
-import com.universalquantification.examgrader.reader.StudentNameMapper;
 import com.universalquantification.examgrader.ui.AppView;
 import java.io.File;
 import java.io.IOException;
-import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.reader.NameRecognitionGateway;
 import com.universalquantification.examgrader.reporter.ReportWriter;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +35,7 @@ public class Controller {
 
     private AppView appView;
     
-    private File rosterFile;
+    private List<RosterEntry> rosterEntries;
     
     /**
      * Initializes a controller with a new InputFileList and Grader.
@@ -64,6 +69,18 @@ public class Controller {
         this.inputFileList = inputFileList;
     }
     
+    public void writeReports(Map<File, List<MatchResult>> results)
+    {
+            for (MatchResult result : results.values().iterator().next())
+            {
+                System.out.format("%s %s", 
+                        result.form.getStudentRecord().getFirstName(),
+                        result.form.getStudentRecord().getLastName());
+            }
+
+        
+    }
+    
     /**
      * Changes the roster file associated with the program. This sets an
      * error on the UI if changing the roster file fails.
@@ -71,9 +88,10 @@ public class Controller {
      * @param rosterFile new roster file to use
      */
     
-    public void changeRosterFile(File rosterFile)
+    public void changeRosterFile(File rosterFile) throws FileNotFoundException
     {
-        this.rosterFile = rosterFile;
+        this.rosterEntries =
+                RosterParser.parseRoster(new Roster(new FileReader(rosterFile)));
     }
     
     /**
@@ -92,25 +110,27 @@ public class Controller {
                 return;
             }
             
-            if (rosterFile == null)
+            if (rosterEntries == null)
             {
                 appView.showError("You must add a roster file.");
                 return;
             }
             // INIT grader
             Grader grader = new Grader(inputFileList,
-                new ExamReader(new NameRecognitionGateway()), rosterFile.getAbsolutePath());
+                new ExamReader(new NameRecognitionGateway()), rosterEntries);
             grader.addObserver(appView);
             // CALL grade grader RETURNING gradingResults
-            Map<File, GradedExamCollection> results = grader.grade();
+            Map<File, List<MatchResult>> results = grader.grade();
             
             // CALL clear on InputFileList
             inputFileList.clear();
             
+            appView.checkRoster(results, rosterEntries);
+            
             // INIT reportWriter gradingResults
         
             // CALL writeReports reportWriter
-            new ReportWriter(null).writeReports(results);
+//            new ReportWriter(null).writeReports(results);
         }
         // EXCEPTION GradingException
         catch (Exception e)

@@ -1,6 +1,5 @@
 package com.universalquantification.examgrader.grader;
 
-import com.universalquantification.examgrader.grader.ExamRosterMatcher.MatchResult;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFile;
@@ -72,7 +71,7 @@ public class Grader extends Observable
     /**
      * The path to the roster file
      */
-    private final String rosterFile;
+    private final List<RosterEntry> rosterEntries;
 
     private boolean doGrade;
 
@@ -88,7 +87,7 @@ public class Grader extends Observable
      * format
      */
     public Grader(InputFileList inputFileList, ExamReader examReader,
-            String rosterFile)
+            List<RosterEntry> rosterEntries)
     {
         // SET this.inputFiles to inputFileList
         // SET this.examReader to examReader
@@ -98,7 +97,7 @@ public class Grader extends Observable
         pagesToGrade = inputFileList.getTotalPages();
         this.inputFiles = inputFileList;
         this.examReader = examReader;
-        this.rosterFile = rosterFile;
+        this.rosterEntries = rosterEntries;
         doGrade = true;
         this.filesToGrade = this.inputFiles.getInputFiles().size();
     }
@@ -135,7 +134,7 @@ public class Grader extends Observable
      * com.universalquantification.examgrader.reader.InvalidExamException
      * @pre has been constructed.
      */
-    public Map<File, GradedExamCollection> grade()
+    public Map<File, List<MatchResult>> grade()
         throws GradingException, FileNotFoundException, IOException,
         InvalidExamException
     {
@@ -159,11 +158,8 @@ public class Grader extends Observable
         ExamRosterMatcher matcher = new ExamRosterMatcher();
         ArrayList<Exam> exams = new ArrayList<Exam>();
         List<InputFile> files = this.inputFiles.getInputFiles();
-        LinkedHashMap<File, GradedExamCollection> gradedFiles
-                = new LinkedHashMap<File, GradedExamCollection>();
-        FileReader rosterFileReader = new FileReader(this.rosterFile);
-        Roster studentReader = new Roster(rosterFileReader);
-        List<RosterEntry> rosters = RosterParser.parseRoster(studentReader);
+        LinkedHashMap<File, List<MatchResult>> gradedFiles
+                = new LinkedHashMap<File, List<MatchResult>>();
 
         Iterator<InputFile> filesIterator = files.iterator();
         // iterate over the files to grade them
@@ -172,6 +168,11 @@ public class Grader extends Observable
             InputFile file = filesIterator.next();
             InputPage answerPage = file.getAnswerKeyPage();
             Exam answerKey = examReader.getExam(answerPage);
+            
+            this.pagesGraded++;
+            setChanged();
+            notifyObservers();
+            
             List<InputPage> examPages = file.getStudentExamPages();
 
             Iterator<InputPage> pageIterator = examPages.iterator();
@@ -189,7 +190,7 @@ public class Grader extends Observable
 
             // do roster matching
             final List<MatchResult> matches = ExamRosterMatcher.match(exams,
-                    rosters);
+                    rosterEntries);
             Set<RosterEntry> matchedEntries = new HashSet<RosterEntry>();
 
             // Sort by confidence level (ascending).
@@ -205,28 +206,37 @@ public class Grader extends Observable
             // notify the obvservers that the grading process for this file has
             // ended and that these are the roster matches.
             setChanged();
-            notifyObservers(matches);
 
-            // add the graded exam collection mapping
-            GradedExamCollection gradedCollection = new GradedExamCollection(
-                answerKey, exams);
-            gradedFiles.put(file.getFileName(), gradedCollection);
+            for (MatchResult result : matches)
+            {
+                matchedEntries.add(result.match);
+//                System.out.format("[%.3f] %s %s ==> %s %s\n", result.confidence,
+//                        result.form.getStudentRecord().getStochasticFirst().
+//                        toString(),
+//                        result.form.getStudentRecord().getStochasticLast().
+//                        toString(),
+//                        result.match.getFirst(),
+//                        result.match.getLast());
+                //ShowImages.showDialog(result.form.getStudentRecord().getFirstNameImage());
+                //ShowImages.showDialog(result.form.getStudentRecord().getLastNameImage());
+            }
+
+            int unmatched = matchedEntries.size() - rosterEntries.size();
+
+            // Alert if there are any unmatched entries.
+            if (unmatched == 0)
+            {
+                //System.out.println("No entries unmatched (perfect permutation)");
+            }
+            else
+            {
+                //System.out.println("Unmatched roster entries: " + unmatched);
+            }
+
             filesGraded++;
         }
 
         return gradedFiles;
-    }
-
-    /**
-     * Updates the roster file associated with the StudentNameMapper.
-     *
-     * @param file to update with
-     * @throws IOException - the exception if the file is in an invalid roster
-     * format
-     */
-    public void updateRoster(File file) throws IOException
-    {
-        // CALL this.mapper.updateRoster WITH file
     }
 
     /**

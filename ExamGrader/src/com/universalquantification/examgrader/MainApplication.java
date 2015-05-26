@@ -1,28 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.universalquantification.examgrader;
 
 import com.universalquantification.examgrader.controller.Controller;
+import com.universalquantification.examgrader.grader.MatchResult;
 import com.universalquantification.examgrader.grader.Grader;
+import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.ui.AppView;
-import java.awt.Toolkit;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import com.universalquantification.examgrader.ui.VerifyDialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -46,6 +41,37 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         controller = new Controller(this);
         initComponents();
         removeFileButton.setEnabled(false);
+        
+    }
+    
+    public void checkRoster(final Map<File, List<MatchResult>> results, final List<RosterEntry> roster)
+    {   
+        final List<MatchResult> bigList = new ArrayList<MatchResult>();
+        for (List<MatchResult> result : results.values()) {
+
+            bigList.addAll(result);
+        }
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+
+                final VerifyDialog dialog = new VerifyDialog(bigList, roster);
+                ActionListener finishedListener = new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        dialog.setVisible(false);
+                        dialog.dispose();
+                        controller.writeReports(results);
+                    }
+                };
+
+                dialog.addFinishedListener(finishedListener);
+
+                dialog.setVisible(true);
+            }
+        });
     }
     
     public void showError(String e)
@@ -73,7 +99,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         );
     }
     
-    public void update(Observable o, Object arg)
+    public void update(Observable o, final Object arg)
     {
         if (o instanceof InputFileList)
         {
@@ -83,12 +109,11 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         else if (o instanceof Grader)
         {
             final Grader grader = (Grader) o;
-            
             java.awt.EventQueue.invokeLater(new Runnable()
             {
                 public void run()
                 {
-                
+                    
                     progressBar.setMaximum(grader.getTotalPagesToGrade());
                     progressBar.setValue(grader.getPagesGraded());
                 }
@@ -314,7 +339,14 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             
             if (file.getName().endsWith(".tsv"))
             {
-                controller.changeRosterFile(file);
+                try
+                {
+                    controller.changeRosterFile(file);
+                }
+                catch (FileNotFoundException e)
+                {
+                    showError("File not found.");
+                }
             }
             else
             {

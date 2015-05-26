@@ -13,9 +13,11 @@ import com.universalquantification.examgrader.reader.ExamReader;
 import com.universalquantification.examgrader.reader.NameRecognitionGateway;
 import com.universalquantification.examgrader.reader.StudentNameMapper;
 import java.io.File;
+import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;
 
@@ -68,10 +70,11 @@ public class GraderTest extends TestCase
         File pdfFile = new File("ExamsScannedDalbey.pdf");
         list.addInputFile(pdfFile);
 
+        List<RosterEntry> rosterEntries = RosterParser.parseRoster(new Roster(new FileReader("students.tsv")));
+        
         NameRecognitionGateway g = new NameRecognitionGateway();
-        Grader instance = new Grader(list, new ExamReader(g), "students.tsv");
-        Map<File, GradedExamCollection> expResult = null;
-        Map<File, GradedExamCollection> result = instance.grade();
+        Grader instance = new Grader(list, new ExamReader(g), rosterEntries);
+        Map<File, List<MatchResult>> result = instance.grade();
         //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");

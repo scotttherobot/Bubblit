@@ -98,7 +98,7 @@ public class InputFile {
     }
     
     /**
-     * Returns the total number of pages in the exam.
+     * Returns the total number of pages in the exam that are for a student exam.
      * @return number of pages in the exam
      */
     public int getNumPages()

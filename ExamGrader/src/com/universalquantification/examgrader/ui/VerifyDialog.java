@@ -1,3 +1,4 @@
+package com.universalquantification.examgrader.ui;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -15,30 +16,35 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
+import com.universalquantification.examgrader.grader.MatchResult;
+import com.universalquantification.examgrader.grader.RosterEntry;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Partially functioning prototype of a verify dialog.
  * @author jdalbey
  */
 public class VerifyDialog extends javax.swing.JFrame
-{
-    final String[] sampleNames =
-    {
-        "Bland", "Brown", "Doe", "Smith", "White"
-    };
+{ 
     
+    private List<RosterEntry> roster;
+
     /**
      * Creates new form VerifyDialog
      */
-    public VerifyDialog()
+    public VerifyDialog(List<MatchResult> matchResults, List<RosterEntry> roster)
     {
-        tableModel = new MyTableModel();
+        
+        this.roster = roster;
+        tableModel = new MyTableModel(matchResults);
 
         initComponents();
         TableCellRenderer defaultRenderer = nameTable.getDefaultRenderer(
                 JButton.class);
         nameTable.setDefaultRenderer(JButton.class,
                 new JTableButtonRenderer(defaultRenderer));
-        TableColumn chooseColumn = nameTable.getColumnModel().getColumn(2);
+        TableColumn chooseColumn = nameTable.getColumnModel().getColumn(4);
         chooseColumn.setCellEditor(new ButtonColumn());
         // The JList needs a listener that when a row is clicked,
         // it will set that value into the table at the row
@@ -50,49 +56,48 @@ public class VerifyDialog extends javax.swing.JFrame
             {
                 int index = listRoster.getSelectedIndex();
                 String desiredName = (String) listRoster.getSelectedValue();
-                TableModel tModel = nameTable.getModel();
+                MyTableModel tModel = (MyTableModel) nameTable.getModel();
                 //TODO: We might want to search the table to see if the desiredName
                 // is already in the table, and if so, change it to "unknown".
-                nameTable.setValueAt(desiredName, chosenTableRow, 1);
+                tModel.setNameFromRoster(desiredName, chosenTableRow);
                 listRoster.setEnabled(false);
             }
         });
-
+    }
+    
+    public void addFinishedListener(ActionListener listener)
+    {
+        jButton1.addActionListener(listener);  
     }
 
     class MyTableModel extends AbstractTableModel
     {
-        ImageIcon demoImg = new ImageIcon("NameFields.png");
         String[] columnNames =
         {
-            "Image",
-            "Name",
+            "First Name Image",
+            "Last Name Image",
+            "First Name",
+            "Last Name",
             "Choose",
             "Confidence",
         };
-        Object[][] rowData =
+        
+        private String[][] model;
+        
+        private List<MatchResult> matchResults;
+        
+        private List<JButton> buttons; 
+        
+        MyTableModel(List<MatchResult> matchResults)
         {
+            this.matchResults = matchResults;
+            this.buttons = new ArrayList<>();
+            
+            for (int i = 0; i < matchResults.size(); i++)
             {
-                demoImg, sampleNames[3],
-                mkChooseBtn(0), new Integer(15), new Boolean(false)
-            },
-            {
-                demoImg, sampleNames[1],
-                mkChooseBtn(1), new Integer(33)
-            },
-            {
-                demoImg, sampleNames[2],
-                mkChooseBtn(2), new Integer(72)
-            },
-            {
-                demoImg, sampleNames[4],
-                mkChooseBtn(3), new Integer(80)
-            },
-            {
-                demoImg, sampleNames[0],
-                mkChooseBtn(4), new Integer(97)
+                buttons.add(mkChooseBtn(i));
             }
-        };
+        }
 
         public String getColumnName(int col)
         {
@@ -101,7 +106,7 @@ public class VerifyDialog extends javax.swing.JFrame
 
         public int getRowCount()
         {
-            return rowData.length;
+            return matchResults.size();
         }
 
         public int getColumnCount()
@@ -111,22 +116,74 @@ public class VerifyDialog extends javax.swing.JFrame
 
         public Object getValueAt(int row, int col)
         {
-            return rowData[row][col];
+            MatchResult result = matchResults.get(row);
+            if (col == 0)
+            {
+                return new ImageIcon(result.form.getStudentRecord().getFirstNameImage());
+            }
+            else if (col == 1)
+            {
+                return new ImageIcon(result.form.getStudentRecord().getLastNameImage());
+            }
+            else if (col == 2)
+            {
+                String firstName = result.form.getStudentRecord().getFirstName();
+                if (firstName != null)
+                {
+                    return firstName;
+                }
+                return result.match.getFirst();
+            }
+            else if (col == 3)
+            {
+                String lastName = result.form.getStudentRecord().getLastName();
+                if (lastName != null)
+                {
+                    return lastName;
+                }
+                return result.match.getLast();
+            }
+            else if (col == 4)
+            {
+                return buttons.get(row);
+            }
+            else if (col == 5)
+            {  
+                return result.confidence; 
+            }
+            else 
+            {
+                return Boolean.FALSE;
+            }
         }
 
         public boolean isCellEditable(int row, int col)
         {
-            return true; //col == 2;
+            return true;
         }
 
         public Class getColumnClass(int column)
         {
             return getValueAt(0, column).getClass();
         }
+        
+        public void setNameFromRoster(String value, int row)
+        {
+            String[] name = value.split(", ");
+            setValueAt(name[1], row, 2);
+            setValueAt(name[0], row, 3);
+        }
 
         public void setValueAt(Object value, int row, int col)
         {
-            rowData[row][col] = value;
+            if (col == 2)
+            {
+                matchResults.get(row).form.getStudentRecord().setFirstName(value.toString());
+            }
+            else if (col == 3)
+            {   
+                matchResults.get(row).form.getStudentRecord().setlastName(value.toString());
+            }
             fireTableCellUpdated(row, col);
         }
     }
@@ -174,12 +231,12 @@ public class VerifyDialog extends javax.swing.JFrame
         }
     }
 
-    private DefaultListModel createListModel(String[] names)
+    private DefaultListModel createListModel()
     {
         DefaultListModel aModel = new DefaultListModel();
-        for (String name : names)
+        for (RosterEntry rosterEntry : roster)
         {
-            aModel.addElement(name);
+            aModel.addElement(rosterEntry.getLast() + ", " + rosterEntry.getFirst());
         }
         return aModel;
     }
@@ -210,8 +267,7 @@ public class VerifyDialog extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
         jSplitPane1 = new javax.swing.JSplitPane();
@@ -220,14 +276,13 @@ public class VerifyDialog extends javax.swing.JFrame
         jScrollPane1 = new javax.swing.JScrollPane();
         nameTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Verify Dialog");
 
         jLabel1.setText("Please verify the students have been correctly identified.");
 
-        listRoster.setModel(createListModel(sampleNames));
+        listRoster.setModel(createListModel());
         listRoster.setEnabled(false);
         jScrollPane2.setViewportView(listRoster);
 
@@ -240,8 +295,6 @@ public class VerifyDialog extends javax.swing.JFrame
 
         jButton1.setText("OK");
 
-        jButton2.setText("Cancel");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -250,11 +303,9 @@ public class VerifyDialog extends javax.swing.JFrame
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(58, Short.MAX_VALUE))
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 742, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(18, 18, 18)
+                .addContainerGap(676, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -266,70 +317,14 @@ public class VerifyDialog extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)))
+                .addComponent(jButton1))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info
-                    : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(VerifyDialog.class.getName()).
-                    log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(VerifyDialog.class.getName()).
-                    log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(VerifyDialog.class.getName()).
-                    log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(VerifyDialog.class.getName()).
-                    log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new VerifyDialog().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
