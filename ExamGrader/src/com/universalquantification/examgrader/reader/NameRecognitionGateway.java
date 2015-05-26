@@ -34,7 +34,6 @@ public class NameRecognitionGateway {
      * Creates an instance of NameRecognitionGateway with a BufferedImage
      * to perform OCR on.
      *
-     * @param letters - buffered image of writing to do OCR on
      */
     public NameRecognitionGateway()
     {
