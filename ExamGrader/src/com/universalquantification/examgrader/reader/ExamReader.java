@@ -1,21 +1,15 @@
 package com.universalquantification.examgrader.reader;
 
 import boofcv.alg.feature.detect.template.TemplateMatching;
-import boofcv.alg.filter.basic.GrayImageOps;
-import boofcv.alg.filter.binary.BinaryImageOps;
 import boofcv.alg.filter.binary.GThresholdImageOps;
 import boofcv.alg.filter.binary.ThresholdImageOps;
-import boofcv.alg.misc.ImageStatistics;
 import boofcv.core.image.ConvertBufferedImage;
 import boofcv.factory.feature.detect.template.FactoryTemplateMatching;
 import boofcv.factory.feature.detect.template.TemplateScoreType;
 import boofcv.gui.binary.VisualizeBinaryData;
-import boofcv.gui.image.ShowImages;
 import boofcv.io.image.UtilImageIO;
 import boofcv.struct.feature.Match;
 import boofcv.struct.image.ImageFloat32;
-import boofcv.struct.image.ImageInt8;
-import boofcv.struct.image.ImageSInt8;
 import boofcv.struct.image.ImageUInt8;
 import com.universalquantification.examgrader.models.Answer;
 import com.universalquantification.examgrader.models.Bubble;
@@ -23,17 +17,11 @@ import com.universalquantification.examgrader.models.BubblitFormV2Details;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.InputPage;
 import com.universalquantification.examgrader.models.Student;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Detects and parses exams.
@@ -418,7 +406,7 @@ public class ExamReader
      *
      * @param path the URL of the file
      * @param width the width for the image
-     * @return
+     * @return a square buffered image from the URL with the given width
      */
     private static BufferedImage loadScaledImage(URL path, int width)
     {
