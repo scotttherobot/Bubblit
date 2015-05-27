@@ -93,6 +93,61 @@
               output="${diffresults}" append="true">
             <arg line="${systemtest.dir}/Exams_responses.csv ${systemtest.dir}/results1_responses.csv"/>
         </exec>
+        
+        <!-- System Test Case 1 -->
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest1.out"
+            error="${error.log}">
+            <arg line="-r ${systemtest.dir}/SampleRoster.tsv -i ${systemtest.dir}/SampleExams.pdf ${systemtest.dir}/SampleExams?1.pdf"/>
+        </java>
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="${systemtest.dir}SysTest1.oracle ${systemtest.dir}/SysTest1.out"/>
+        </exec>
+        
+        <!-- System Test Case 4 -->
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest10.out"
+            error="${error.log}">
+            <arg line="-i ${systemtest.dir}/SampleExams.pdf -r ${systemtest.dir}/SampleRoster.tsv"/>
+        </java>
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="${systemtest.dir}SysTest10.oracle ${systemtest.dir}/SysTest10.out"/>
+        </exec>
+        <!-- TODO: Make sure the CSV aggreagate report is there -->
+        
+        <!-- System Test Case 10 -->
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest10.out"
+            error="${error.log}">
+            <arg line="-i SampleExams?.pdf -r SampleRoster.tsv"/>
+        </java>
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="${systemtest.dir}SysTest10.oracle ${systemtest.dir}/SysTest10.out"/>
+        </exec>
+        <!-- TODO: Make sure the HTML reports are there -->
+        
+        <!-- System Test Case 11 -->
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest11.out"
+            error="${error.log}">
+            <arg line="-v"/>
+        </java>
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="${systemtest.dir}SysTest11.oracle ${systemtest.dir}/SysTest11.out"/>
+        </exec>
+        
     </target>
     
     <target name="deploy" depends="jar">
