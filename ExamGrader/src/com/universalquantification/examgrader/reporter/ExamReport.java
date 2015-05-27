@@ -64,8 +64,11 @@ public class ExamReport
         // SET this.exam to exam
         this.exam = exam;
         // SET this.outfile to writeFile
+        this.outfile = writeFile;
+        // SET this.template to template
         this.template = template;
         // CALL scope.put with "exam" and this.exam
+        this.scope = new HashMap<String, Object>();
         this.scope.put("exam", this.exam);
     }
     

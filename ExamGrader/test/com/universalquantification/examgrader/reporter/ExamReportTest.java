@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package com.universalquantification.examgrader.reporter;
 
+import static com.universalquantification.examgrader.helpers.ExamHelper.createExam;
 import com.universalquantification.examgrader.models.Answer;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.InputPage;
@@ -12,6 +14,7 @@ import com.universalquantification.examgrader.reporter.ExamReport;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import junit.framework.TestCase;
 
 /**
@@ -20,7 +23,9 @@ import junit.framework.TestCase;
  */
 public class ExamReportTest extends TestCase
 {
-    private Exam exam;
+    
+    Exam exam;
+    Exam answerKey;
     
     public ExamReportTest(String testName)
     {
@@ -32,8 +37,10 @@ public class ExamReportTest extends TestCase
     {
         super.setUp();
         
-        // TODO: Set up a new Exam object here.
-        //this.exam = new Exam();
+        this.exam = createExam(Arrays.asList(0b11000, 0b01100, 0b00100, 0b00010), "Phone", "Home");
+        this.answerKey = createExam(Arrays.asList(0b11000, 0b01100, 0b00000, 0b00100), "Thoughts", "Alone");
+        
+        this.exam.grade(answerKey);
     }
     
     @Override
@@ -42,20 +49,18 @@ public class ExamReportTest extends TestCase
         super.tearDown();
     }
 
-    // TODO add test methods here. The name must begin with 'test'. For example:
-    // public void testHello() {}
-    
+
     public void testWriteReport()
     {
-        String expected = "scott";
+        String expected = "score: " + this.exam.getRawScore();
         StringWriter output = new StringWriter();
         
-        String templateString = "{{exam.name}}";
+        String templateString = "score: {{#exam}}{{getRawScore}}{{/exam}}";
         StringReader reportFormat = new StringReader(templateString);
         
-        ExamReport report = new ExamReport(exam, output, reportFormat);
+        ExamReport report = new ExamReport(this.exam, output, reportFormat);
         report.writeReport();
         
-        assertSame(expected, output.toString());
+        assertEquals(expected, output.toString());
     }
 }
