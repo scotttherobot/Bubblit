@@ -64,6 +64,93 @@ public class NameRecognitionGatewayTest extends TestCase {
             System.out.print(result[i] + " ");
         }
     }
+    
+    /**
+     * Test of detectCharacter method, of class NameRecognitionGateway.
+     */
+    public void testDetectCharacter2() {
+        
+        
+        String fileName = PATH + "B_1.png";
+        System.out.println("detectCharacter: " + fileName);
+        BufferedImage image = null;
+        
+        try {
+            
+            image = ImageIO.read(new File(fileName));
+            
+        }catch (IOException ex) {    
+            Logger.getLogger(NameRecognitionGatewayTest.class.getName()).
+                    log(Level.SEVERE, null, ex);  
+        }
+        
+        NameRecognitionGateway instance = new NameRecognitionGateway();
+        
+        char[] result = instance.detectCharacter(image);
+
+        for(int i = 0; i < result.length; i++)
+        {
+            System.out.print(result[i] + " ");
+        }
+    }
+    
+    /**
+     * Test of detectCharacter method, of class NameRecognitionGateway.
+     */
+    public void testDetectCharacter3() {
+        
+        
+        String fileName = PATH + "C_Scott.png";
+        System.out.println("detectCharacter: " + fileName);
+        BufferedImage image = null;
+        
+        try {
+            
+            image = ImageIO.read(new File(fileName));
+            
+        }catch (IOException ex) {    
+            Logger.getLogger(NameRecognitionGatewayTest.class.getName()).
+                    log(Level.SEVERE, null, ex);  
+        }
+        
+        NameRecognitionGateway instance = new NameRecognitionGateway();
+        
+        char[] result = instance.detectCharacter(image);
+
+        for(int i = 0; i < result.length; i++)
+        {
+            System.out.print(result[i] + " ");
+        }
+    }
+    
+    /**
+     * Test of detectCharacter method, of class NameRecognitionGateway.
+     */
+    public void testDetectCharacter4() {
+        
+        
+        String fileName = PATH + "D_1.png";
+        System.out.println("detectCharacter: " + fileName);
+        BufferedImage image = null;
+        
+        try {
+            
+            image = ImageIO.read(new File(fileName));
+            
+        }catch (IOException ex) {    
+            Logger.getLogger(NameRecognitionGatewayTest.class.getName()).
+                    log(Level.SEVERE, null, ex);  
+        }
+        
+        NameRecognitionGateway instance = new NameRecognitionGateway();
+        
+        char[] result = instance.detectCharacter(image);
+
+        for(int i = 0; i < result.length; i++)
+        {
+            System.out.print(result[i] + " ");
+        }
+    }
 
     /**
      * Test of invertBW method, of class NameRecognitionGateway
