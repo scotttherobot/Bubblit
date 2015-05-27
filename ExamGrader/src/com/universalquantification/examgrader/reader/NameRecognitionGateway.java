@@ -52,7 +52,7 @@ public class NameRecognitionGateway {
         
         // CALL getBinaryImage to RETURN black and white image
         BufferedImage bn = getBinaryImage(letters);
-        // CALL invertBW to RETURN inverted image
+        // CALL invertBW to invert image black/white
         invertBW(bn);
         // CALL resize to scale image to 40 by 40 pixels
         bn = resize(bn, 40, 40);
@@ -101,7 +101,7 @@ public class NameRecognitionGateway {
      * @param image BufferedImage input to change into black and white
      * @return the resulting black-and-white image
      */
-    private static BufferedImage getBinaryImage(BufferedImage image)
+    public static BufferedImage getBinaryImage(BufferedImage image)
     {
         // convert into a usable format
         ImageFloat32 input = ConvertBufferedImage.convertFromSingle(image, null,

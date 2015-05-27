@@ -56,55 +56,60 @@ public class NameRecognitionGatewayTest extends TestCase {
         }
         
         NameRecognitionGateway instance = new NameRecognitionGateway();
-        // char[] expResult = null;
-        char[] result = instance.detectCharacter(image);
-        // assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
         
+        char[] result = instance.detectCharacter(image);
+
         for(int i = 0; i < result.length; i++)
         {
             System.out.print(result[i] + " ");
         }
-        
-        // fail("The test case is a prototype.");
     }
 
     /**
-     * Test of invertBW method, of class NameRecognitionGateway.
+     * Test of invertBW method, of class NameRecognitionGateway
+     * @return BufferedImage of inverted white/black colors
      */
-//    public void testInvertBW() {
-//        System.out.println("invertBW");
-//        BufferedImage img = null;
-//        NameRecognitionGateway.invertBW(img);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    public BufferedImage testInvertBW() {
+        System.out.println("invertBW on image A_1.png");
+        String fileName = PATH + "A_1.png";
+        BufferedImage image = null;
+        
+        try {
+            
+            image = ImageIO.read(new File(fileName));
+            
+        }catch (IOException ex) {    
+            Logger.getLogger(NameRecognitionGatewayTest.class.getName()).
+                    log(Level.SEVERE, null, ex);  
+        }
+        //make the image binary first
+        image = NameRecognitionGateway.getBinaryImage(image);
+        NameRecognitionGateway.invertBW(image);
+        // TODO review the generated test code and remove the default call to fail.
+        return image;
+    }
 
     /**
-     * Test of getBounds method, of class NameRecognitionGateway.
+     * Test of getBinaryImage method, of class NameRecognitionGateway
+     * @return BufferedImage that only has black and white pixels
      */
-//    public void testGetBounds() {
-//        System.out.println("getBounds");
-//        BufferedImage img = null;
-//        Bounds expResult = null;
-//        Bounds result = NameRecognitionGateway.getBounds(img);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getLetters method, of class NameRecognitionGateway.
-//     */
-//    public void testGetLetters() {
-//        System.out.println("getLetters");
-//        BufferedImage img = null;
-//        int numLetters = 0;
-//        ArrayList<BufferedImage> expResult = null;
-//        ArrayList<BufferedImage> result = NameRecognitionGateway.getLetters(img, numLetters);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-    
+    public BufferedImage testGetBinaryImage() {
+        System.out.println("getBinaryImage on image S.png");
+        String fileName = PATH + "S.png";
+        BufferedImage image = null;
+        BufferedImage result = null;
+        
+        try {
+            
+            image = ImageIO.read(new File(fileName));
+            
+        }catch (IOException ex) {    
+            Logger.getLogger(NameRecognitionGatewayTest.class.getName()).
+                    log(Level.SEVERE, null, ex);  
+        }
+        
+        result = NameRecognitionGateway.getBinaryImage(image);
+        
+        return result;
+    }
 }
