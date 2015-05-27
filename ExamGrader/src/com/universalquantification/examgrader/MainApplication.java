@@ -17,12 +17,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 /**
  * main program
@@ -470,44 +477,85 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         //</editor-fold>
         //</editor-fold>
         
-        // Mac Compatbilitiy
+        //CLI SETUP
+        // create an Options object
+        Options options = new Options();
+        // add v option, with no arguments
+        options.addOption("v", false, "display version and team info.");
+        options.addOption("h", false, "display syntax help info.");
+        //****check for CLArgs 
         
-        try {
-                System.setProperty("apple.laf.useScreenMenuBar", "true");
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Bubblit Version 1 - Universal Quanitification");
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch(ClassNotFoundException e) {
-                System.out.println("ClassNotFoundException: " + e.getMessage());
-        }
-        catch(InstantiationException e) {
-                System.out.println("InstantiationException: " + e.getMessage());
-        }
-        catch(IllegalAccessException e) {
-                System.out.println("IllegalAccessException: " + e.getMessage());
-        }
-        catch(UnsupportedLookAndFeelException e) {
-                System.out.println("UnsupportedLookAndFeelException: " + e.getMessage());
-        }
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    new MainApplication().setVisible(true);
+        //if is CL then start consol view (take flags as constructor args)
+        if(false) {
+            
+            CommandLineParser parser = new DefaultParser();
+            
+            try {
+                
+                CommandLine cmd = parser.parse(options, args);
+                //check for -v flag to print out the version of the application
+                //   and team information.
+                if(cmd.hasOption("v")){
+                    System.out.println("Bubblit V2.0 by Universal Quantification");
                 }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                    System.exit(1);
+                
+                //check for -h flag to print out the syntax help information.
+                if(cmd.hasOption("h")){
+                    System.out.println("java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
                 }
+                
+            } catch (ParseException ex) {
+                Logger.getLogger(MainApplication.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
+            
+            
+            //controller.addFile
+            
+            //controller.grade
+            
+            //gets the map of roster entries to pass back into controller.writeReports
         
+        }
+        // run the GUI application instead
+        else {
+            // Mac Compatbilitiy
+
+            try {
+                    System.setProperty("apple.laf.useScreenMenuBar", "true");
+                    System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Bubblit Version 1 - Universal Quanitification");
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+            catch(ClassNotFoundException e) {
+                    System.out.println("ClassNotFoundException: " + e.getMessage());
+            }
+            catch(InstantiationException e) {
+                    System.out.println("InstantiationException: " + e.getMessage());
+            }
+            catch(IllegalAccessException e) {
+                    System.out.println("IllegalAccessException: " + e.getMessage());
+            }
+            catch(UnsupportedLookAndFeelException e) {
+                    System.out.println("UnsupportedLookAndFeelException: " + e.getMessage());
+            }
+
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        new MainApplication().setVisible(true);
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                        System.exit(1);
+                    }
+                }
+            });
         
+        }
     }
 
     //private GradeExams task;
