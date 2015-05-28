@@ -13,7 +13,7 @@ import java.util.List;
 public class ExamRosterMatcher
 {
     /**
-    /**
+     * /**
      * Matches each of the given forms with one of the roster entries.
      *
      * @param forms the list of exams
@@ -45,17 +45,20 @@ public class ExamRosterMatcher
             }
 
             // Compute the lengths to normalize the confidence level.
-            int lfirst = Math.max(form.getStudentRecord()
-                    .getStochasticFirst()
-                    .length(),
-                    bestEntry.getFirst().length());
-            int llast = Math.max(form.getStudentRecord()
-                    .getStochasticLast()
-                    .length(),
-                    bestEntry.getLast().length());
-            double confidence = 1 - bestWeight / (lfirst + llast);
+            if (bestEntry != null)
+            {
+                int lfirst = Math.max(form.getStudentRecord()
+                        .getStochasticFirst()
+                        .length(),
+                        bestEntry.getFirst().length());
+                int llast = Math.max(form.getStudentRecord()
+                        .getStochasticLast()
+                        .length(),
+                        bestEntry.getLast().length());
+                double confidence = 1 - bestWeight / (lfirst + llast);
 
-            result.add(new MatchResult(form, bestEntry, confidence));
+                result.add(new MatchResult(form, bestEntry, confidence));
+            }
         }
 
         return result;
