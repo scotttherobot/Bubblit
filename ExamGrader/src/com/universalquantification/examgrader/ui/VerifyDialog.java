@@ -16,7 +16,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-import com.universalquantification.examgrader.grader.MatchResult;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.Student;

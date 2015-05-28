@@ -1,6 +1,5 @@
 package com.universalquantification.examgrader.ui;
 
-import com.universalquantification.examgrader.grader.MatchResult;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import java.io.File;

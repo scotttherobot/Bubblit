@@ -1,7 +1,6 @@
 package com.universalquantification.examgrader;
 
 import com.universalquantification.examgrader.controller.Controller;
-import com.universalquantification.examgrader.grader.MatchResult;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.Exam;
