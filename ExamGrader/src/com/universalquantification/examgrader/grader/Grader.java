@@ -184,6 +184,7 @@ public class Grader extends Observable
                 exam.grade(answerKey);
                 exams.add(exam);
                 this.pagesGraded++;
+                //System.out.println("grade " + exam.toString());
                 setChanged();
                 notifyObservers();
             }
@@ -220,18 +221,7 @@ public class Grader extends Observable
                 //ShowImages.showDialog(result.form.getStudentRecord().getFirstNameImage());
                 //ShowImages.showDialog(result.form.getStudentRecord().getLastNameImage());
             }
-
-            int unmatched = matchedEntries.size() - rosterEntries.size();
-
-            // Alert if there are any unmatched entries.
-            if (unmatched == 0)
-            {
-                //System.out.println("No entries unmatched (perfect permutation)");
-            }
-            else
-            {
-                //System.out.println("Unmatched roster entries: " + unmatched);
-            }
+            gradedFiles.put(file.getFileName(), matches);
 
             filesGraded++;
         }
