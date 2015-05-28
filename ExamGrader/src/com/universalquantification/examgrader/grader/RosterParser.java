@@ -68,7 +68,7 @@ public class RosterParser
             Map<String,String> entry = roster.getRecordByColumnValue("No.", Integer.toString(i));
             String name = entry.get("Student Name");
             
-            final String pattern = "\"([^,]+),\\s*([^\\s]+).*\"";
+            final String pattern = "\"?([^,]+),\\s*([^\\s]+).*\"?";
             Matcher matcher = Pattern.compile(pattern).matcher(name);
 
             // Make sure that the input is valid.
