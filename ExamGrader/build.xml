@@ -95,6 +95,7 @@
         </exec>
         
         <!-- System Test Case 1 -->
+        <!-- Tests that multiple input files are accepted -->
         <java classname="${main.class}"
             classpath="${dist.jar}"
             fork="true"
@@ -108,6 +109,7 @@
         </exec>
         
         <!-- System Test Case 4 -->
+        <!-- Tests that an aggregate report is created. -->
         <java classname="${main.class}"
             classpath="${dist.jar}"
             fork="true"
@@ -122,6 +124,7 @@
         <!-- TODO: Make sure the CSV aggreagate report is there -->
         
         <!-- System Test Case 10 -->
+        <!-- Tests that indivudial HTML reports are created -->
         <java classname="${main.class}"
             classpath="${dist.jar}"
             fork="true"
@@ -136,6 +139,7 @@
         <!-- TODO: Make sure the HTML reports are there -->
         
         <!-- System Test Case 11 -->
+        <!-- Tests that the -v flag works -->
         <java classname="${main.class}"
             classpath="${dist.jar}"
             fork="true"

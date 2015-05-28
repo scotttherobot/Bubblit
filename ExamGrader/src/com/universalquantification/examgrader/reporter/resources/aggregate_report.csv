@@ -1,0 +1,21 @@
+{{#exams}}
+"Creation Date:","Nov 4, 2003 8:14:11 PM"
+"Input File:","Midterm307-01A.pdf"
+
+Student,ID,Score,Percent
+{{#each getGradedExams}}
+{{#getStudentRecord}}"{{getLastName}}, {{getFirstName}}",{{getId}}{{/getStudentRecord}},{{getRawScore}},{{getPercentScore}}
+{{/each}}
+
+"Total Points",{{#getAnswerKey}}{{getQuestions}}{{/getAnswerKey}}
+"Class Average",{{getAverageScore}},{{getAveragePercentage}}
+"Standard Deviation",{{getStdDeviation}}
+
+"Question #","Missed count"
+1,2
+2,2
+3,3
+4,3
+5,3
+6,0
+{{/exams}}

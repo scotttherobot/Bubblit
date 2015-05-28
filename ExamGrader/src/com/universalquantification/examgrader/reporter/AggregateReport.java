@@ -5,9 +5,18 @@
  */
 package com.universalquantification.examgrader.reporter;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * an AggregateReport is a results report for a GradedExamCollection.
@@ -27,9 +36,9 @@ public class AggregateReport
     private GradedExamCollection exams;
     
     /**
-     * The output file.
+     * The output writer.
      */
-    private File outfile;
+    private Writer outfile;
     
     /**
      * The variables that will be put into the template.
@@ -37,9 +46,9 @@ public class AggregateReport
     private HashMap<String, Object> scope;
     
     /**
-     * The name of the template file to compile.
+     * The reader of the template file to compile.
      */
-    private static String aggregateReportTemplateName;
+    private static Reader template;
 
     
     /**
@@ -47,12 +56,17 @@ public class AggregateReport
      * @param exams - the GradedExamCollection of graded exams
      * @param writeFile - the file to write the aggregate report to
      */
-    public AggregateReport(GradedExamCollection exams, File writeFile)
+    public AggregateReport(GradedExamCollection exams, Writer writeFile, Reader template)
     {
         // SET this.exams to exams
+        this.exams = exams;
         // SET this.outfile to writeFile
-        
+        this.outfile = writeFile;
+        // SET this.aggregateReportTemplate to template
+        this.template = template;
         // CALL scope.put with this.exams
+        this.scope = new HashMap<String, Object>();
+        this.scope.put("exams", this.exams);
     }
     
     /**
@@ -60,8 +74,42 @@ public class AggregateReport
      */
     public void writeReport()
     {
+        try
+        {
+            // INIT a new String with the return of CALL renderHTML
+            String html = this.renderHTML();
+            // CALL write with the html string
+            this.outfile.write(html);
+            // CALL flush 
+            this.outfile.flush();
+            // CALL close
+            this.outfile.close();
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(ExamReport.class.getName()).log(Level.SEVERE, null,
+                    ex);
+        }
+    }
+    
+    /**
+     * Renders the HTML and returns it as a string.
+     * @return 
+     */
+    public String renderHTML()
+    {
+        // INIT a new StringWriter
+        StringWriter html = new StringWriter();
+       
         // INIT a new MustacheFactory mf
+        MustacheFactory mf = new DefaultMustacheFactory();
         // SET generator to mf.compile with examReportTemplateName
+        Mustache m = mf.compile(this.template, "Aggregate Report");
         // CALL generator.execute with outfile and scope
+        m.execute(html, this.scope);
+        // CALL writer.flush
+        html.flush();
+        
+        return html.toString();
     }
 }

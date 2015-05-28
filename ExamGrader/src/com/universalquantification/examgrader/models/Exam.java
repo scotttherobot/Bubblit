@@ -190,6 +190,15 @@ public class Exam
         return incorrectQuestions;
     }
     
+    /**
+     * Returns the count of questions in the exam.
+     * 
+     * @return A integer representing the number of questions in the exam.
+     */
+    public int getQuestionCount()
+    {
+        return answerMap.size();
+    }
     
     /**
      * Returns a raw score representing the number of correct answers.

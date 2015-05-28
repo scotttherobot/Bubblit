@@ -90,6 +90,15 @@ public class GradedExamCollection
         // CALL getQuestions answerKey
         return answerKey.getQuestions();
     }
+    
+    /**
+     * Returns all graded exams.
+     * @return set of all exams in the collection.
+     */
+    public List<Exam> getGradedExams()
+    {
+        return studentExams;
+    }
 
     /**
      * Returns the number of exams in the collection.
@@ -120,6 +129,15 @@ public class GradedExamCollection
         
         // RETURN sum divided by number of exams
         return 1.0 * sum / getNumExams();
+    }
+    
+    /**
+     * Returns the average percentage score of exams in the collection.
+     * @return average percentage score of exams in the collection
+     */
+    public double getAveragePercentage()
+    {
+        return getAverageScore() / answerKey.getQuestionCount();
     }
 
     /**
