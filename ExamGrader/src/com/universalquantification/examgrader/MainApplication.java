@@ -128,7 +128,40 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             });
         }
     }
+    
+    /**
+     * Sets the preference for whether or not to display the full test image
+     * on the results web page for each exam.
+     * 
+     * @param isFullImage Boolean condition representing whether or not to 
+     * display a full image.
+     */
+    public void setTestImagePreference(boolean isFullImage) {
+        // do something with isFullImage
+    }
+    
+    /**
+     * Sets the preference for whether or not to display the correct answers
+     * on the results web page for each exam.
+     * 
+     * @param doShow Boolean condition representing whether or not to 
+     * display the correct answers.
+     */
+    public void setShowCorrectAnswerPreference(boolean doShow) {
+        // do something with doShow
+    }
 
+    /**
+     * Sets the preference for whether or not to display the incorrect answers
+     * on the results web page for each exam.
+     * 
+     * @param doShow Boolean condition representing whether or not to 
+     * display the incorrect answers.
+     */
+    public void setShowIncorrectAnswerPreference(boolean doShow) {
+        // do something with doShow
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -155,8 +188,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        exitMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        exitMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -305,10 +338,11 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         jMenuItem1.setText("Preferences");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                preferencesMenuItemSelected(evt);
             }
         });
         fileMenu.add(jMenuItem1);
+        fileMenu.add(jSeparator3);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
@@ -319,7 +353,6 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             }
         });
         fileMenu.add(exitMenuItem);
-        fileMenu.add(jSeparator3);
 
         menuBar.add(fileMenu);
 
@@ -460,11 +493,11 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         }
     }//GEN-LAST:event_addRosterFileButtonActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        if (preferencesWindow == null) preferencesWindow = new ExamPreferences();
+    private void preferencesMenuItemSelected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesMenuItemSelected
+        if (preferencesWindow == null) preferencesWindow = new ExamPreferences(this);
 
         preferencesWindow.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_preferencesMenuItemSelected
 
     /**
      * @param args the command line arguments
@@ -600,7 +633,6 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     // Variables for creation
     
     private ExamPreferences preferencesWindow;
-
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;

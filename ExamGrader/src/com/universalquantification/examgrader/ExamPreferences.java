@@ -10,14 +10,16 @@ package com.universalquantification.examgrader;
  * @author CY
  */
 public class ExamPreferences extends javax.swing.JFrame {
-
+    MainApplication application;
     /**
      * Creates new form ExamPreferences
      */
-    public ExamPreferences() {
+    public ExamPreferences(MainApplication application) {
         initComponents();
         
         setLocationRelativeTo(null);
+        
+        this.application = application;
     }
 
     /**
@@ -28,48 +30,77 @@ public class ExamPreferences extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        checkbox1 = new java.awt.Checkbox();
-        checkbox2 = new java.awt.Checkbox();
-        checkbox3 = new java.awt.Checkbox();
+        examImagePreference = new java.awt.Checkbox();
+        examCorrectAnswerDisplayPreference = new java.awt.Checkbox();
+        examIncorrectAnswerDisplayPreference = new java.awt.Checkbox();
 
-        checkbox1.setLabel("checkbox1");
+        setTitle("Bubblit Preferences");
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        checkbox2.setLabel("checkbox2");
+        examImagePreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
+        examImagePreference.setLabel("Display a full image, instead of a partial image, for each test on the results webpages.");
+        examImagePreference.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                examImagePreferenceItemStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(14, 10, 4, 10);
+        getContentPane().add(examImagePreference, gridBagConstraints);
 
-        checkbox3.setLabel("checkbox3");
+        examCorrectAnswerDisplayPreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
+        examCorrectAnswerDisplayPreference.setLabel("Display answers that were answered correctly for each test on the results webpages.");
+        examCorrectAnswerDisplayPreference.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                examCorrectAnswerDisplayPreferenceItemStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(4, 10, 4, 10);
+        getContentPane().add(examCorrectAnswerDisplayPreference, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(175, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(checkbox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(checkbox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(checkbox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(141, 141, 141))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(116, 116, 116)
-                .addComponent(checkbox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(checkbox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(checkbox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
-        );
+        examIncorrectAnswerDisplayPreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
+        examIncorrectAnswerDisplayPreference.setLabel("Display answers that were answered incorrectly for each test on the results webpages.");
+        examIncorrectAnswerDisplayPreference.setName(""); // NOI18N
+        examIncorrectAnswerDisplayPreference.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                examIncorrectAnswerDisplayPreferenceItemStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(4, 10, 14, 10);
+        getContentPane().add(examIncorrectAnswerDisplayPreference, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void examImagePreferenceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_examImagePreferenceItemStateChanged
+        application.setTestImagePreference(examImagePreference.getState());
+    }//GEN-LAST:event_examImagePreferenceItemStateChanged
+
+    private void examCorrectAnswerDisplayPreferenceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_examCorrectAnswerDisplayPreferenceItemStateChanged
+        application.setShowCorrectAnswerPreference(examCorrectAnswerDisplayPreference.getState());
+    }//GEN-LAST:event_examCorrectAnswerDisplayPreferenceItemStateChanged
+
+    private void examIncorrectAnswerDisplayPreferenceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_examIncorrectAnswerDisplayPreferenceItemStateChanged
+        application.setShowIncorrectAnswerPreference(examIncorrectAnswerDisplayPreference.getState());
+    }//GEN-LAST:event_examIncorrectAnswerDisplayPreferenceItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Checkbox checkbox1;
-    private java.awt.Checkbox checkbox2;
-    private java.awt.Checkbox checkbox3;
+    private java.awt.Checkbox examCorrectAnswerDisplayPreference;
+    private java.awt.Checkbox examImagePreference;
+    private java.awt.Checkbox examIncorrectAnswerDisplayPreference;
     // End of variables declaration//GEN-END:variables
 }
