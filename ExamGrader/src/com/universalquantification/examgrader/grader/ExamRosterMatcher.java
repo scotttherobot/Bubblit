@@ -12,8 +12,6 @@ import java.util.List;
  */
 public class ExamRosterMatcher
 {
-
-
     /**
     /**
      * Matches each of the given forms with one of the roster entries.

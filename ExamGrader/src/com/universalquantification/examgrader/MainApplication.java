@@ -49,6 +49,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         initComponents();
         removeFileButton.setEnabled(false);
         
+        setLocationRelativeTo(null);
     }
     
     public void checkRoster(final Map<File, List<MatchResult>> results, final List<RosterEntry> roster)
@@ -135,24 +136,27 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
+        addFileButton = new javax.swing.JButton();
+        removeFileButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         fileList = new javax.swing.JList();
-        addFileButton = new javax.swing.JButton();
-        progressBar = new javax.swing.JProgressBar();
-        gradeButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        removeFileButton = new javax.swing.JButton();
+        rosterFileLabel = new javax.swing.JLabel();
+        addRosterFileButton = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        gradePanel = new javax.swing.JPanel();
+        gradeButton = new javax.swing.JButton();
+        progressBar = new javax.swing.JProgressBar();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -161,7 +165,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Version 2 - Universal Quantification");
-        setPreferredSize(new java.awt.Dimension(400, 400));
+        setForeground(java.awt.Color.white);
+        setPreferredSize(new java.awt.Dimension(440, 360));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -172,110 +177,22 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 0);
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        listModel = new DefaultListModel();
-        fileList.setModel(listModel);
-        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
-        {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
-            {
-                fileListValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(fileList);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 359;
-        gridBagConstraints.ipady = 161;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 10);
-        getContentPane().add(jScrollPane1, gridBagConstraints);
-
-        addFileButton.setText("Add File");
-        addFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        addFileButton.setText("Add Exam File");
+        addFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFileButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 110);
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 134);
         getContentPane().add(addFileButton, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 10, 6, 10);
-        getContentPane().add(progressBar, gridBagConstraints);
 
-        gradeButton.setText("Grade!");
-        gradeButton.setToolTipText("");
-        gradeButton.setAlignmentX(0.5F);
-        gradeButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                gradeButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
-        getContentPane().add(gradeButton, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = java.awt.GridBagConstraints.RELATIVE;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-        getContentPane().add(jSeparator1, gridBagConstraints);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jPanel1, new java.awt.GridBagConstraints());
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jPanel2, new java.awt.GridBagConstraints());
-
-        removeFileButton.setText("Remove File");
+        removeFileButton.setText("Remove Exam File");
         removeFileButton.setToolTipText("");
-        removeFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        removeFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeFileButtonActionPerformed(evt);
             }
         });
@@ -287,19 +204,122 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 10);
         getContentPane().add(removeFileButton, gridBagConstraints);
 
+        listModel = new DefaultListModel();
+        fileList.setModel(listModel);
+        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                fileListValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(fileList);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 359;
+        gridBagConstraints.ipady = 161;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 10);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
+
+        jSeparator1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jSeparator1, gridBagConstraints);
+
+        rosterFileLabel.setText("No Roster File Selected");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 14, 0, 0);
+        getContentPane().add(rosterFileLabel, gridBagConstraints);
+
+        addRosterFileButton.setText("Select Roster File");
+        addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
+        addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addRosterFileButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        getContentPane().add(addRosterFileButton, gridBagConstraints);
+        addRosterFileButton.getAccessibleContext().setAccessibleName("Add Roster File");
+
+        jSeparator2.setAutoscrolls(true);
+        jSeparator2.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jSeparator2, gridBagConstraints);
+
+        gradePanel.setLayout(new java.awt.BorderLayout());
+
+        gradeButton.setText("Grade!");
+        gradeButton.setToolTipText("");
+        gradeButton.setAlignmentX(0.5F);
+        gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
+        gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
+        gradeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gradeButtonActionPerformed(evt);
+            }
+        });
+        gradePanel.add(gradeButton, java.awt.BorderLayout.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
+        getContentPane().add(gradePanel, gridBagConstraints);
+
+        progressBar.setMinimumSize(new java.awt.Dimension(10, 10));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(-10, 10, 0, 128);
+        getContentPane().add(progressBar, gridBagConstraints);
+
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Preferences");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem1);
+
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
             }
         });
         fileMenu.add(exitMenuItem);
+        fileMenu.add(jSeparator3);
 
         menuBar.add(fileMenu);
 
@@ -308,22 +328,19 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("Contents");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentsMenuItemActionPerformed(evt);
             }
         });
         helpMenu.add(contentsMenuItem);
         contentsMenuItem.getAccessibleContext().setAccessibleName("How-To");
 
+        aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 aboutMenuItemActionPerformed(evt);
             }
         });
@@ -337,38 +354,27 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     }// </editor-fold>//GEN-END:initComponents
 
     private void addFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFileButtonActionPerformed
-        // TODO add your handling code here:
         int returnVal = fileChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             
-            
-            if (file.getName().endsWith(".tsv"))
-            {
-                try
-                {
-                    controller.changeRosterFile(file);
-                }
-                catch (FileNotFoundException e)
-                {
-                    showError("File not found.");
-                }
-            }
-            else
-            {
+            if (file.getName().endsWith(".pdf")) {
                 controller.addInputFile(file);
             }
+            else {
+                 JOptionPane.showMessageDialog(this, "You may only add exam " +
+                         "files of Portable Document Format (PDF). " + 
+                         "\nPlease see the user manual available in the 'Help' " +
+                         "menu for \nmore information.");
+            }
         }
-        else
-        {
+        else {
             System.out.println("File access cancelled by user.");
         }
     }//GEN-LAST:event_addFileButtonActionPerformed
 
     private void gradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradeButtonActionPerformed
- 
-       
         SwingWorker<Void, Void> task = new SwingWorker<Void, Void>() {
 
             @Override
@@ -387,8 +393,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
                 
         task.execute();
         gradeButton.setEnabled(false);
-        gradeButton.setText("Please wait, grading...");
-
+        gradeButton.setText("Grading...");
     }//GEN-LAST:event_gradeButtonActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -396,7 +401,6 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
-        // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, 
                 "How to Add Tests: "
                 + "\n\t1) Click the \"Add File\" button."
@@ -430,6 +434,38 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         removeFileButton.setEnabled(true);
     }//GEN-LAST:event_fileListValueChanged
 
+    private void addRosterFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRosterFileButtonActionPerformed
+        int returnVal = fileChooser.showOpenDialog(this);
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            if (file.getName().endsWith(".tsv")) {
+                try {
+                    rosterFileLabel.setText(file.getName());
+                    controller.changeRosterFile(file);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainApplication.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else {
+                 JOptionPane.showMessageDialog(this, "You may only add roster " +
+                         "files of Tab Separated Values (TSV) " + 
+                         "\nformat. Please see the user manual available in the 'Help' " +
+                         "menu \nfor more information.");
+            }
+        }
+        else {
+            System.out.println("File access cancelled by user.");
+        }
+    }//GEN-LAST:event_addRosterFileButtonActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        if (preferencesWindow == null) preferencesWindow = new ExamPreferences();
+
+        preferencesWindow.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -448,6 +484,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
                 if ("Nimbus".equals(info.getName()))
                 {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    
                     break;
                 }
             }
@@ -560,9 +597,15 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
     //private GradeExams task;
     
+    // Variables for creation
+    
+    private ExamPreferences preferencesWindow;
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addFileButton;
+    private javax.swing.JButton addRosterFileButton;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JFileChooser fileChooser;
@@ -570,15 +613,18 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     private javax.swing.JList fileList;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JButton gradeButton;
+    private javax.swing.JPanel gradePanel;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JButton removeFileButton;
+    private javax.swing.JLabel rosterFileLabel;
     // End of variables declaration//GEN-END:variables
 
 }
