@@ -180,8 +180,7 @@ public class ExamReader
 
         Student student = new Student(
                 firstNamePossibilities, lastNamePossibilities,
-                firstNameField, lastNameField
-        );
+                firstNameField, lastNameField);
 
         Exam exam = new Exam(answers, student, file);
 

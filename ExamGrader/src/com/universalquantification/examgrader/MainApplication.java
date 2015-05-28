@@ -4,7 +4,10 @@ import com.universalquantification.examgrader.controller.Controller;
 import com.universalquantification.examgrader.grader.MatchResult;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
+import com.universalquantification.examgrader.models.Exam;
+import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
+import com.universalquantification.examgrader.models.Student;
 import com.universalquantification.examgrader.ui.AppView;
 import com.universalquantification.examgrader.ui.VerifyDialog;
 import java.awt.event.ActionEvent;
@@ -52,12 +55,11 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         setLocationRelativeTo(null);
     }
     
-    public void checkRoster(final Map<File, List<MatchResult>> results, final List<RosterEntry> roster)
+    public void checkRoster(final Map<File, GradedExamCollection> results, final List<RosterEntry> roster)
     {   
-        final List<MatchResult> bigList = new ArrayList<MatchResult>();
-        for (List<MatchResult> result : results.values()) {
-
-            bigList.addAll(result);
+        final List<Student> bigList = new ArrayList<Student>();
+        for (GradedExamCollection collection : results.values()) {
+            bigList.addAll(collection.getAllStudents());
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {

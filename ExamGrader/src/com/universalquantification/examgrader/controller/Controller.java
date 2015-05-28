@@ -1,10 +1,10 @@
 package com.universalquantification.examgrader.controller;
 
 import com.universalquantification.examgrader.grader.Grader;
-import com.universalquantification.examgrader.grader.MatchResult;
 import com.universalquantification.examgrader.grader.Roster;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.grader.RosterParser;
+import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.reader.ExamReader;
 import com.universalquantification.examgrader.ui.AppView;
@@ -12,9 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import com.universalquantification.examgrader.reader.NameRecognitionGateway;
 import com.universalquantification.examgrader.reporter.ReportWriter;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +35,8 @@ public class Controller {
 
     private AppView appView;
     
+    private ReportWriter reportWriter;
+    
     private List<RosterEntry> rosterEntries;
     
     /**
@@ -42,16 +44,8 @@ public class Controller {
      */
     public Controller(AppView view) throws IOException
     {
-        
-        // SET the view field to view
-        this.appView = view;
-        // INIT a new InputFileList as inputFileList field
-        this.inputFileList = new InputFileList();
-        
-        // INIT a new StudentNameMapper studentNameMapper
-        // INIT a new ExamReader examReader with studentNameMapper as reader
-        // INIT a new Grader with inputFileList, reader, mapper as grader field
-        this.inputFileList.addObserver(appView);
+        this(view, new InputFileList(), new ReportWriter(null));
+      
     }
     
     /**
@@ -60,25 +54,33 @@ public class Controller {
      * @param grader a grader to use
      * @pre the grader must be tied to the InputFileList
      */
-    Controller(AppView view, InputFileList inputFileList, Grader grader)
+    Controller(AppView view, InputFileList inputFileList,
+            ReportWriter reportWriter)
     {
-        // SET the view field to view
-        // SET the inputFileList field to inputFileList
-        // SET the grader field to grader
         this.appView = view;
-        this.inputFileList = inputFileList;
+        // INIT a new InputFileList as inputFileList field
+        this.inputFileList = new InputFileList();
+        
+        // INIT a new StudentNameMapper studentNameMapper
+        // INIT a new ExamReader examReader with studentNameMapper as reader
+        // INIT a new Grader with inputFileList, reader, mapper as grader field
+        this.inputFileList.addObserver(appView);
+        this.reportWriter = reportWriter;
+        this.rosterEntries = new ArrayList<>();
+        
     }
     
-    public void writeReports(Map<File, List<MatchResult>> results)
+    public void writeReports(Map<File, GradedExamCollection> results)
     {
-            for (MatchResult result : results.values().iterator().next())
-            {
-                System.out.format("%s %s", 
-                        result.form.getStudentRecord().getFirstName(),
-                        result.form.getStudentRecord().getLastName());
-            }
-
-        
+        try
+        {
+            reportWriter.writeReports(results);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            appView.showError("Failed to write reports.");
+        }
     }
     
     /**
@@ -101,6 +103,7 @@ public class Controller {
      */
     public void grade()
     {
+        Grader grader = null;
         // BEGIN
         try
         {
@@ -116,11 +119,11 @@ public class Controller {
                 return;
             }
             // INIT grader
-            Grader grader = new Grader(inputFileList,
+            grader = new Grader(inputFileList,
                 new ExamReader(new NameRecognitionGateway()), rosterEntries);
             grader.addObserver(appView);
             // CALL grade grader RETURNING gradingResults
-            Map<File, List<MatchResult>> results = grader.grade();
+            Map<File, GradedExamCollection> results = grader.grade();
             
             // CALL clear on InputFileList
             inputFileList.clear();
@@ -139,6 +142,13 @@ public class Controller {
             appView.showError("An error occured with message: " + e.getMessage());
             // CALL setError view "Grading failed. Please check that the
             // format is correct"
+        }
+        finally
+        {
+            if (grader != null)
+            {
+               grader.deleteObserver(appView);
+            }
         }
         // END
         

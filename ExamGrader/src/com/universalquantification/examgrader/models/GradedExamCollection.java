@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,17 @@ public class GradedExamCollection
         this.studentExams = exams;
     }
 
+    public List<Student> getAllStudents()
+    {
+        List<Student> students = new ArrayList<>();
+        for (Exam exam: studentExams)
+        {
+            students.add(exam.getStudentRecord());
+        }
+        
+        return students;
+    }
+    
     /**
      * This returns an Exam containing correct answers for the GradedExamCollection.
      * @return an Exam containing correct answers for the GradedExamCollection

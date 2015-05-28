@@ -74,7 +74,7 @@ public class GraderTest extends TestCase
         
         NameRecognitionGateway g = new NameRecognitionGateway();
         Grader instance = new Grader(list, new ExamReader(g), rosterEntries);
-        Map<File, List<MatchResult>> result = instance.grade();
+        Map<File, GradedExamCollection> result = instance.grade();
         //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");

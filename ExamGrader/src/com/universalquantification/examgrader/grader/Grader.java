@@ -134,7 +134,7 @@ public class Grader extends Observable
      * com.universalquantification.examgrader.reader.InvalidExamException
      * @pre has been constructed.
      */
-    public Map<File, List<MatchResult>> grade()
+    public Map<File, GradedExamCollection> grade()
         throws GradingException, FileNotFoundException, IOException,
         InvalidExamException
     {
@@ -156,15 +156,15 @@ public class Grader extends Observable
         // ENDFOR
         // RETURN fileExamMap
         ExamRosterMatcher matcher = new ExamRosterMatcher();
-        ArrayList<Exam> exams = new ArrayList<Exam>();
         List<InputFile> files = this.inputFiles.getInputFiles();
-        LinkedHashMap<File, List<MatchResult>> gradedFiles
-                = new LinkedHashMap<File, List<MatchResult>>();
+        Map<File, GradedExamCollection> fileExamsMap =
+                new LinkedHashMap<File, GradedExamCollection>();
 
         Iterator<InputFile> filesIterator = files.iterator();
         // iterate over the files to grade them
         while (filesIterator.hasNext() && this.doGrade)
         {
+            List<Exam> exams = new ArrayList<>();
             InputFile file = filesIterator.next();
             InputPage answerPage = file.getAnswerKeyPage();
             Exam answerKey = examReader.getExam(answerPage);
@@ -190,43 +190,17 @@ public class Grader extends Observable
             }
 
             // do roster matching
-            final List<MatchResult> matches = ExamRosterMatcher.match(exams,
-                    rosterEntries);
-            Set<RosterEntry> matchedEntries = new HashSet<RosterEntry>();
-
-            // Sort by confidence level (ascending).
-            Collections.sort(matches, new Comparator<MatchResult>()
-            {
-                @Override
-                public int compare(MatchResult o1, MatchResult o2)
-                {
-                    return Double.compare(o1.confidence, o2.confidence);
-                }
-            });
+            ExamRosterMatcher.match(exams, rosterEntries);
             
-            // notify the obvservers that the grading process for this file has
-            // ended and that these are the roster matches.
-            setChanged();
-
-            for (MatchResult result : matches)
-            {
-                matchedEntries.add(result.match);
-//                System.out.format("[%.3f] %s %s ==> %s %s\n", result.confidence,
-//                        result.form.getStudentRecord().getStochasticFirst().
-//                        toString(),
-//                        result.form.getStudentRecord().getStochasticLast().
-//                        toString(),
-//                        result.match.getFirst(),
-//                        result.match.getLast());
-                //ShowImages.showDialog(result.form.getStudentRecord().getFirstNameImage());
-                //ShowImages.showDialog(result.form.getStudentRecord().getLastNameImage());
-            }
-            gradedFiles.put(file.getFileName(), matches);
+            // INIT collection as GradedExamCollection WITH answerKey, exams
+            GradedExamCollection current =
+                    new GradedExamCollection(answerKey, exams);
+            fileExamsMap.put(file.getFileName(), current);
 
             filesGraded++;
         }
 
-        return gradedFiles;
+        return fileExamsMap;
     }
 
     /**

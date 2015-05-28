@@ -1,11 +1,13 @@
 package com.universalquantification.examgrader.reporter;
 
+import com.google.common.io.Files;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Map;
 
 /**
@@ -35,6 +37,20 @@ public class ReportWriter
         this.outputDirectory = outputDirectory;
     }
     
+    private File getOutputDirectory(File file)
+    {
+        File parent;
+        if (outputDirectory == null)
+        {
+            parent = file.getParentFile();
+        }
+        else
+        {
+            parent = outputDirectory;
+        }
+        return parent;
+    }
+    
     /**
      * Writes the output reports given a map of GradedExamCollections.
      * For each GradedExamCollection, an AggregateReport is created and written,
@@ -49,12 +65,15 @@ public class ReportWriter
         for (Map.Entry<File, GradedExamCollection> entry : collection.entrySet())
         {
             File f = entry.getKey();
+            // CALL getOutputDirectory AS f
+            File outputDirectory = getOutputDirectory(f);
             GradedExamCollection gradedExams = entry.getValue();
         
             // INIT a new FileWriter with the destination path
-            FileWriter outfile = new FileWriter(outputDirectory.getAbsolutePath() + f.getName() + "_aggregate.csv");
+
+            FileWriter outfile = new FileWriter(new File(outputDirectory, f.getName() + "_aggregate.csv"));
             // INIT a new FileReader with the template path
-            FileReader aggregateTemplate = new FileReader("aggregate_report.csv");
+            FileReader aggregateTemplate = new FileReader("resources/aggregate_report.csv");
             // INIT a new AggregateReport with file + "_aggregate", examCollection
             AggregateReport ar = new AggregateReport(gradedExams, outfile, aggregateTemplate);
             // CALL AggregateReport.writeReport
@@ -64,12 +83,13 @@ public class ReportWriter
             for (Exam graded : gradedExams.getGradedExams())
             {
                 // INIT a new FileWriter with the destination path
+                File location = new File(new File(outputDirectory, f.getName() + "_www"),
+                        graded.getStudentRecord().getId() + ".html");
+                
                 FileWriter examReportOut = 
-                 new FileWriter(outputDirectory.getAbsolutePath() + "/" 
-                 + f.getName() + "_www/" + graded.getStudentRecord().getId() 
-                 + ".html");
+                 new FileWriter(location);
                 // INIT a new FileReader with the template path
-                FileReader examReportTemplate = new FileReader("exam_report.html");
+                FileReader examReportTemplate = new FileReader("resources/exam_report.html");
                 // INIT a new ExamReport with exam, file + "_" + exam.student.id
                 ExamReport eReport = new ExamReport(graded, examReportOut, examReportTemplate);
                 // CALL ExamReport.writeReport

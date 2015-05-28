@@ -7,6 +7,7 @@ package com.universalquantification.examgrader.ui;
 
 import com.universalquantification.examgrader.grader.MatchResult;
 import com.universalquantification.examgrader.grader.RosterEntry;
+import com.universalquantification.examgrader.models.GradedExamCollection;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class ConsoleView implements AppView, Observer {
 
         //okay to keep unsupported
     @Override
-    public void checkRoster(Map<File, List<MatchResult>> results, List<RosterEntry> roster) {
+    public void checkRoster(Map<File, GradedExamCollection> results, List<RosterEntry> roster) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

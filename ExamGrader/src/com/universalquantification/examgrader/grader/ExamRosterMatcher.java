@@ -20,11 +20,9 @@ public class ExamRosterMatcher
      * @param entries the candidate students who could be matched
      * @return a list of results
      */
-    public static List<MatchResult> match(List<Exam> forms,
+    public static void match(List<Exam> forms,
             List<RosterEntry> entries)
     {
-        List<MatchResult> result = new ArrayList<MatchResult>();
-
         // Match each form individually (no cross-referencing).
         for (Exam form : forms)
         {
@@ -57,11 +55,9 @@ public class ExamRosterMatcher
                         bestEntry.getLast().length());
                 double confidence = 1 - bestWeight / (lfirst + llast);
 
-                result.add(new MatchResult(form, bestEntry, confidence));
+                form.getStudentRecord().setRosterEntry(bestEntry, confidence);
             }
         }
-
-        return result;
     }
 
 }

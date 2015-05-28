@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.models;
 
+import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.reader.StochasticString;
 import java.awt.image.BufferedImage;
 
@@ -26,8 +27,10 @@ public class Student
      */
     private final StochasticString stochasticLast;
 
-    BufferedImage firstNameImage;
-    BufferedImage lastNameImage;
+    private BufferedImage firstNameImage;
+    private BufferedImage lastNameImage;
+    
+    private Double confidence;
 
     /**
      * Construct a student record given a first name, last name, and
@@ -51,6 +54,7 @@ public class Student
         this.stochasticLast = null;
         this.firstNameImage = firstNameImg;
         this.lastNameImage = lastNameImg;
+        this.confidence = 1.0;
     }
 
     public Student(StochasticString first, StochasticString last,
@@ -61,6 +65,13 @@ public class Student
         this.stochasticLast = last;
         this.firstNameImage = firstNameImg;
         this.lastNameImage = lastNameImg;
+    }
+    
+    public void setRosterEntry(RosterEntry entry, Double confidence)
+    {
+        this.firstName = entry.getFirst();
+        this.lastName = entry.getLast();
+        this.confidence = confidence;
     }
 
     /**
@@ -153,5 +164,15 @@ public class Student
     public BufferedImage getLastNameImage()
     {
         return this.lastNameImage;
+    }
+    
+    public double getConfidence()
+    {
+        return confidence;
+    }
+    
+    public void setConfidence(Double confidence)
+    {
+        this.confidence = confidence;
     }
 }

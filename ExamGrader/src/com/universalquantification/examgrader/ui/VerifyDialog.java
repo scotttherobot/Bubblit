@@ -18,6 +18,8 @@ import javax.swing.table.TableModel;
 
 import com.universalquantification.examgrader.grader.MatchResult;
 import com.universalquantification.examgrader.grader.RosterEntry;
+import com.universalquantification.examgrader.models.Exam;
+import com.universalquantification.examgrader.models.Student;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class VerifyDialog extends javax.swing.JFrame
     /**
      * Creates new form VerifyDialog
      */
-    public VerifyDialog(List<MatchResult> matchResults, List<RosterEntry> roster)
+    public VerifyDialog(List<Student> matchResults, List<RosterEntry> roster)
     {
         
         this.roster = roster;
@@ -84,11 +86,11 @@ public class VerifyDialog extends javax.swing.JFrame
         
         private String[][] model;
         
-        private List<MatchResult> matchResults;
+        private List<Student> matchResults;
         
         private List<JButton> buttons; 
         
-        MyTableModel(List<MatchResult> matchResults)
+        MyTableModel(List<Student> matchResults)
         {
             this.matchResults = matchResults;
             this.buttons = new ArrayList<>();
@@ -116,32 +118,22 @@ public class VerifyDialog extends javax.swing.JFrame
 
         public Object getValueAt(int row, int col)
         {
-            MatchResult result = matchResults.get(row);
+            Student student = matchResults.get(row);
             if (col == 0)
             {
-                return new ImageIcon(result.form.getStudentRecord().getFirstNameImage());
+                return new ImageIcon(student.getFirstNameImage());
             }
             else if (col == 1)
             {
-                return new ImageIcon(result.form.getStudentRecord().getLastNameImage());
+                return new ImageIcon(student.getLastNameImage());
             }
             else if (col == 2)
             {
-                String firstName = result.form.getStudentRecord().getFirstName();
-                if (firstName != null)
-                {
-                    return firstName;
-                }
-                return result.match.getFirst();
+                return student.getFirstName();
             }
             else if (col == 3)
             {
-                String lastName = result.form.getStudentRecord().getLastName();
-                if (lastName != null)
-                {
-                    return lastName;
-                }
-                return result.match.getLast();
+                return student.getLastName();
             }
             else if (col == 4)
             {
@@ -149,7 +141,7 @@ public class VerifyDialog extends javax.swing.JFrame
             }
             else if (col == 5)
             {  
-                return result.confidence; 
+                return student.getConfidence();
             }
             else 
             {
@@ -178,11 +170,11 @@ public class VerifyDialog extends javax.swing.JFrame
         {
             if (col == 2)
             {
-                matchResults.get(row).form.getStudentRecord().setFirstName(value.toString());
+                matchResults.get(row).setFirstName(value.toString());
             }
             else if (col == 3)
             {   
-                matchResults.get(row).form.getStudentRecord().setlastName(value.toString());
+                matchResults.get(row).setlastName(value.toString());
             }
             fireTableCellUpdated(row, col);
         }
