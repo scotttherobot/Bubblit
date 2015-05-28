@@ -294,6 +294,7 @@ public class Exam
         {
             sb.append("\t");
             sb.append(this.answerMap.get(qNum).toString());
+            sb.append(this.isQuestionCorrect(qNum) ? " correct " : " incorrect");
             sb.append("\n");
         }
         
