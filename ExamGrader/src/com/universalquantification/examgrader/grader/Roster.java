@@ -50,7 +50,7 @@ public class Roster
             // We have a row. Explode it.
             String[] values = explode(line);
             // Map the columns to the values if they're 1:1
-            if (values.length == columns.length -1)
+            if (values.length > 3)
             {
                 HashMap<String, String> record
                     = new HashMap<String, String>();
