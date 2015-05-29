@@ -1,12 +1,21 @@
 package com.universalquantification.examgrader.models;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import org.apache.commons.codec.binary.Base64OutputStream;
 
 /**
  * Exam represents an exam form. An Exam can have a map of answers or 
@@ -73,6 +82,28 @@ public class Exam
         // RETURN examFile
         
         return examFile;
+    }
+    
+    /**
+     * Returns a Base64 encoded PNG of the input file.
+     * Adapted from http://stackoverflow.com/a/7179113
+     * @return a String that is the Base64 encoded page image.
+     */
+    public String getExamImageB64()
+    {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        OutputStream b64 = new Base64OutputStream(os);
+        String result = "";
+        try
+        {
+            ImageIO.write(getExamFile().getBufferedImage(), "png", b64);
+            result = os.toString("UTF-8");
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
     
     /**

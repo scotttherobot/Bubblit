@@ -14,6 +14,21 @@
                     {{/getStudentRecord}}
                     <p>Your score: <b>{{getFormattedPercentScore}}</b></p>
                 </div>
+                <div class="col-md-12 text-center">
+                    {{#showFullImage}}
+                    <img alt="exam image" src="data:image/png;base64,{{getExamImageB64}}">
+                    {{/showFullImage}}
+                </div>
+                <div class="col-md-12 text-center">
+                    {{#showCorrect}}
+                    Correct answers:
+                    {{/showCorrect}}
+                </div>
+                <div class="col-md-12 text-center">
+                    {{#showIncorrect}}
+                    Incorrect answers:
+                    {{/showIncorrect}}
+                </div>
             </div>
         </div>
    </body>

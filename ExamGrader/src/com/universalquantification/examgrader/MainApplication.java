@@ -10,6 +10,7 @@ import com.universalquantification.examgrader.models.Student;
 import com.universalquantification.examgrader.ui.AppView;
 import com.universalquantification.examgrader.ui.ConsoleView;
 import com.universalquantification.examgrader.ui.VerifyDialog;
+import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -141,6 +142,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
      */
     public void setTestImagePreference(boolean isFullImage) {
         // do something with isFullImage
+        PreferencesManager.getInstance().set("show-full-image", isFullImage);
     }
     
     /**
@@ -152,6 +154,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
      */
     public void setShowCorrectAnswerPreference(boolean doShow) {
         // do something with doShow
+        PreferencesManager.getInstance().set("show-correct-answers", doShow);
     }
 
     /**
@@ -163,6 +166,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
      */
     public void setShowIncorrectAnswerPreference(boolean doShow) {
         // do something with doShow
+        PreferencesManager.getInstance().set("show-incorrect-answers", doShow);
     }
     
     /**
@@ -642,6 +646,13 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
     public static void main(String[] args) throws ParseException
     {
+        // Init our preferences to false. We should do this later, but it will
+        // cause a crash if it's NOT done. So here.
+        PreferencesManager.getInstance().set("show-full-image", false);
+        PreferencesManager.getInstance().set("show-incorrect-answers", false);
+        PreferencesManager.getInstance().set("show-correct-answers", false);
+        
+        
         CommandLineParser parser = new GnuParser();
      
         CommandLine cmd = null;

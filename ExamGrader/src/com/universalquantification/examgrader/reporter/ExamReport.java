@@ -9,6 +9,7 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.universalquantification.examgrader.models.Exam;
+import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -70,6 +71,14 @@ public class ExamReport
         // CALL scope.put with "exam" and this.exam
         this.scope = new HashMap<String, Object>();
         this.scope.put("exam", this.exam);
+        
+        // We also need to inject the display preferences into the context.
+        boolean showCorrect = (boolean)PreferencesManager.getInstance().get("show-correct-answers");
+        this.scope.put("showCorrect", showCorrect);
+        boolean showInorrect = (boolean)PreferencesManager.getInstance().get("show-incorrect-answers");
+        this.scope.put("showIncorrect", showInorrect);
+        boolean showFullImage = (boolean)PreferencesManager.getInstance().get("show-full-image");
+        this.scope.put("showFullImage", showFullImage);
     }
     
     /**
