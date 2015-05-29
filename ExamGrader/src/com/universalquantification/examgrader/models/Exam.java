@@ -116,15 +116,16 @@ public class Exam
      * 
      * @param question A number representing which numbered answer to check.
      * @return A boolean representing whether or not the checked answer is
-     * correct.
+     * correct, or null if the question was not graded.
      */
-    public boolean isQuestionCorrect(int question)
+    public Boolean isQuestionCorrect(int question)
     {
         // IF correctQuestions contains question
             // RETURN true
         // ELSE
             // RETURN false
         // ENDIF
+        
         
         Answer a = getAnswer(question);
         int questionNumber = a.getNumber();
@@ -294,7 +295,10 @@ public class Exam
         {
             sb.append("\t");
             sb.append(this.answerMap.get(qNum).toString());
-            sb.append(this.isQuestionCorrect(qNum) ? " correct " : " incorrect");
+            if (this.correctQuestions != null)
+            {
+                sb.append(this.isQuestionCorrect(qNum) ? " correct " : " incorrect");
+            }
             sb.append("\n");
         }
         
