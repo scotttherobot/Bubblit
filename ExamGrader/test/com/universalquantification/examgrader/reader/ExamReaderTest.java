@@ -18,6 +18,8 @@ import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.fail;
 import junit.framework.TestCase;
 
 /**
@@ -86,12 +88,10 @@ public class ExamReaderTest extends TestCase
             "B",
             "C",
             "B", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-            "", "", "", "", "",
             "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-            "", "", "", "", "",
             "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-            "", "", "", "", "",
-            "", "", "", "", "", "", "", "", "", ""
+            "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+            "", "", "", "", "", "", "", ""
         };
 
         examTestHelper(exam1File, exam1Answers, choices, instance, 100);
@@ -139,8 +139,8 @@ public class ExamReaderTest extends TestCase
             "",
             "B",
             "B",
-            "",
-            "",
+            "B",
+            "B",
             "",
             "B",
             "B",
@@ -228,6 +228,127 @@ public class ExamReaderTest extends TestCase
         };
 
         String exam1File = "test-input-files/Erma.pdf";
+
+        String exam1Answers[] =
+        {
+            "E",
+            "D",
+            "C",
+            "B",
+            "A",
+            "BC",
+            "D",
+            "C",
+            "B",
+            "C",
+            "B",
+            "AD",
+            "C",
+            "B",
+            "C",
+            "D",
+            "D",
+            "C",
+            "B",
+            "A",
+            "B",
+            "C",
+            "C",
+            "B",
+            "C",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        };
+
+        examTestHelper(exam1File, exam1Answers, choices, instance, 100);
+    }
+
+    public void testGetExam3Rotated() throws Exception
+    {
+        System.out.println("Test getExam for Erma_Rotated.pdf");
+
+        NameRecognitionGateway gateway = new NameRecognitionGateway();
+        ExamReader instance = new ExamReader(gateway);
+        String choices[] =
+        {
+            "A", "B", "C", "D", "E"
+        };
+
+        String exam1File = "test-input-files/Erma_Rotated.pdf";
+
         String exam1Answers[] =
         {
             "E",
@@ -692,6 +813,125 @@ public class ExamReaderTest extends TestCase
         examTestHelper(exam1File, exam1Answers, choices, instance, 100);
     }
 
+    public void testGetExam6Rotated() throws Exception
+    {
+        System.out.println("Test getExam for Luis_Rotated.pdf");
+
+        NameRecognitionGateway gateway = new NameRecognitionGateway();
+        ExamReader instance = new ExamReader(gateway);
+        String choices[] =
+        {
+            "A", "B", "C", "D", "E"
+        };
+
+        String exam1File = "test-input-files/Luis_Rotated.pdf";
+        String exam1Answers[] =
+        {
+            "A",
+            "C",
+            "B",
+            "D",
+            "C",
+            "B",
+            "E",
+            "B",
+            "A",
+            "C",
+            "D",
+            "B",
+            "C",
+            "E",
+            "D",
+            "C",
+            "B",
+            "A",
+            "AC",
+            "BD",
+            "CE",
+            "D",
+            "D",
+            "D",
+            "D",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        };
+
+        examTestHelper(exam1File, exam1Answers, choices, instance, 100);
+    }
+
     public void testGetExam7() throws Exception
     {
         System.out.println("Test getExam with non-exam file NonExam.pdf");
@@ -847,6 +1087,128 @@ public class ExamReaderTest extends TestCase
         };
 
         String exam1File = "test-input-files/Santi.pdf";
+
+        String exam1Answers[] =
+        {
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "A",
+            "A",
+            "A",
+            "A",
+            "A",
+            "B",
+            "B",
+            "B",
+            "B",
+            "B",
+            "C",
+            "C",
+            "C",
+            "C",
+            "C",
+            "D",
+            "D",
+            "D",
+            "D",
+            "D",
+            "AB",
+            "BC",
+            "CD",
+            "DE",
+            "AC",
+            "BD",
+            "CE",
+            "AE",
+            "AD",
+            "BE",
+            "C",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        };
+
+        examTestHelper(exam1File, exam1Answers, choices, instance, 100);
+
+    }
+
+    public void testGetExam9Rotated() throws Exception
+    {
+        System.out.println("Test getExam for Santi_Rotated.pdf");
+
+        NameRecognitionGateway gateway = new NameRecognitionGateway();
+        ExamReader instance = new ExamReader(gateway);
+        String choices[] =
+        {
+            "A", "B", "C", "D", "E"
+        };
+
+        String exam1File = "test-input-files/Santi_Rotated.pdf";
+
         String exam1Answers[] =
         {
             "A",
@@ -1073,6 +1435,126 @@ public class ExamReaderTest extends TestCase
         examTestHelper(exam1File, exam1Answers, choices, instance, 100);
     }
 
+    public void testGetExam10Rotated() throws Exception
+    {
+        System.out.println("Test getExam Scott_Rotated.pdf");
+
+        NameRecognitionGateway gateway = new NameRecognitionGateway();
+        ExamReader instance = new ExamReader(gateway);
+        String choices[] =
+        {
+            "A", "B", "C", "D", "E"
+        };
+
+        String exam1File = "test-input-files/Scott_Rotated.pdf";
+
+        String exam1Answers[] =
+        {
+            "A",
+            "AB",
+            "BC",
+            "CD",
+            "DE",
+            "E",
+            "DE",
+            "CD",
+            "BC",
+            "AB",
+            "A",
+            "BC",
+            "C",
+            "B",
+            "B",
+            "C",
+            "D",
+            "D",
+            "C",
+            "B",
+            "B",
+            "C",
+            "D",
+            "D",
+            "C",
+            "ACDE",
+            "ACE",
+            "ABCE",
+            "",
+            "ABCDE",
+            "AE",
+            "AE",
+            "",
+            "ABCDE",
+            "AE",
+            "ABCDE",
+            "",
+            "E",
+            "ABCDE",
+            "E",
+            "",
+            "E",
+            "ABCDE",
+            "E",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        };
+
+        examTestHelper(exam1File, exam1Answers, choices, instance, 100);
+    }
+
     public void testGetExam11() throws Exception
     {
         System.out.println("Test getExam for Yvonne.pdf");
@@ -1085,6 +1567,127 @@ public class ExamReaderTest extends TestCase
         };
 
         String exam1File = "test-input-files/Yvonne.pdf";
+
+        String exam1Answers[] =
+        {
+            "C",
+            "B",
+            "B",
+            "C",
+            "B",
+            "A",
+            "AB",
+            "B",
+            "CE",
+            "BD",
+            "BC",
+            "AC",
+            "D",
+            "D",
+            "C",
+            "B",
+            "D",
+            "B",
+            "D",
+            "A",
+            "C",
+            "B",
+            "C",
+            "A",
+            "B",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        };
+
+        examTestHelper(exam1File, exam1Answers, choices, instance, 100);
+    }
+    
+    public void testGetExam11Rotated() throws Exception
+    {
+        System.out.println("Test getExam for Yvonne_Rotated.pdf");
+
+        NameRecognitionGateway gateway = new NameRecognitionGateway();
+        ExamReader instance = new ExamReader(gateway);
+        String choices[] =
+        {
+            "A", "B", "C", "D", "E"
+        };
+
+        String exam1File = "test-input-files/Yvonne_Rotated.pdf";
+
         String exam1Answers[] =
         {
             "C",
