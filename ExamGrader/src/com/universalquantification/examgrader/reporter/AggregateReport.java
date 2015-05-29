@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +69,11 @@ public class AggregateReport
         // CALL scope.put with this.exams
         this.scope = new HashMap<String, Object>();
         this.scope.put("exams", this.exams);
+        this.scope.put("filename",
+         this.exams.getAnswerKey().getExamFile().getFile().getName());
+        
+        String date = new SimpleDateFormat("MMM d, yyyy HH:mm:ss").format(new Date());
+        this.scope.put("creationDate", date);
     }
     
     /**

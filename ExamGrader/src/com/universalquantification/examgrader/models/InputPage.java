@@ -58,5 +58,14 @@ public class InputPage
     {
         return this.image;
     }
+    
+    /**
+     * Gets theFile associated with the page.
+     * @return file the page belongs to.
+     */
+    public File getFile()
+    {
+        return this.file;
+    }
 
 }

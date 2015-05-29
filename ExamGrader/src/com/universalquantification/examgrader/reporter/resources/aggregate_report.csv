@@ -1,11 +1,11 @@
 {{#exams}}
-"Creation Date:","Nov 4, 2003 8:14:11 PM"
-"Input File:","Midterm307-01A.pdf"
+"Creation Date:","{{creationDate}}"
+"Input File:","{{filename}}"
 
 Student,ID,Score,Percent
-{{#each getGradedExams}}
+{{#getGradedExams}}
 {{#getStudentRecord}}"{{getLastName}}, {{getFirstName}}",{{getId}}{{/getStudentRecord}},{{getRawScore}},{{getPercentScore}}
-{{/each getGradedExams}}
+{{/getGradedExams}}
 
 "Total Points",{{#getAnswerKey}}{{getQuestionCount}}{{/getAnswerKey}}
 "Class Average",{{getAverageScore}},{{getAveragePercentage}}
