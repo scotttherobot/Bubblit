@@ -323,6 +323,16 @@ public class Exam
     }
     
     /**
+     * Returns the max possible score.
+     * IE how many questions were bubbled on the key, the grading basis, etc.
+     * @return 
+     */
+    public int getMaxScore()
+    {
+        return correctQuestions.size() + incorrectQuestions.size();
+    }
+    
+    /**
      * Returns a formatted string of the score percentage.
      * @returns A string formatted to two decimal places representing the percentage score.
      */

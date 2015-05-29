@@ -4,7 +4,7 @@
 
 Student,ID,Score,Percent
 {{#getGradedExams}}
-{{#getStudentRecord}}"{{getLastName}}, {{getFirstName}}",{{getId}}{{/getStudentRecord}},{{getRawScore}},{{getPercentScore}}
+{{#getStudentRecord}}"{{getLastName}}, {{getFirstName}}",{{getId}}{{/getStudentRecord}},{{getRawScore}},{{getFormattedPercentScore}}
 {{/getGradedExams}}
 
 "Total Points",{{#getAnswerKey}}{{getQuestionCount}}{{/getAnswerKey}}
