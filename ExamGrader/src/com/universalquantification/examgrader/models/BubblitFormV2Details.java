@@ -54,6 +54,7 @@ public class BubblitFormV2Details
      */
     public static final float kCornerHorizontalRatio = 0.25f;
     
+    public static final double kDonutSlope = (3202.0 - 98.0)/(2452.0 - 98.0);    
     // These are all relative to where the donuts appear
     private final ImagePointOffset[] questionOffsets =
     {
