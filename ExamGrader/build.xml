@@ -12,7 +12,7 @@
     <import file="nbproject/build-impl.xml"/>
     
     
-  <fileset dir="${basedir}/lib" id="runtime.files">
+  <fileset dir="${basedir}/lib-build" id="runtime.files">
         <include name="*.jar"/>
    <exclude name="308checks.jar"/>
    <exclude name="JavaLOC.jar"/>
@@ -27,7 +27,7 @@
      -->
     <target description="Run checkstyle on src directory." name="checkstyle">
     <taskdef resource="checkstyletask.properties"
-             classpath="lib/308checks.jar;lib/checkstyle-all-4.4.jar"/>
+             classpath="lib-build/308checks.jar;lib-build/checkstyle-all-4.4.jar"/>
     <checkstyle config="nbproject/308style.xml" failOnViolation="true">
                 <!-- Specify includes and excludes -->
                 <fileset dir="src/com/universalquantification/examgrader" includes="**/*.java"/>
@@ -44,7 +44,7 @@
      -->
       <target description="Count lines of code." name="loc">
         <java classname="textui.LOC"
-            classpath="lib/JavaLOC.jar"
+            classpath="lib-build/JavaLOC.jar"
             fork="true">
                 <arg line="-d src -r"/>
         </java>
