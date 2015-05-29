@@ -12,23 +12,36 @@
                     {{#getStudentRecord}}
                     <h1>{{getFirstName}} {{getLastName}} &mdash; {{getId}}</h1>
                     {{/getStudentRecord}}
-                    <p>Your score: <b>{{getFormattedPercentScore}}</b></p>
+                    <h3>Results!</h3>
+                    <p>{{getRawScore}} out of {{getQuestionCount}}. That's <b>{{getFormattedPercentScore}}</b></p>
                 </div>
+                {{#showCorrect}}
                 <div class="col-md-12 text-center">
-                    {{#showFullImage}}
+                    <h3>You got these ones right!</h3>
+                    <p>Here's what we thought you bubbled in:</p>
+                    <ul>
+                        {{#getCorrectFeedback}}
+                        <li>{{.}}</li>
+                        {{/getCorrectFeedback}}
+                    </ul>
+                </div>
+                {{/showCorrect}}
+                {{#showIncorrect}}
+                <div class="col-md-12 text-center">
+                    <h3>You answered these ones incorrectly</h3>
+                    <p>Here're the correct answers.</p>
+                    <ul>
+                        {{#getIncorrectFeedback}}
+                        <li>{{.}}</li>
+                        {{/getIncorrectFeedback}}
+                    </ul>
+                </div>
+                {{/showIncorrect}}
+                {{#showFullImage}}
+                <div class="col-md-12 text-center">
                     <img alt="exam image" src="data:image/png;base64,{{getExamImageB64}}">
-                    {{/showFullImage}}
                 </div>
-                <div class="col-md-12 text-center">
-                    {{#showCorrect}}
-                    Correct answers:
-                    {{/showCorrect}}
-                </div>
-                <div class="col-md-12 text-center">
-                    {{#showIncorrect}}
-                    Incorrect answers:
-                    {{/showIncorrect}}
-                </div>
+                {{/showFullImage}}
             </div>
         </div>
    </body>

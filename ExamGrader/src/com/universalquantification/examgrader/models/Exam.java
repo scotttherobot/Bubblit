@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -165,6 +166,46 @@ public class Exam
         
         return false;
     }
+    
+    /**
+     * Returns a list of the correct answers for the incorrect responses.
+     * @return a list of strings containing the question number and the correct
+     * answer to that question.
+     */
+    public List<String> getIncorrectFeedback()
+    {
+        List<String> feedback = new ArrayList<String>();
+        
+        for (Integer i : getIncorrectQuestions()) {
+            StringBuilder fbStr = new StringBuilder();
+            
+            fbStr.append(getAnswer(i).toString());
+            
+            feedback.add(fbStr.toString());
+        }
+        
+        return feedback;
+    }
+    
+    /**
+     * Returns a list of the correct answers for the incorrect responses.
+     * @return a list of strings containing the question number and the correct
+     * answer to that question.
+     */
+    public List<String> getCorrectFeedback()
+    {
+        List<String> feedback = new ArrayList<String>();
+        
+        for (Integer i : getCorrectQuestions()) {
+            StringBuilder fbStr = new StringBuilder();
+            
+            fbStr.append(getAnswer(i).toString());
+            
+            feedback.add(fbStr.toString());
+        }
+        
+        return feedback;
+    }
 
     /**
      * Returns the set of correct answers from grading.
@@ -218,6 +259,24 @@ public class Exam
         }
 
         return incorrectQuestions;
+    }
+    
+    /**
+     * Returns the set of incorrect responses as an array
+     * @return an array of the incorrect responses.
+     */
+    public Object[] getIncorrectResponses()
+    {
+        return getIncorrectQuestions().toArray();
+    }
+    
+    /**
+     * Returns the set of correct responses as an array
+     * @return an array of the correct responses.
+     */
+    public Object[] getCorrectResponses()
+    {
+        return getCorrectQuestions().toArray();
     }
     
     /**
