@@ -21,7 +21,7 @@
                     <p>Here's what we thought you bubbled in:</p>
                     <ul>
                         {{#getCorrectFeedback}}
-                        <li>{{.}}</li>
+                        <li>{{key}} : {{value}}</li>
                         {{/getCorrectFeedback}}
                     </ul>
                 </div>
@@ -32,7 +32,7 @@
                     <p>Here're the correct answers.</p>
                     <ul>
                         {{#getIncorrectFeedback}}
-                        <li>{{.}}</li>
+                        <li>{{key}} : {{value}}</li>
                         {{/getIncorrectFeedback}}
                     </ul>
                 </div>

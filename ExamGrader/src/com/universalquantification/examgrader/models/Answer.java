@@ -218,7 +218,8 @@ public class Answer implements Comparable<Answer>
             // ENDIF
         // ENDFOR
         
-        String message = number + ") ";
+        //String message = number + ") ";
+        String message = "";
         int index = 0;
         
         for (Bubble choice : choices) {

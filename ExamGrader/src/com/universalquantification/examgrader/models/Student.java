@@ -71,6 +71,7 @@ public class Student
     {
         this.firstName = entry.getFirst();
         this.lastName = entry.getLast();
+        this.id = entry.getId();
         this.confidence = confidence;
     }
 

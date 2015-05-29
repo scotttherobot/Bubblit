@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.models;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -151,6 +152,43 @@ public class GradedExamCollection
     {
         return getAverageScore() / answerKey.getQuestionCount();
     }
+    
+    /**
+     * Returns a formatted string from the passed double.
+     * @returns A string formatted to two decimal places
+     */
+    private String formatDecimal(double dec)
+    {
+        DecimalFormat percent = new DecimalFormat("#.00");
+        return percent.format(dec).toString();
+    }
+    
+    /**
+     * Returns a formatted string from the average percentage
+     * @return a string formatted to two decimals containing the average percentage
+     */
+    public String getAvgPercentString()
+    {
+        return formatDecimal(getAveragePercentage() * 100.00);
+    }
+    
+    /**
+     * Returns a formatted string from the average raw score
+     * @return a string formatted to two decimals containing the average raw score
+     */
+    public String getAvgRawString()
+    {
+        return formatDecimal(getAverageScore());
+    }
+    
+    /**
+     * Returns a formatted string of the standard deviation
+     * @return a string formatted to two decimals containing the std dev
+     */
+    public String getStdDevString()
+    {
+        return formatDecimal(getStdDeviation());
+    }
 
     /**
      * Returns the standard deviation of scores of exams in the collection.
@@ -221,6 +259,42 @@ public class GradedExamCollection
         }
         // RETURN frequencies
         return frequencies;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public Set<Map.Entry<String,String>> getQuestionMissCounts()
+    {
+        Map feedback = new HashMap();
+        
+        Exam key = getAnswerKey();
+        int questions = key.getQuestionCount();
+        
+        // For all of our student exams
+        for (Exam exam : studentExams)
+        {
+            // For every question in our key
+            for (int i =  1; i <= questions; i++)
+            {
+                // Initialize the feedback set with 0
+                // if we've never seen this question number before
+                if (!feedback.containsKey(i))
+                {
+                    feedback.put(i, 0);
+                }
+                
+                // If the student got it wrong, increment the tally in the map
+                if (!exam.isQuestionCorrect(i))
+                {
+                    // if question wrong, increment set
+                    feedback.put(i, Integer.parseInt(feedback.get(i).toString()) + 1);
+                }
+            }
+        }
+        
+        return feedback.entrySet();
     }
 
     /**

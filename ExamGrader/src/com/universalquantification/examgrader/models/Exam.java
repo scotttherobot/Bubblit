@@ -172,19 +172,20 @@ public class Exam
      * @return a list of strings containing the question number and the correct
      * answer to that question.
      */
-    public List<String> getIncorrectFeedback()
+    public Set<Map.Entry<String,String>> getIncorrectFeedback()
     {
-        List<String> feedback = new ArrayList<String>();
+        Map feedback = new HashMap();
+        //List<String> feedback = new ArrayList<String>();
         
         for (Integer i : getIncorrectQuestions()) {
             StringBuilder fbStr = new StringBuilder();
             
             fbStr.append(getAnswer(i).toString());
             
-            feedback.add(fbStr.toString());
+            feedback.put(i, fbStr.toString());
         }
         
-        return feedback;
+        return feedback.entrySet();
     }
     
     /**
@@ -192,19 +193,19 @@ public class Exam
      * @return a list of strings containing the question number and the correct
      * answer to that question.
      */
-    public List<String> getCorrectFeedback()
+    public Set<Map.Entry<String,String>> getCorrectFeedback()
     {
-        List<String> feedback = new ArrayList<String>();
+        Map feedback = new HashMap();
         
         for (Integer i : getCorrectQuestions()) {
             StringBuilder fbStr = new StringBuilder();
             
             fbStr.append(getAnswer(i).toString());
             
-            feedback.add(fbStr.toString());
+            feedback.put(i, fbStr.toString());
         }
         
-        return feedback;
+        return feedback.entrySet();
     }
 
     /**

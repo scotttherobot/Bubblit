@@ -40,6 +40,11 @@ public class RosterEntry
     private final String last;
 
     /**
+     * The student's ID.
+     */
+    private final String id;
+
+    /**
      * Creates a {@code RosterEntry} with the given parameters.
      *
      * @param sequenceNumber
@@ -49,12 +54,13 @@ public class RosterEntry
      * @param last
      *      the student's last name
      */
-    public RosterEntry(int sequenceNumber, String first, String last)
+    public RosterEntry(int sequenceNumber, String first, String last, String id)
     {
         super();
         this.sequenceNumber = sequenceNumber;
         this.first = first;
         this.last = last;
+        this.id = id;
     }
 
     /**
@@ -88,6 +94,15 @@ public class RosterEntry
     public String getLast()
     {
         return last;
+    }
+
+    /**
+     * Gets the student's id
+     * @return the student's ID
+     */
+    public String getId()
+    {
+        return id;
     }
 
     public double evaluateMatch(Exam form)

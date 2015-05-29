@@ -8,14 +8,11 @@ Student,ID,Score,Percent
 {{/getGradedExams}}
 
 "Total Points",{{#getAnswerKey}}{{getQuestionCount}}{{/getAnswerKey}}
-"Class Average",{{getAverageScore}},{{getAveragePercentage}}
-"Standard Deviation",{{getStdDeviation}}
+"Class Average",{{getAvgRawString}},{{getAvgPercentString}}
+"Standard Deviation",{{getStdDevString}}
 
 "Question #","Missed count"
-1,2
-2,2
-3,3
-4,3
-5,3
-6,0
+{{#getQuestionMissCounts}}
+{{key}},{{value}}
+{{/getQuestionMissCounts}}
 {{/exams}}

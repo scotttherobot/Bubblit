@@ -45,7 +45,7 @@ public class RosterParser
         String last = matcher.group(2);
         String first = matcher.group(3);
 
-        return new RosterEntry(sequenceNumber, first, last);
+        return new RosterEntry(sequenceNumber, first, last, "IS THIS USED");
     }
 
     /**
@@ -67,6 +67,7 @@ public class RosterParser
             //int sequenceNumber, String first, String last
             Map<String,String> entry = roster.getRecordByColumnValue("No.", Integer.toString(i));
             String name = entry.get("Student Name");
+            String id = entry.get("EMPLID");
             
             final String pattern = "\"?([^,]+),\\s*([^\\s\"]+).*\"?";
             Matcher matcher = Pattern.compile(pattern).matcher(name);
@@ -80,7 +81,7 @@ public class RosterParser
             String last = matcher.group(1);
             String first = matcher.group(2);
 
-            result.add(new RosterEntry(i, first, last));
+            result.add(new RosterEntry(i, first, last, id));
         }
         
         return result;
