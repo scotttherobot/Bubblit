@@ -5,7 +5,9 @@
  */
 package com.universalquantification.examgrader.grader;
 
+import boofcv.gui.image.ShowImages;
 import com.sun.pdfview.PDFFile;
+import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.models.InputPage;
@@ -27,18 +29,18 @@ import junit.framework.TestCase;
  */
 public class GraderTest extends TestCase
 {
-    
+
     public GraderTest(String testName)
     {
         super(testName);
     }
-    
+
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
     }
-    
+
     @Override
     protected void tearDown() throws Exception
     {
@@ -51,12 +53,12 @@ public class GraderTest extends TestCase
     public void testCancel()
     {
         /*
-        System.out.println("cancel");
-        Grader instance = null;
-        instance.cancel();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-        */
+         System.out.println("cancel");
+         Grader instance = null;
+         instance.cancel();
+         // TODO review the generated test code and remove the default call to fail.
+         fail("The test case is a prototype.");
+         */
     }
 
     /**
@@ -64,17 +66,58 @@ public class GraderTest extends TestCase
      */
     public void testGrade() throws Exception
     {
-        System.out.println("grade");
+        /*
+         System.out.println("grade");
        
+         InputFileList list = new InputFileList();
+         File pdfFile = new File("ExamsScannedDalbey.pdf");
+         list.addInputFile(pdfFile);
+
+         List<RosterEntry> rosterEntries = RosterParser.parseRoster(new Roster(new FileReader("students.tsv")));
+        
+         NameRecognitionGateway g = new NameRecognitionGateway();
+         Grader instance = new Grader(list, new ExamReader(g), rosterEntries);
+         Map<File, GradedExamCollection> result = instance.grade();
+         //assertEquals(expResult, result);
+         // TODO review the generated test code and remove the default call to fail.
+         //fail("The test case is a prototype.");
+         */
+    }
+
+    public void testGrade2() throws Exception
+    {
+        System.out.println("grade");
+
         InputFileList list = new InputFileList();
-        File pdfFile = new File("ExamsScannedDalbey.pdf");
+        File pdfFile = new File("test-input-files/Scans3.pdf");
         list.addInputFile(pdfFile);
 
-        List<RosterEntry> rosterEntries = RosterParser.parseRoster(new Roster(new FileReader("students.tsv")));
-        
+        List<RosterEntry> rosterEntries = RosterParser.parseRoster(new Roster(
+                new FileReader("students.tsv")));
+
         NameRecognitionGateway g = new NameRecognitionGateway();
         Grader instance = new Grader(list, new ExamReader(g), rosterEntries);
         Map<File, GradedExamCollection> result = instance.grade();
+        GradedExamCollection gc = result.get(pdfFile);
+        assertEquals(gc.getNumExams(), 1);
+        Exam gradedExam = gc.getGradedExams().get(0);
+        boolean[] results =
+        {   
+            true, false, false, true, false, false, false, false, true, false,
+            false, true, false, false, false, true, false, false, false, false,
+            false, true, true, true, true, false, false, false, false, false,
+            false, false, false, false, false, false, true, true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true,
+            true, true, true, true, true
+        };
+        for (int qNum = 1; qNum <= 100; qNum++)
+        {
+            assertEquals(gradedExam.isQuestionCorrect(qNum), results[qNum - 1]);
+        }
         //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
@@ -120,5 +163,5 @@ public class GraderTest extends TestCase
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
     }
-    
+
 }
