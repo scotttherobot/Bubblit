@@ -11,6 +11,7 @@ import com.universalquantification.examgrader.ui.AppView;
 import com.universalquantification.examgrader.ui.ConsoleView;
 import com.universalquantification.examgrader.ui.VerifyDialog;
 import com.universalquantification.examgrader.utils.PreferencesManager;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -187,8 +188,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
@@ -230,10 +230,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         getContentPane().add(jLabel1, gridBagConstraints);
 
         addFileButton.setText("Add Exam File");
-        addFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        addFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFileButtonActionPerformed(evt);
             }
         });
@@ -245,10 +243,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         removeFileButton.setText("Remove Exam File");
         removeFileButton.setToolTipText("");
-        removeFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        removeFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeFileButtonActionPerformed(evt);
             }
         });
@@ -265,10 +261,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         fileList.setAutoscrolls(false);
         fileList.setFixedCellHeight(24);
         fileList.setFocusCycleRoot(true);
-        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
-        {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
-            {
+        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 fileListValueChanged(evt);
             }
         });
@@ -304,10 +298,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         addRosterFileButton.setText("Select Roster File");
         addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
-        addRosterFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addRosterFileButtonActionPerformed(evt);
             }
         });
@@ -335,10 +327,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         gradeButton.setAlignmentX(0.5F);
         gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
         gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
-        gradeButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        gradeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gradeButtonActionPerformed(evt);
             }
         });
@@ -368,10 +358,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Preferences");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 preferencesMenuItemSelected(evt);
             }
         });
@@ -381,10 +369,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -395,12 +381,11 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         helpMenu.setMnemonic('h');
         helpMenu.setText("Help");
 
+        contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
         contentsMenuItem.setMnemonic('c');
-        contentsMenuItem.setText("Contents");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        contentsMenuItem.setText("User Manual");
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentsMenuItemActionPerformed(evt);
             }
         });
@@ -410,10 +395,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 aboutMenuItemActionPerformed(evt);
             }
         });
@@ -485,18 +468,13 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
-        JOptionPane.showMessageDialog(this, 
-                "How to Add Tests: "
-                + "\n\t1) Click the \"Add File\" button."
-                + "\n\t2) Select the PDF file(s) containing the forms you want graded. Make sure that "
-                + "\n\t     the first page of the PDF file is the form representing the key."
-                + "\n\t3) Press \"OK\" and your files will now be queued to be graded."
-                + "\n\nHow to Grade Tests: "
-                + "\n\t1) Check that the PDF files you have in your lists are the forms you want graded."
-                + "\n\t2) Click the \"Grade!\" button."
-                + "\n\t3) When the progress bar displayed is full, the resulting the scoring files will"
-                + "\n\t     be found in the directories of each of your queued files."
-        );
+        File htmlFile = new File("UserManual.html");
+        
+        try {
+            Desktop.getDesktop().browse(htmlFile.toURI());
+        } catch (IOException ex) {
+            Logger.getLogger(MainApplication.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_contentsMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
