@@ -143,11 +143,13 @@ public class VerifyDialog extends javax.swing.JFrame
             }
         }
 
+        @Override
         public boolean isCellEditable(int row, int col)
         {
             return true;
         }
 
+        @Override
         public Class getColumnClass(int column)
         {
             return getValueAt(0, column).getClass();
@@ -282,15 +284,11 @@ public class VerifyDialog extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Verification Dialog");
-        setMinimumSize(new java.awt.Dimension(0, 0));
         setPreferredSize(new java.awt.Dimension(1200, 720));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         InstructionLabel.setText("Please verify that the students have been correctly identified.");
         InstructionLabel.setToolTipText("");
-        InstructionLabel.setMaximumSize(new java.awt.Dimension(299, 14));
-        InstructionLabel.setMinimumSize(new java.awt.Dimension(299, 14));
-        InstructionLabel.setPreferredSize(new java.awt.Dimension(299, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

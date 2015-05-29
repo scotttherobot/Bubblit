@@ -369,8 +369,13 @@ public class Exam
             if (thisAnswer != null) {
                 otherAnswer = (Answer) pair.getValue();
                 
-                if (thisAnswer.equals(otherAnswer)) {
-                    correctQuestions.add(questionNumber);
+                if (otherAnswer != null) {
+                    if (thisAnswer.equals(otherAnswer)) {
+                        correctQuestions.add(questionNumber);
+                    }
+                }
+                else {
+                    answerMap.put(questionNumber, new Answer(otherAnswer));
                 }
             }
         }

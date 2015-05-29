@@ -38,6 +38,30 @@ public class Answer implements Comparable<Answer>
     }
     
     /**
+     * Constructs an answer that is a duplicate of another answer.
+     * 
+     * @param other The answer to create a duplicate of.
+     */
+    public Answer(Answer other) 
+    {
+        this.choices = other.choices;
+        this.number = other.number;
+    }
+    
+    /**
+     * Checks if the answer has any bubbles filled in.
+     * 
+     * @return A boolean representing whether or not the answer is blank.
+     */
+    public boolean isEmpty() {
+        for (Bubble b : choices) {
+            if (b.isFilled()) return false;
+        }
+        
+        return true;
+    }
+    
+    /**
      * Returns the number of this answer.
      * 
      * @return The number for this question.

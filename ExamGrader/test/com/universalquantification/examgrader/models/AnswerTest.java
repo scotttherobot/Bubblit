@@ -15,6 +15,20 @@ public class AnswerTest extends TestCase {
         super(testName);
     }
     
+    public void testAnswerCopy() {
+        List<Bubble> bubbleList = Arrays.asList(
+                new Bubble(true, "A"),
+                new Bubble(true, "B"),
+                new Bubble(true, "C"),
+                new Bubble(true, "D"),
+                new Bubble(true, "E"));
+        
+        Answer a = new Answer(bubbleList, 16);
+        Answer b = new Answer(a);
+        
+        assertTrue(a.equals(b));
+    }
+    
     public void testGetNumber() {
         List<Bubble> bubbleList = Arrays.asList(
                 new Bubble(true, "A"),
@@ -26,6 +40,14 @@ public class AnswerTest extends TestCase {
         Answer a = new Answer(bubbleList, 16);
         
         assertEquals(a.getNumber(), 16);
+    }
+    
+    public void testIsEmpty() {
+        List<Bubble> bubbleList = new ArrayList<>();
+        
+        Answer a = new Answer(bubbleList, 1);
+        
+        assertTrue(a.isEmpty());
     }
     
     public void testCompareTo() {
