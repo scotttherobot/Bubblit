@@ -7,7 +7,7 @@ Student,ID,Score,Percent
 {{#getStudentRecord}}"{{getLastName}}, {{getFirstName}}",{{getId}}{{/getStudentRecord}},{{getRawScore}},{{getPercentScore}}
 {{/each getGradedExams}}
 
-"Total Points",{{#getAnswerKey}}{{getQuestions}}{{/getAnswerKey}}
+"Total Points",{{#getAnswerKey}}{{getQuestionCount}}{{/getAnswerKey}}
 "Class Average",{{getAverageScore}},{{getAveragePercentage}}
 "Standard Deviation",{{getStdDeviation}}
 

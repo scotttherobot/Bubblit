@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.models;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -231,6 +232,16 @@ public class Exam
         // RETURN percentScore
         
         return 1.0 * correctQuestions.size() / answerMap.size();
+    }
+    
+    /**
+     * Returns a formatted string of the score percentage.
+     * @returns A string formatted to two decimal places representing the percentage score.
+     */
+    public String getFormattedPercentScore()
+    {
+        DecimalFormat percent = new DecimalFormat("#.00");
+        return percent.format(getPercentScore() * 100.00).toString();
     }
     
     /**
