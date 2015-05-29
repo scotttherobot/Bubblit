@@ -83,7 +83,7 @@ public class InputFile {
     public InputPage getAnswerKeyPage()
     {
         // RETURN pages[0]
-        return pages.get(1);
+        return pages.get(0);
     }
     
     
