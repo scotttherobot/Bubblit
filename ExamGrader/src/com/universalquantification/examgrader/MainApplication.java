@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -42,8 +43,9 @@ import org.apache.commons.cli.ParseException;
  */
 public class MainApplication extends javax.swing.JFrame implements AppView, Observer
 {
-    
+    private final MainApplication _this = this;
     private Controller controller;
+    private List<String> fileLocations;
 
     /**
      * Creates new form NewApplication
@@ -73,9 +75,17 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
                     @Override
                     public void actionPerformed(ActionEvent evt) {
+                        String successMessage = "Success! Your score reports have been written to:\n\n";
+                        
                         dialog.setVisible(false);
                         dialog.dispose();
                         controller.writeReports(results);
+                        
+                        for (String fileLocation : fileLocations) {
+                            successMessage = successMessage.concat("\t•  " + new File(fileLocation).getParent() + "\n");
+                        }
+                        
+                        JOptionPane.showMessageDialog(_this, successMessage, "Success!", JOptionPane.INFORMATION_MESSAGE);
                     }
                 };
 
@@ -88,7 +98,6 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     
     public void showError(String e)
     {
-        
           /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable()
         {
@@ -106,9 +115,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             }
         });
         
-        JOptionPane.showMessageDialog(this, 
-                e
-        );
+        JOptionPane.showMessageDialog(this, e, "Error! ):", JOptionPane.ERROR_MESSAGE);
     }
     
     public void update(Observable o, final Object arg)
@@ -125,7 +132,6 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             {
                 public void run()
                 {
-                    
                     progressBar.setMaximum(grader.getTotalPagesToGrade());
                     progressBar.setValue(grader.getPagesGraded());
                 }
@@ -176,8 +182,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
@@ -207,7 +212,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Version 2 - Universal Quantification");
         setForeground(java.awt.Color.white);
-        setPreferredSize(new java.awt.Dimension(440, 360));
+        setPreferredSize(new java.awt.Dimension(480, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -219,10 +224,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         getContentPane().add(jLabel1, gridBagConstraints);
 
         addFileButton.setText("Add Exam File");
-        addFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        addFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFileButtonActionPerformed(evt);
             }
         });
@@ -234,10 +237,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         removeFileButton.setText("Remove Exam File");
         removeFileButton.setToolTipText("");
-        removeFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        removeFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeFileButtonActionPerformed(evt);
             }
         });
@@ -251,10 +252,11 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         listModel = new DefaultListModel();
         fileList.setModel(listModel);
-        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
-        {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
-            {
+        fileList.setAutoscrolls(false);
+        fileList.setFixedCellHeight(24);
+        fileList.setFocusCycleRoot(true);
+        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 fileListValueChanged(evt);
             }
         });
@@ -290,10 +292,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         addRosterFileButton.setText("Select Roster File");
         addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
-        addRosterFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addRosterFileButtonActionPerformed(evt);
             }
         });
@@ -321,10 +321,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         gradeButton.setAlignmentX(0.5F);
         gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
         gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
-        gradeButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        gradeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gradeButtonActionPerformed(evt);
             }
         });
@@ -354,10 +352,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Preferences");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 preferencesMenuItemSelected(evt);
             }
         });
@@ -367,10 +363,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -383,10 +377,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("Contents");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentsMenuItemActionPerformed(evt);
             }
         });
@@ -396,10 +388,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 aboutMenuItemActionPerformed(evt);
             }
         });
@@ -413,6 +403,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     }// </editor-fold>//GEN-END:initComponents
 
     private void addFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFileButtonActionPerformed
+        fileChooser.setDialogTitle("Choose a PDF File");
+        
         int returnVal = fileChooser.showOpenDialog(this);
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -425,7 +417,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
                  JOptionPane.showMessageDialog(this, "You may only add exam " +
                          "files of Portable Document Format (PDF). " + 
                          "\nPlease see the user manual available in the 'Help' " +
-                         "menu for \nmore information.");
+                         "menu for \nmore information.", "Wrong File Type", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else {
@@ -438,7 +430,16 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
             @Override
             public Void doInBackground() {
+                ListModel<Class<?>> model = fileList.getModel();
+                
+                fileLocations = new ArrayList<String>();
+                
+                for(int i = 0; i < model.getSize(); i++) {
+                    fileLocations.add(model.getElementAt(i) + "");
+                } 
+
                 controller.grade();
+                        
                 return null;
             }
             
@@ -476,8 +477,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
         // TODO add your handling code here:
-         JOptionPane.showMessageDialog(this, "Welcome to Bubblit, a grading software that uses computer vision to grade tests. Created by Universal Quantification."
-        );
+         JOptionPane.showMessageDialog(this, "Welcome to Bubblit, a grading software that uses computer vision to grade tests. Created by Universal Quantification.", 
+                 "About", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void removeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFileButtonActionPerformed
@@ -494,6 +495,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     }//GEN-LAST:event_fileListValueChanged
 
     private void addRosterFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRosterFileButtonActionPerformed
+        fileChooser.setDialogTitle("Choose a TSV File");
+
         int returnVal = fileChooser.showOpenDialog(this);
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -511,7 +514,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
                  JOptionPane.showMessageDialog(this, "You may only add roster " +
                          "files of Tab Separated Values (TSV) " + 
                          "\nformat. Please see the user manual available in the 'Help' " +
-                         "menu \nfor more information.");
+                         "menu \nfor more information.", "Wrong File Type", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else {

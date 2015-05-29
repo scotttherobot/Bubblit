@@ -19,6 +19,8 @@ import javax.swing.table.TableModel;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.Student;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,6 @@ import java.util.List;
  */
 public class VerifyDialog extends javax.swing.JFrame
 { 
-    
     private List<RosterEntry> roster;
 
     /**
@@ -36,7 +37,6 @@ public class VerifyDialog extends javax.swing.JFrame
      */
     public VerifyDialog(List<Student> matchResults, List<RosterEntry> roster)
     {
-        
         this.roster = roster;
         tableModel = new MyTableModel(matchResults);
 
@@ -45,30 +45,25 @@ public class VerifyDialog extends javax.swing.JFrame
                 JButton.class);
         nameTable.setDefaultRenderer(JButton.class,
                 new JTableButtonRenderer(defaultRenderer));
-        TableColumn chooseColumn = nameTable.getColumnModel().getColumn(4);
+        
+        nameTable.getColumnModel().getColumn(0).setPreferredWidth(260);
+        nameTable.getColumnModel().getColumn(1).setPreferredWidth(260);
+        nameTable.getColumnModel().getColumn(5).setPreferredWidth(100);
+        
+        TableColumn chooseColumn = nameTable.getColumnModel().getColumn(5);
+        
         chooseColumn.setCellEditor(new ButtonColumn());
         // The JList needs a listener that when a row is clicked,
         // it will set that value into the table at the row
         // saved in the instance field "chosenTableRow".
         // then disable the JList.
-        listRoster.addMouseListener(new MouseAdapter()
-        {
-            public void mouseClicked(MouseEvent e)
-            {
-                int index = listRoster.getSelectedIndex();
-                String desiredName = (String) listRoster.getSelectedValue();
-                MyTableModel tModel = (MyTableModel) nameTable.getModel();
-                //TODO: We might want to search the table to see if the desiredName
-                // is already in the table, and if so, change it to "unknown".
-                tModel.setNameFromRoster(desiredName, chosenTableRow);
-                listRoster.setEnabled(false);
-            }
-        });
+        
+         setLocationRelativeTo(null);
     }
     
     public void addFinishedListener(ActionListener listener)
     {
-        jButton1.addActionListener(listener);  
+        VerifyButton.addActionListener(listener);  
     }
 
     class MyTableModel extends AbstractTableModel
@@ -79,8 +74,8 @@ public class VerifyDialog extends javax.swing.JFrame
             "Last Name Image",
             "First Name",
             "Last Name",
-            "Choose",
             "Confidence",
+            "Change Name",
         };
         
         private String[][] model;
@@ -136,11 +131,11 @@ public class VerifyDialog extends javax.swing.JFrame
             }
             else if (col == 4)
             {
-                return buttons.get(row);
+                return student.getConfidence();
             }
             else if (col == 5)
             {  
-                return student.getConfidence();
+                return buttons.get(row);
             }
             else 
             {
@@ -234,7 +229,7 @@ public class VerifyDialog extends javax.swing.JFrame
 
     private JButton mkChooseBtn(int row)
     {
-        JButton btn = new JButton("Choose");
+        JButton btn = new JButton("Change Name");
         btn.setActionCommand("" + row);
         btn.addActionListener(new ChooseBtnListener());
         return btn;
@@ -248,6 +243,8 @@ public class VerifyDialog extends javax.swing.JFrame
             String action = evt.getActionCommand();
             chosenTableRow = Integer.parseInt(action);
             listRoster.setEnabled(true);
+            listRoster.clearSelection();
+            listRoster.setBackground(new Color(255, 255, 255));
         }
     }
 
@@ -259,66 +256,146 @@ public class VerifyDialog extends javax.swing.JFrame
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new javax.swing.JLabel();
+        jDesktopPane1 = new javax.swing.JDesktopPane();
+        InstructionLabel = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jSplitPane1 = new javax.swing.JSplitPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        listRoster = new javax.swing.JList();
         jScrollPane1 = new javax.swing.JScrollPane();
         nameTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        NameSelectionPane = new javax.swing.JScrollPane();
+        listRoster = new javax.swing.JList();
+        jSeparator2 = new javax.swing.JSeparator();
+        VerifyButton = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Verify Dialog");
+        setTitle("Bubblit Verification Dialog");
+        setMinimumSize(new java.awt.Dimension(0, 0));
+        setPreferredSize(new java.awt.Dimension(1200, 720));
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Please verify the students have been correctly identified.");
+        InstructionLabel.setText("Please verify that the students have been correctly identified.");
+        InstructionLabel.setToolTipText("");
+        InstructionLabel.setMaximumSize(new java.awt.Dimension(299, 14));
+        InstructionLabel.setMinimumSize(new java.awt.Dimension(299, 14));
+        InstructionLabel.setPreferredSize(new java.awt.Dimension(299, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(12, 10, 10, 10);
+        getContentPane().add(InstructionLabel, gridBagConstraints);
 
-        listRoster.setModel(createListModel());
-        listRoster.setEnabled(false);
-        jScrollPane2.setViewportView(listRoster);
+        jSeparator1.setPreferredSize(new java.awt.Dimension(10, 3));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        getContentPane().add(jSeparator1, gridBagConstraints);
 
-        jSplitPane1.setRightComponent(jScrollPane2);
+        jSplitPane1.setResizeWeight(1.0);
+        jSplitPane1.setAlignmentX(0.5F);
+        jSplitPane1.setAlignmentY(0.5F);
+        jSplitPane1.setMinimumSize(new java.awt.Dimension(100, 23));
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(100, 100));
+        jSplitPane1.setRequestFocusEnabled(false);
+        jSplitPane1.setVerifyInputWhenFocusTarget(false);
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(460, 21));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 402));
+        jScrollPane1.setRequestFocusEnabled(false);
 
         nameTable.setModel(tableModel);
+        nameTable.setFocusTraversalPolicyProvider(true);
+        nameTable.setGridColor(new java.awt.Color(255, 255, 255));
+        nameTable.setInheritsPopupMenu(true);
         jScrollPane1.setViewportView(nameTable);
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
-        jButton1.setText("OK");
+        NameSelectionPane.setMinimumSize(new java.awt.Dimension(0, 0));
+        NameSelectionPane.setPreferredSize(new java.awt.Dimension(240, 66));
+        NameSelectionPane.setRequestFocusEnabled(false);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 742, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(676, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1))
-        );
+        listRoster.setModel(createListModel());
+        listRoster.setAutoscrolls(false);
+        listRoster.setPreferredSize(new java.awt.Dimension(200, 0));
+        listRoster.setRequestFocusEnabled(false);
+        listRoster.setValueIsAdjusting(true);
+        listRoster.setVisibleRowCount(4);
+        listRoster.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listRosterValueChanged(evt);
+            }
+        });
+        NameSelectionPane.setViewportView(listRoster);
+
+        jSplitPane1.setRightComponent(NameSelectionPane);
+        NameSelectionPane.getAccessibleContext().setAccessibleName("NameSelectionPane");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jSplitPane1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 10, 10);
+        getContentPane().add(jSeparator2, gridBagConstraints);
+
+        VerifyButton.setText("Verify");
+        VerifyButton.setToolTipText("");
+        VerifyButton.setMargin(new java.awt.Insets(2, 20, 2, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+        getContentPane().add(VerifyButton, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void listRosterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listRosterValueChanged
+        int index = listRoster.getSelectedIndex();
+        String desiredName = (String) listRoster.getSelectedValue();
+        MyTableModel tModel = (MyTableModel) nameTable.getModel();
+        //TODO: We might want to search the table to see if the desiredName
+        // is already in the table, and if so, change it to "unknown".
+        if (desiredName != null) {
+            tModel.setNameFromRoster(desiredName, chosenTableRow);
+
+            listRoster.setEnabled(false);
+            
+            listRoster.setBackground(new Color(240, 240, 240));
+            //NameSelectionPane.setPreferredSize(new Dimension(0, 0));
+        }
+    }//GEN-LAST:event_listRosterValueChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel InstructionLabel;
+    private javax.swing.JScrollPane NameSelectionPane;
+    private javax.swing.JButton VerifyButton;
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JList listRoster;
     private javax.swing.JTable nameTable;
