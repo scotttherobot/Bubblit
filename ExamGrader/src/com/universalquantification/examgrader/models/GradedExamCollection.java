@@ -3,10 +3,12 @@ package com.universalquantification.examgrader.models;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * A GradedExamCollection is a collection of exams graded by
@@ -243,10 +245,10 @@ public class GradedExamCollection
      */
     public Set<Map.Entry<String,String>> getQuestionMissCounts()
     {
-        Map<String, String> feedback = new TreeMap<String, String>();
+        Map<String, String> feedback = new LinkedHashMap<String, String>();
         
         Exam key = getAnswerKey();
-        Set<Integer> questions = key.getQuestions();
+        Set<Integer> questions = new TreeSet<>(key.getQuestions());
         
         for (Integer question : questions)
         {

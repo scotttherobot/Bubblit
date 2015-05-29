@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.models;
 
+import java.util.LinkedHashMap;
 import java.util.TreeSet;
 import java.util.Set;
 import java.util.List;
@@ -106,14 +107,14 @@ public class GradedExamCollectionTest extends TestCase {
     public void testGetQuestionMissCounts() {
         Set<Map.Entry<String, String>> result = gradedExamCollection.getQuestionMissCounts();
         
-        Map<String, String> expected = new HashMap<>();
+        Map<String, String> expected = new LinkedHashMap<>();
         expected.put("1", "2");
         expected.put("2", "2");
         expected.put("3", "2");
         expected.put("4", "1");
         
         
-        assertEquals(new TreeSet<>(expected.entrySet()), result);
+        assertEquals(expected.entrySet(), result);
     }
 
     /**
