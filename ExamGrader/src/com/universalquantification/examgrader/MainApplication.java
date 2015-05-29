@@ -99,6 +99,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     public void showError(String e)
     {
           /* Create and display the form */
+        /*
         java.awt.EventQueue.invokeLater(new Runnable()
         {
             public void run()
@@ -114,8 +115,12 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
                 }
             }
         });
+        */
+  
+        if(this.isDisplayable()){
+            JOptionPane.showMessageDialog(this, e, "Error! ):", JOptionPane.ERROR_MESSAGE);
+        }
         
-        JOptionPane.showMessageDialog(this, e, "Error! ):", JOptionPane.ERROR_MESSAGE);
     }
     
     public void update(Observable o, final Object arg)
@@ -182,7 +187,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
@@ -224,8 +230,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         getContentPane().add(jLabel1, gridBagConstraints);
 
         addFileButton.setText("Add Exam File");
-        addFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addFileButtonActionPerformed(evt);
             }
         });
@@ -237,8 +245,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         removeFileButton.setText("Remove Exam File");
         removeFileButton.setToolTipText("");
-        removeFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        removeFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 removeFileButtonActionPerformed(evt);
             }
         });
@@ -255,8 +265,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         fileList.setAutoscrolls(false);
         fileList.setFixedCellHeight(24);
         fileList.setFocusCycleRoot(true);
-        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+        {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+            {
                 fileListValueChanged(evt);
             }
         });
@@ -292,8 +304,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         addRosterFileButton.setText("Select Roster File");
         addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
-        addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addRosterFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addRosterFileButtonActionPerformed(evt);
             }
         });
@@ -321,8 +335,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         gradeButton.setAlignmentX(0.5F);
         gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
         gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
-        gradeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        gradeButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 gradeButtonActionPerformed(evt);
             }
         });
@@ -352,8 +368,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Preferences");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 preferencesMenuItemSelected(evt);
             }
         });
@@ -363,8 +381,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -377,8 +397,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("Contents");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 contentsMenuItemActionPerformed(evt);
             }
         });
@@ -388,8 +410,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 aboutMenuItemActionPerformed(evt);
             }
         });
