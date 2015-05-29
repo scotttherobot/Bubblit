@@ -11,6 +11,7 @@ import boofcv.factory.feature.detect.edge.FactoryEdgeDetectors;
 import boofcv.factory.feature.detect.template.FactoryTemplateMatching;
 import boofcv.factory.feature.detect.template.TemplateScoreType;
 import boofcv.gui.binary.VisualizeBinaryData;
+import boofcv.gui.image.ShowImages;
 import boofcv.io.image.UtilImageIO;
 import boofcv.struct.ConnectRule;
 import boofcv.struct.feature.Match;
@@ -154,33 +155,53 @@ public class ExamReader
 //        graphics.drawLine(bounds.minX, bounds.maxY, bounds.maxX, bounds.maxY);
 //        ShowImages.showDialog(fileImage);
         BubblitFormV2Details formDetails = new BubblitFormV2Details(bounds);
-
         Bounds cbBounds = formDetails.getBoundsForCalibrationBubbles();
+        CalibrationBubbleRegion cbInfo = getCalibrationBubbleStats(fileImage,
+                cbBounds);
 
-        BufferedImage calibrationRegion = fileImage.getSubimage(
-                cbBounds.minX, cbBounds.minY,
-                cbBounds.maxX - cbBounds.minX,
-                cbBounds.maxY - cbBounds.minY);
-        //ShowImages.showDialog(calibrationRegion);
-        BufferedImage calibrationBubbles[] = splitImageHorizontally(
-                calibrationRegion, 5);
-
-        double fillRatio = 0;
-        for (int onCb = 0; onCb < calibrationBubbles.length; onCb++)
+        if (cbInfo.minFillRatio < 0.07)
         {
-            double ratio = getBlackRatio(calibrationBubbles[onCb]);
-            fillRatio = ratio > fillRatio ? ratio : fillRatio;
+            //ShowImages.showDialog(fileImage);
+            fileImage = rotate180(fileImage);
+            fileImage = getBinaryImage(fileImage);
+            invertBW(fileImage);
+            //ShowImages.showDialog(fileImage);
+
+            bounds = getFormBounds(fileImage);
+
+            // If no anchors were found then this page is not an exam.
+            if (bounds == null)
+            {
+                throw new InvalidExamException();
+            }
+
+            // If the bounds are invalid, this page is not an exam.
+            if (bounds.minX >= bounds.maxX || bounds.minY >= bounds.maxY)
+            {
+                throw new InvalidExamException();
+            }
+
+            formDetails = new BubblitFormV2Details(bounds);
+            cbBounds = formDetails.getBoundsForCalibrationBubbles();
+            cbInfo = getCalibrationBubbleStats(fileImage,
+                    cbBounds);
+            if (cbInfo.minFillRatio < 0.07)
+            {
+                throw new InvalidExamException();
+            }
+
         }
 
-        fillRatio *= kFillRatioMultiplier;
+        double fillRatio = cbInfo.avgFillRatio * kFillRatioMultiplier;
+        
         //System.out.println("fill ratio is " + fillRatio);
-
         char choices[] =
         {
             'A', 'B', 'C', 'D', 'E'
         };
 
-        for (int qNum = 1; qNum <= 100; qNum++)
+        for (int qNum = 1;
+                qNum <= 100; qNum++)
         {
             ArrayList<Bubble> questionBubbles = new ArrayList<Bubble>();
             Answer newAnswer;
@@ -239,6 +260,42 @@ public class ExamReader
         Exam exam = new Exam(answers, student, file);
 
         return exam;
+    }
+
+    private CalibrationBubbleRegion getCalibrationBubbleStats(
+            BufferedImage fileImage, Bounds cbBounds)
+    {
+        // if fill min ratio for bubbles is 0, flip.
+        BufferedImage calibrationRegion = fileImage.getSubimage(
+                cbBounds.minX, cbBounds.minY,
+                cbBounds.maxX - cbBounds.minX,
+                cbBounds.maxY - cbBounds.minY);
+        //ShowImages.showDialog(calibrationRegion);
+        BufferedImage calibrationBubbles[] = splitImageHorizontally(
+                calibrationRegion, 5);
+
+        double fillRatio = 0;
+        double minRatio = 1;
+        for (int onCb = 0; onCb < calibrationBubbles.length; onCb++)
+        {
+            double ratio = getBlackRatio(calibrationBubbles[onCb]);
+            fillRatio = ratio > fillRatio ? ratio : fillRatio;
+            minRatio = ratio < minRatio ? ratio : minRatio;
+        }
+
+        return new CalibrationBubbleRegion(minRatio, fillRatio);
+
+        //fillRatio *= kFillRatioMultiplier;
+    }
+
+    private BufferedImage rotate180(BufferedImage img)
+    {
+        AffineTransform tx = AffineTransform.getScaleInstance(-1, -1);
+        tx.translate(-img.getWidth(null), -img.getHeight(null));
+        AffineTransformOp op = new AffineTransformOp(tx,
+                AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        img = op.filter(img, null);
+        return img;
     }
 
     /**
@@ -402,23 +459,23 @@ public class ExamReader
                 getpY();
         Bounds bounds = new Bounds(x0, x1, y0, y1);
         return bounds;
-                /*
-        double hypotenuseLength = Math.sqrt(
-                Math.pow(x1 - x0, 2)
-                + Math.pow(y1 - y0, 2));
-        int newAnchorWidth = BubblitFormV2Details.getAnchorWidthFromHypotenuse(
-                hypotenuseLength);
-        System.out.println("width is " + newAnchorWidth);
-        Bounds bounds = new Bounds(
-                leftAnchorLoc.getpX(), // minx
-                image.getWidth() - rightCorner.width + rightAnchorLoc.getpX()
-                + newAnchorWidth, // maxx
-                leftAnchorLoc.getpY(), // miny
+        /*
+         double hypotenuseLength = Math.sqrt(
+         Math.pow(x1 - x0, 2)
+         + Math.pow(y1 - y0, 2));
+         int newAnchorWidth = BubblitFormV2Details.getAnchorWidthFromHypotenuse(
+         hypotenuseLength);
+         System.out.println("width is " + newAnchorWidth);
+         Bounds bounds = new Bounds(
+         leftAnchorLoc.getpX(), // minx
+         image.getWidth() - rightCorner.width + rightAnchorLoc.getpX()
+         + newAnchorWidth, // maxx
+         leftAnchorLoc.getpY(), // miny
 
-                +newAnchorWidth// maxy
-        );
-        return bounds;
-                */
+         +newAnchorWidth// maxy
+         );
+         return bounds;
+         */
     }
 
     private static ImagePoint getDonutLocation(ImageUInt8 image,
@@ -426,10 +483,12 @@ public class ExamReader
     {
         ImageUInt8 edgeImage = new ImageUInt8(image.width, image.height);
         CannyEdge<ImageUInt8, ImageSInt16> canny = FactoryEdgeDetectors.canny(2,
-                true, true, ImageUInt8.class, ImageSInt16.class);
+                true, true, ImageUInt8.class, ImageSInt16.class
+        );
 
         // The edge image is actually an optional parameter.  If you don't need it just pass in null
-        canny.process(image, 0.1f, 0.95f, edgeImage);
+        canny.process(image,
+                0.1f, 0.95f, edgeImage);
 
         // First get the contour created by canny
         //List<EdgeContour> edgeContours = canny.getContours();
@@ -438,8 +497,10 @@ public class ExamReader
         // Note that you are only interested in external contours.
         List<Contour> contours = BinaryImageOps.contour(edgeImage,
                 ConnectRule.EIGHT, null);
+
         //System.out.println(contours.size() + "  conts");
-        if (contours.size() < 2)
+        if (contours.size()
+                < 2)
         {
             return null;
         }
@@ -461,17 +522,16 @@ public class ExamReader
 
         //BufferedImage visualBinary = VisualizeBinaryData.renderBinary(edgeImage,
         //        null);
-
         //ShowImages.showDialog(visualBinary);
         //ShowImages.showWindow(visualCannyContour,"Canny Trace Graph");
         //ShowImages.showWindow(visualEdgeContour,"Contour from Canny Binary");
-
         ImagePoint p = new ImagePoint();
         if (getRight)
         {
             p.setpX(maxx);
             p.setpY(maxy);
         }
+
         else
         {
             p.setpX(minx);
