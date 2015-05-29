@@ -99,7 +99,9 @@ public class ReportWriter
                 FileWriter examReportOut = 
                  new FileWriter(location.getAbsolutePath());
                 // INIT a new FileReader with the template path
-                FileReader examReportTemplate = new FileReader("src/com/universalquantification/examgrader/reporter/resources/exam_report.html");
+                //FileReader examReportTemplate = new FileReader("src/com/universalquantification/examgrader/reporter/resources/exam_report.html");
+                InputStreamReader examReportTemplate = new InputStreamReader(this.getClass().getResourceAsStream(
+                RESOURCE_PATH + "/exam_report.html"));
                 // INIT a new ExamReport with exam, file + "_" + exam.student.id
                 ExamReport eReport = new ExamReport(graded, examReportOut, examReportTemplate);
                 // CALL ExamReport.writeReport
