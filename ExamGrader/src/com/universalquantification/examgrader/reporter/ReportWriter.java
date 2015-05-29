@@ -70,8 +70,9 @@ public class ReportWriter
             GradedExamCollection gradedExams = entry.getValue();
         
             // INIT a new FileWriter with the destination path
-
-            FileWriter outfile = new FileWriter(new File(outputDirectory, f.getName() + "_aggregate.csv"));
+            // Create the output directory for the HTML reports
+            String nameWithoutExtension = Files.getNameWithoutExtension(f.getName());
+            FileWriter outfile = new FileWriter(new File(outputDirectory, nameWithoutExtension + "_aggregate.csv"));
             // INIT a new FileReader with the template path
             FileReader aggregateTemplate = new FileReader("src/com/universalquantification/examgrader/reporter/resources/aggregate_report.csv");
             // INIT a new AggregateReport with file + "_aggregate", examCollection
@@ -79,8 +80,7 @@ public class ReportWriter
             // CALL AggregateReport.writeReport
             ar.writeReport();
             
-            // Create the output directory for the HTML reports
-            File outfolder = new File(outputDirectory, f.getName() + "_www");
+            File outfolder = new File(outputDirectory, nameWithoutExtension + "_www");
             outfolder.mkdir();
             
             // FOR EACH exam in the examCollection
