@@ -1,0 +1,55 @@
+"Creation Date:","May 29, 2015 03:29:25 AM"
+"Input File:","SampleExams.pdf"
+
+Student,ID,Score,Percent
+"Cuellar, Luis",123454321,9,25.00
+"Vanderlind, Scott",143364799,7,19.44
+"Wang, Yi-Ming",123345000,1,2.78
+"Tan, C.Y.",399746331,0,.00
+"Bishop, Raul",399746331,6,16.67
+"Kelly, Carole",555555555,5,13.89
+"Hammond, Yvonne",444444444,2,5.56
+"Curtis, Felicia",323453234,3,8.33
+"Wilkerson, Erma",934728594,4,11.11
+
+"Total Points",36
+"Class Average",4.11,11.42
+"Standard Deviation",2.93
+
+"Question #","Missed count"
+1,6
+2,7
+3,7
+4,8
+5,9
+6,8
+7,8
+8,8
+9,8
+10,9
+11,8
+12,7
+13,8
+14,6
+15,8
+16,6
+17,7
+18,8
+19,6
+20,9
+21,7
+22,8
+23,7
+24,7
+25,8
+26,9
+27,9
+28,9
+29,9
+30,9
+31,9
+32,9
+33,9
+34,9
+35,9
+36,9

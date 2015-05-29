@@ -87,11 +87,30 @@
             fork="true"
             output="${systemtest.dir}/SysTest1.out"
             error="${error.log}">
-            <arg line="-r ${systemtest.dir}/Exams.pdf -i ${systemtest.dir}/ExamSets/SampleExams.pdf ${systemtest.dir}/ExamSets/SampleExams1.pdf"/>
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SampleExams.pdf ${systemtest.dir}/ExamSets/SampleExams1.pdf"/>
         </java>
         <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
               output="${diffresults}" append="true">
             <arg line="oracles/SysTest1.oracle SysTest1.out"/>
+        </exec>
+        
+        <echo message="running systest4"/>
+        <!-- System Test Case 4 -->
+        <!-- The application will generate an aggregate CSV report containing scores and statistics from a single PDF input. -->
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest4.out"
+            error="${error.log}">
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SampleExams.pdf"/>
+        </java>
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="oracles/SysTest4.oracle SysTest4.out"/>
+        </exec>
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="oracles/SysTest4_aggregate.oracle ${systemtest.dir}/ExamSets/SampleExams_aggregate.csv"/>
         </exec>
         
     </target>
