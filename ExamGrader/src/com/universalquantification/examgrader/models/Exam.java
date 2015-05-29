@@ -45,6 +45,15 @@ public class Exam
      * is called.
      */
     private Set<Integer> correctQuestions;
+    /**
+     * Questions that were incorrect. This set will be null until grade()
+     * is called.
+     */
+    private Set<Integer> incorrectQuestions;
+    /**
+     * Number of questions on the answer key when graded.
+     */
+    private int answerKeyQuestionCount;
     
      /**
      * Creates a new exam containing the given list and attached to a given 
@@ -238,27 +247,6 @@ public class Exam
      */
     public Set<Integer> getIncorrectQuestions()
     {
-        // INIT incorrectQuestions as a set
-        // INIT iterator as an iterator for answerMap
-        // 
-        // WHILE iterator.hasNext() is true
-            // CALL next on iterator RETURNING entry
-            // IF correctQuestions does not contain the key for entry
-            // CALL add on incorrectQuestions with the key for entry
-        // ENDWHILE
-        //
-        // RETURN incorrectQuestions
-        
-        Set<Integer> incorrectQuestions = new HashSet<>();
-        
-        for (Map.Entry pair : answerMap.entrySet()) {
-            int questionNumber = (int) pair.getKey();
-            
-            if (!isQuestionCorrect(questionNumber)) {
-                incorrectQuestions.add(questionNumber);
-            }
-        }
-
         return incorrectQuestions;
     }
     
@@ -318,8 +306,7 @@ public class Exam
         // SET percentScore to rawScore divided by questionCount
         //
         // RETURN percentScore
-        
-        return 1.0 * correctQuestions.size() / answerMap.size();
+        return 1.0 * correctQuestions.size() / answerKeyQuestionCount;
     }
     
     /**
@@ -360,24 +347,25 @@ public class Exam
         
         Map<Integer, Answer> correctAnswerMap = answerKey.answerMap;
         
+        answerKeyQuestionCount = 0;
+        
         correctQuestions = new HashSet<>();
+        incorrectQuestions = new HashSet<>();
         
         for (Map.Entry pair : correctAnswerMap.entrySet()) {
             int questionNumber = (int) pair.getKey();
             Answer thisAnswer = answerMap.get(questionNumber);
-            Answer otherAnswer;
+            Answer otherAnswer = (Answer) pair.getValue();
             
-            if (thisAnswer != null) {
-                otherAnswer = (Answer) pair.getValue();
-                
-                if (otherAnswer != null) {
-                    if (thisAnswer.equals(otherAnswer)) {
-                        correctQuestions.add(questionNumber);
-                    }
+            if (!otherAnswer.isEmpty()) {
+                if (thisAnswer != null && thisAnswer.equals(otherAnswer)) {
+                    correctQuestions.add(questionNumber);
                 }
                 else {
-                    answerMap.put(questionNumber, new Answer(otherAnswer));
+                    incorrectQuestions.add(questionNumber);
                 }
+                
+                answerKeyQuestionCount++;
             }
         }
     }

@@ -121,8 +121,8 @@ public class ExamTest extends TestCase
     }
     
     public void testGetPercentScore() {
-        Exam exam = createExam(Arrays.asList(0b11000, 0b01100, 0b00100, 0b00010), "Late", "Night");
-        Exam answerKey = createExam(Arrays.asList(0b11000, 0b01100, 0b00000, 0b00100), "Still", "Light");
+        Exam exam = createExam(Arrays.asList(0b11000, 0b01100, 0b00000, 0b00010), "Late", "Night");
+        Exam answerKey = createExam(Arrays.asList(0b11000, 0b01100, 0b00100, 0b00100), "Still", "Light");
         
         exam.grade(answerKey);
         
@@ -143,13 +143,13 @@ public class ExamTest extends TestCase
 
     public void testExam() 
     {
-        Exam answerKey = createExam(Arrays.asList(0b1000, 0b1000, 0b1000, 0b1000), "1/4", "Correct");
-        Exam exam = createExam(Arrays.asList(0b1000, 0b1000, 0b0100, 0b0000), "Great", "Student");
+        Exam answerKey = createExam(Arrays.asList(0b10000, 0b10000, 0b10000, 0b10000), "1/4", "Correct");
+        Exam exam = createExam(Arrays.asList(0b10000, 0b10000, 0b01000, 0b00000), "Great", "Student");
 
         exam.grade(answerKey);
 
         assertEquals(exam.getRawScore(), 2);
-        assertEquals(exam.getPercentScore(), 0.5, 0.001);
+        assertEquals(exam.getPercentScore(), 0.5);
 
         assertEquals(exam.getCorrectQuestions(), new HashSet<>(Arrays.asList(1, 2)));
         assertEquals(exam.getIncorrectQuestions(), new HashSet<>(Arrays.asList(3, 4)));

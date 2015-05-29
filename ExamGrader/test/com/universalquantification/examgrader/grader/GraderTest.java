@@ -101,20 +101,16 @@ public class GraderTest extends TestCase
         GradedExamCollection gc = result.get(pdfFile);
         assertEquals(gc.getNumExams(), 1);
         Exam gradedExam = gc.getGradedExams().get(0);
+        
         boolean[] results =
         {   
             true, false, false, true, false, false, false, false, true, false,
             false, true, false, false, false, true, false, false, false, false,
             false, true, true, true, true, false, false, false, false, false,
-            false, false, false, false, false, false, true, true, true, true,
-            true, true, true, true, true, true, true, true, true, true, true,
-            true, true, true, true, true, true, true, true, true, true, true,
-            true, true, true, true, true, true, true, true, true, true, true,
-            true, true, true, true, true, true, true, true, true, true, true,
-            true, true, true, true, true, true, true, true, true, true, true,
-            true, true, true, true, true
+            false, false, false, false, false, false
         };
-        for (int qNum = 1; qNum <= 100; qNum++)
+        
+        for (int qNum = 1; qNum <= results.length; qNum++)
         {
             assertEquals((boolean)gradedExam.isQuestionCorrect(qNum), results[qNum - 1]);
         }

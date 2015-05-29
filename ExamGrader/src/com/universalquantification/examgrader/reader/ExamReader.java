@@ -183,6 +183,7 @@ public class ExamReader
         for (int qNum = 1; qNum <= 100; qNum++)
         {
             ArrayList<Bubble> questionBubbles = new ArrayList<Bubble>();
+            Answer newAnswer;
 
             Bounds qb = formDetails.getBoundsForQuestion(qNum);
             BufferedImage q = fileImage.getSubimage(
@@ -205,6 +206,7 @@ public class ExamReader
 
                 questionBubbles.add(bubble);
             }
+
 
             answers.add(new Answer(questionBubbles, qNum));
         }
