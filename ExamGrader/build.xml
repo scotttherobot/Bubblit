@@ -99,6 +99,73 @@
         <delete file="${systemtest.dir}/*_aggregate.csv"/>
         <delete dir="${systemtest.dir}/*_www/"/>
         
+
+        
+        <echo message="running systest2"/>
+        <!-- System Test Case 2 -->
+        <!-- The application can grade skewed exams. -->
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest2Part1.out"
+            error="${error.log}">
+
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SampleExams.pdf"/>
+        </java>
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest2Part2.out"
+            error="${error.log}">
+
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SkewedExams.pdf"/>
+        </java>
+        
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+            <arg line="ExamSets/SampleExams_aggregate.csv ExamSets/SkewedExams_aggregate.csv"/>
+        </exec>
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+             output="${diffresults}" append="true">
+           <arg line="ExamSets/SampleExams_www/323453234.html ExamSets/SkewedExams_www/323453234.html"/>
+        </exec>
+
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+             output="${diffresults}" append="true">
+           <arg line="ExamSets/SampleExams_www/555555555.html ExamSets/SkewedExams_www/555555555.html"/>
+        </exec>
+
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+             output="${diffresults}" append="true">
+           <arg line="ExamSets/SampleExams_www/123454321.html ExamSets/SkewedExams_www/123454321.html"/>
+        </exec>
+
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+             output="${diffresults}" append="true">
+           <arg line="ExamSets/SampleExams_www/399746331.html ExamSets/SkewedExams_www/399746331.html"/>
+        </exec>
+
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+             output="${diffresults}" append="true">
+           <arg line="ExamSets/SampleExams_www/934728594.html ExamSets/SkewedExams_www/934728594.html"/>
+        </exec>
+
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+             output="${diffresults}" append="true">
+           <arg line="ExamSets/SampleExams_www/143364799.html ExamSets/SkewedExams_www/143364799.html"/>
+        </exec>
+
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+             output="${diffresults}" append="true">
+           <arg line="ExamSets/SampleExams_www/444444444.html ExamSets/SkewedExams_www/444444444.html"/>
+        </exec>
+        <delete file="${systemtest.dir}/ExamSets/SampleExams_aggregate.csv"/>
+        <delete file="${systemtest.dir}/ExamSets/SkewedExams_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/ExamSets/SampleExams_www"/>
+        <delete dir="${systemtest.dir}/ExamSets/SkewedExams_www"/>
+
+        
+
         <echo message="running systest4"/>
         <!-- System Test Case 4 -->
         <!-- The application will generate an aggregate CSV report containing scores and statistics from a single PDF input. -->
@@ -121,6 +188,7 @@
         <delete file="${systemtest.dir}/*_aggregate.csv"/>
         <delete dir="${systemtest.dir}/*_www/"/>
         
+
     </target>
     
     <target name="deploy" depends="jar">
