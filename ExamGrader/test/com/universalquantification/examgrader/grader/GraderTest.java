@@ -116,7 +116,7 @@ public class GraderTest extends TestCase
         };
         for (int qNum = 1; qNum <= 100; qNum++)
         {
-            assertEquals(gradedExam.isQuestionCorrect(qNum), results[qNum - 1]);
+            assertEquals((boolean)gradedExam.isQuestionCorrect(qNum), results[qNum - 1]);
         }
         //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
