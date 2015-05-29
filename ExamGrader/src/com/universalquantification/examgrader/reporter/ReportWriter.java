@@ -73,23 +73,27 @@ public class ReportWriter
 
             FileWriter outfile = new FileWriter(new File(outputDirectory, f.getName() + "_aggregate.csv"));
             // INIT a new FileReader with the template path
-            FileReader aggregateTemplate = new FileReader("resources/aggregate_report.csv");
+            FileReader aggregateTemplate = new FileReader("src/com/universalquantification/examgrader/reporter/resources/aggregate_report.csv");
             // INIT a new AggregateReport with file + "_aggregate", examCollection
             AggregateReport ar = new AggregateReport(gradedExams, outfile, aggregateTemplate);
             // CALL AggregateReport.writeReport
             ar.writeReport();
             
+            // Create the output directory for the HTML reports
+            File outfolder = new File(outputDirectory, f.getName() + "_www");
+            outfolder.mkdir();
+            
             // FOR EACH exam in the examCollection
             for (Exam graded : gradedExams.getGradedExams())
             {
-                // INIT a new FileWriter with the destination path
-                File location = new File(new File(outputDirectory, f.getName() + "_www"),
+                // INIT a new File with the destination path
+                File location = new File(outfolder,
                         graded.getStudentRecord().getId() + ".html");
-                
+                // INIT a new FileWriter with the destination path
                 FileWriter examReportOut = 
-                 new FileWriter(location);
+                 new FileWriter(location.getAbsolutePath());
                 // INIT a new FileReader with the template path
-                FileReader examReportTemplate = new FileReader("resources/exam_report.html");
+                FileReader examReportTemplate = new FileReader("src/com/universalquantification/examgrader/reporter/resources/exam_report.html");
                 // INIT a new ExamReport with exam, file + "_" + exam.student.id
                 ExamReport eReport = new ExamReport(graded, examReportOut, examReportTemplate);
                 // CALL ExamReport.writeReport
