@@ -45,15 +45,12 @@ public class Exam
      * is called.
      */
     private Set<Integer> correctQuestions;
+    
     /**
      * Questions that were incorrect. This set will be null until grade()
      * is called.
      */
     private Set<Integer> incorrectQuestions;
-    /**
-     * Number of questions on the answer key when graded.
-     */
-    private int answerKeyQuestionCount;
     
      /**
      * Creates a new exam containing the given list and attached to a given 
@@ -75,7 +72,10 @@ public class Exam
         answerMap = new HashMap();
         
         for (Answer a : answers) {
-            answerMap.put(a.getNumber(), a);
+            if (!a.isEmpty())
+            {
+                answerMap.put(a.getNumber(), a);
+            }
         }
     } 
     
@@ -152,11 +152,10 @@ public class Exam
         // END
         
         Answer a = answerMap.get(question);
-        
-        if (a == null) {
-            throw new IllegalArgumentException("No such numbered question on this exam.");
+        if (a == null)
+        {
+            return new Answer(new ArrayList<Bubble>(), question);
         }
-        
         return a;
     }
 
@@ -187,15 +186,7 @@ public class Exam
             // RETURN false
         // ENDIF
         
-        
-        Answer a = getAnswer(question);
-        int questionNumber = a.getNumber();
-        
-        for (Integer i : correctQuestions) {
-            if (i == questionNumber) return true;
-        }
-        
-        return false;
+        return correctQuestions.contains(question);
     }
     
     /**
@@ -328,7 +319,7 @@ public class Exam
         // SET percentScore to rawScore divided by questionCount
         //
         // RETURN percentScore
-        return 1.0 * correctQuestions.size() / answerKeyQuestionCount;
+        return 1.0 * correctQuestions.size() / (correctQuestions.size() + incorrectQuestions.size());
     }
     
     /**
@@ -369,25 +360,19 @@ public class Exam
         
         Map<Integer, Answer> correctAnswerMap = answerKey.answerMap;
         
-        answerKeyQuestionCount = 0;
-        
         correctQuestions = new HashSet<>();
         incorrectQuestions = new HashSet<>();
         
         for (Map.Entry pair : correctAnswerMap.entrySet()) {
             int questionNumber = (int) pair.getKey();
             Answer thisAnswer = answerMap.get(questionNumber);
-            Answer otherAnswer = (Answer) pair.getValue();
+            Answer correctAnswer = (Answer) pair.getValue();
             
-            if (!otherAnswer.isEmpty()) {
-                if (thisAnswer != null && thisAnswer.equals(otherAnswer)) {
-                    correctQuestions.add(questionNumber);
-                }
-                else {
-                    incorrectQuestions.add(questionNumber);
-                }
-                
-                answerKeyQuestionCount++;
+            if (thisAnswer != null && thisAnswer.equals(correctAnswer)) {
+                correctQuestions.add(questionNumber);
+            }
+            else {
+                incorrectQuestions.add(questionNumber);
             }
         }
     }

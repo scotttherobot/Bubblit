@@ -149,9 +149,9 @@ public class AnswerTest extends TestCase {
         Answer c = new Answer(bubbleListC, 12);
         Answer d = new Answer(bubbleListD, 13);
 
-        assertEquals(a.toString(), "10) AE");
-        assertEquals(b.toString(), "11) B");
-        assertEquals(c.toString(), "12) ABCDE");
-        assertEquals(d.toString(), "13) ");
+        assertEquals(a.toString(), "AE");
+        assertEquals(b.toString(), "B");
+        assertEquals(c.toString(), "ABCDE");
+        assertEquals(d.toString(), "");
     }
 }

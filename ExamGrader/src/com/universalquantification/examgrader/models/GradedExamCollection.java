@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * A GradedExamCollection is a collection of exams graded by
@@ -221,44 +222,19 @@ public class GradedExamCollection
         
         return Math.sqrt(sumOfSquares / (getNumExams() - 1));
     }
-
-    /**
-     * Returns a map mapping every answer that appeared more than once in
-     * the graded exams to the number of times they occurred in the graded 
-     * exams.
-     * 
-     * @param question the question number
-     * @return a map of Answer to their frequency
-     */
-    public Map<Answer, Integer> getAnswerFrequency(int question)
+    
+    private int getMisses(int question)
     {
+        int i = 0;
         
-        // INIT frequencies map
-        Map<Answer, Integer> frequencies = new HashMap<>();
-        
-        // FOR exam in studentExams
         for (Exam exam: studentExams)
         {
-            // CALL getAnswer exam WITH question RETURNING answer
-            Answer answer = exam.getAnswer(question);
-            
-            // IF frequencies does not contain a key for answer
-            if (!frequencies.containsKey(answer))
+            if (!exam.isQuestionCorrect(question))
             {
-                // SET frequencies[answer] to 1
-                frequencies.put(answer, 1);
+                i++;
             }
-            // ELSE
-            else
-            {
-                // SET frequencies[answer] to frequencies[answer] + 1
-                frequencies.put(answer, frequencies.get(answer) + 1);
-            }
-            // END IF
-        // END FOR
         }
-        // RETURN frequencies
-        return frequencies;
+        return i;
     }
     
     /**
@@ -267,32 +243,16 @@ public class GradedExamCollection
      */
     public Set<Map.Entry<String,String>> getQuestionMissCounts()
     {
-        Map feedback = new HashMap();
+        Map<String, String> feedback = new TreeMap<String, String>();
         
         Exam key = getAnswerKey();
-        int questions = key.getQuestionCount();
+        Set<Integer> questions = key.getQuestions();
         
-        // For all of our student exams
-        for (Exam exam : studentExams)
+        for (Integer question : questions)
         {
-            // For every question in our key
-            for (int i =  1; i <= questions; i++)
-            {
-                // Initialize the feedback set with 0
-                // if we've never seen this question number before
-                if (!feedback.containsKey(i))
-                {
-                    feedback.put(i, 0);
-                }
-                
-                // If the student got it wrong, increment the tally in the map
-                if (!exam.isQuestionCorrect(i))
-                {
-                    // if question wrong, increment set
-                    feedback.put(i, Integer.parseInt(feedback.get(i).toString()) + 1);
-                }
-            }
+            feedback.put(String.valueOf(question), String.valueOf(getMisses(question)));
         }
+        
         
         return feedback.entrySet();
     }

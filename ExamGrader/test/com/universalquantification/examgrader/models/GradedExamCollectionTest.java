@@ -1,5 +1,7 @@
 package com.universalquantification.examgrader.models;
 
+import java.util.TreeSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;
@@ -101,15 +103,17 @@ public class GradedExamCollectionTest extends TestCase {
     /**
      * Test of getAnswerFrequency method, of class GradedExamCollection.
      */
-    public void testGetAnswerFrequency() {
-        Map<Answer, Integer> result = gradedExamCollection.getAnswerFrequency(1);
+    public void testGetQuestionMissCounts() {
+        Set<Map.Entry<String, String>> result = gradedExamCollection.getQuestionMissCounts();
         
-        Map<Answer, Integer> expected = new HashMap<>();
-        expected.put(createAnswer(0b0001, 1), 1);
-        expected.put(createAnswer(0b1000, 1), 1);
-        expected.put(createAnswer(0b0000, 1), 1);        
+        Map<String, String> expected = new HashMap<>();
+        expected.put("1", "2");
+        expected.put("2", "2");
+        expected.put("3", "2");
+        expected.put("4", "1");
         
-        assertEquals(expected, result);
+        
+        assertEquals(new TreeSet<>(expected.entrySet()), result);
     }
 
     /**
