@@ -114,6 +114,28 @@ public class Exam
     }
     
     /**
+     * Returns a Base64 encoded PNG of the name box from the input file.
+     * Adapted from http://stackoverflow.com/a/7179113
+     * @return a String that is the Base64 encoded name field image.
+     */
+    public String getNameImageB64()
+    {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        OutputStream b64 = new Base64OutputStream(os);
+        String result = "";
+        try
+        {
+            ImageIO.write(getExamFile().getMetaBufferedImage(), "png", b64);
+            result = os.toString("UTF-8");
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(Exam.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+    
+    /**
      * Returns the answer for the given question number.
      * @param question A number representing which numbered question to get
      * the answer for.

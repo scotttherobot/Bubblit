@@ -72,7 +72,7 @@ public class AggregateReport
         this.scope.put("filename",
          this.exams.getAnswerKey().getExamFile().getFile().getName());
         
-        String date = new SimpleDateFormat("MMM d, yyyy HH:mm:ss").format(new Date());
+        String date = new SimpleDateFormat("MMM d, yyyy hh:mm:ss a").format(new Date());
         this.scope.put("creationDate", date);
     }
     

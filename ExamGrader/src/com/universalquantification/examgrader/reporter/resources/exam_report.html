@@ -42,6 +42,11 @@
                     <img alt="exam image" src="data:image/png;base64,{{getExamImageB64}}">
                 </div>
                 {{/showFullImage}}
+                {{^showFullImage}}
+                <div class="col-md-12 text-center">
+                    <img alt="exam image" src="data:image/png;base64,{{getNameImageB64}}">
+                </div>
+                {{/showFullImage}}
             </div>
         </div>
    </body>

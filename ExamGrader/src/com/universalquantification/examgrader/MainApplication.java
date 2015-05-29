@@ -675,7 +675,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     {
         // Init our preferences to false. We should do this later, but it will
         // cause a crash if it's NOT done. So here.
-        PreferencesManager.getInstance().set("show-full-image", true);
+        PreferencesManager.getInstance().set("show-full-image", false);
         PreferencesManager.getInstance().set("show-incorrect-answers", true);
         PreferencesManager.getInstance().set("show-correct-answers", true);
         

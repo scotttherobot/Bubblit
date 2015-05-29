@@ -21,6 +21,7 @@ public class InputPage
     private File file;
     private static final int kPageHeight = 1000;
     private static final int kPageWidth = (int)((8.5/11.0) * kPageHeight);
+    private static final int kMetaBoxHeight = 300;
 
     /**
      * Constructs an InputPage from a PDFPage. The PDFPage must have the bubble
@@ -57,6 +58,22 @@ public class InputPage
     public BufferedImage getBufferedImage()
     {
         return this.image;
+    }
+    
+    /**
+     * Gets the BufferedImage of the meta box (name field).
+     *
+     * @return image of the name field from the page
+     */
+    public BufferedImage getMetaBufferedImage()
+    {
+        
+        BufferedImage snap = new BufferedImage(kPageWidth, kMetaBoxHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = snap.createGraphics();
+        g2d.drawImage(this.image, null, null);
+        g2d.dispose();
+        
+        return snap;
     }
     
     /**
