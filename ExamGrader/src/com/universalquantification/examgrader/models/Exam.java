@@ -52,6 +52,11 @@ public class Exam
      */
     private Set<Integer> incorrectQuestions;
     
+    /**
+     * The map of correct answers this exam was graded against.
+     */
+    private Map<Integer, Answer> correctAnswerMap;
+    
      /**
      * Creates a new exam containing the given list and attached to a given 
      * student.
@@ -202,7 +207,9 @@ public class Exam
         for (Integer i : getIncorrectQuestions()) {
             StringBuilder fbStr = new StringBuilder();
             
-            fbStr.append(getAnswer(i).toString());
+            // GET THE ANSWER FROM THE CORRECT ANSWER MAP
+            Answer correctAnswer = (Answer)correctAnswerMap.get(i);
+            fbStr.append(correctAnswer.toString());
             
             feedback.put(i, fbStr.toString());
         }
@@ -368,7 +375,7 @@ public class Exam
             // ENDIF
         // ENDWHILE
         
-        Map<Integer, Answer> correctAnswerMap = answerKey.answerMap;
+        this.correctAnswerMap = answerKey.answerMap;
         
         correctQuestions = new HashSet<>();
         incorrectQuestions = new HashSet<>();
