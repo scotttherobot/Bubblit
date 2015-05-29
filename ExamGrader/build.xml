@@ -63,6 +63,8 @@
         <delete file="${diffresults}"/>
         <delete file="${error.log}"/>
         <delete file="${systemtest.dir}/SysTest*.out"/>
+        <delete file="${systemtest.dir}/*_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/*_www/"/>
         
         <echo message="running systest11"/>
         <!-- System Test Case 11 -->
@@ -93,6 +95,9 @@
               output="${diffresults}" append="true">
             <arg line="oracles/SysTest1.oracle SysTest1.out"/>
         </exec>
+        <delete file="${systemtest.dir}/SysTest*.out"/>
+        <delete file="${systemtest.dir}/*_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/*_www/"/>
         
         <echo message="running systest4"/>
         <!-- System Test Case 4 -->
@@ -110,8 +115,11 @@
         </exec>
         <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
               output="${diffresults}" append="true">
-            <arg line="oracles/SysTest4_aggregate.oracle ${systemtest.dir}/ExamSets/SampleExams_aggregate.csv"/>
+            <arg line="oracles/SysTest4_aggregate.oracle ExamSets/SampleExams_aggregate.csv"/>
         </exec>
+        <delete file="${systemtest.dir}/SysTest*.out"/>
+        <delete file="${systemtest.dir}/*_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/*_www/"/>
         
     </target>
     
