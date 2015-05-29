@@ -98,6 +98,21 @@
         <delete file="${systemtest.dir}/SysTest*.out"/>
         <delete file="${systemtest.dir}/*_aggregate.csv"/>
         <delete dir="${systemtest.dir}/*_www/"/>
+
+        <echo message="running systest10"/>
+        <!-- System Test Case 10 -->
+        <!-- The application will generate individual student score reports in HTML formats. -->
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest10.out"
+            error="${error.log}">
+            <arg line="-i ${systemtest.dir}/ExamSets/Sample10.pdf -r ${systemtest.dir}/RosterFiles/SampleRoster.tsv"/>
+        </java>
+        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
+              output="${diffresults}" append="true">
+              <arg line="001.html ${systemtest.dir}/ExamSets/Sample10_www/001.html"/>
+        </exec>
         
 
         

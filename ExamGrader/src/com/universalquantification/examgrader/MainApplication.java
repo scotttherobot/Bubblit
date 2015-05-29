@@ -699,7 +699,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
         //check for -h flag to print out the syntax help information.
         if (cmd.hasOption("h")) {
-   
+            printHelp(COMMAND_LINE_OPTIONS);
             return;
         }
        
