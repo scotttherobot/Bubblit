@@ -42,7 +42,7 @@ public class Controller {
     /**
      * Initializes a controller with a new InputFileList and Grader.
      */
-    public Controller(AppView view) throws IOException
+    public Controller(AppView view)
     {
         this(view, new InputFileList(), new ReportWriter(null));
       

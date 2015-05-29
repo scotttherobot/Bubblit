@@ -8,12 +8,14 @@ import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.models.Student;
 import com.universalquantification.examgrader.ui.AppView;
+import com.universalquantification.examgrader.ui.ConsoleView;
 import com.universalquantification.examgrader.ui.VerifyDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -514,15 +516,32 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     }//GEN-LAST:event_addRosterFileButtonActionPerformed
 
     private void preferencesMenuItemSelected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesMenuItemSelected
-        if (preferencesWindow == null) preferencesWindow = new ExamPreferences(this);
+        if (preferencesWindow == null)
+            preferencesWindow = new ExamPreferences(this);
 
         preferencesWindow.setVisible(true);
     }//GEN-LAST:event_preferencesMenuItemSelected
 
-    /**
+   private static final String NAME_AND_VERSION =
+            "Bubblit V2.0 by Universal Quantification";
+    
+    private static final Options COMMAND_LINE_OPTIONS = new Options()
+    {{
+        // add v option, with no arguments
+        this.addOption("v", "version", false, "display version and team info.");
+        this.addOption("h", "help", false, "display syntax help info.");
+        // add i flag with argument boolean SET to true 
+        this.addOption("i", "input-file", true, "Path to PDF Input Exam File(s)");
+        // add r flag with argument boolean SET to true
+        this.addOption("r", "roster", true, "Path to student roster TSV file (relative or absolute)");
+        // add o flag with argument boolean SET to true
+        this.addOption("o", "outputDirectoryOverride", true, "Path to folder for placing result files");
+    }};  
+    
+     /**
      * @param args the command line arguments
      */
-    public static void main(String args[])
+    public static void runGui()
     {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -567,87 +586,104 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         //</editor-fold>
         //</editor-fold>
         
-        //CLI SETUP
-        // create an Options object
-        Options options = new Options();
-        // add v option, with no arguments
-        options.addOption("v", false, "display version and team info.");
-        options.addOption("h", false, "display syntax help info.");
-        //****check for CLArgs 
-        
-        //if is CL then start consol view (take flags as constructor args)
-        if(false) {
-            
-            CommandLineParser parser = new GnuParser();
-            
-            try {
-                
-                CommandLine cmd = parser.parse(options, args);
-                //check for -v flag to print out the version of the application
-                //   and team information.
-                if(cmd.hasOption("v")){
-                    System.out.println("Bubblit V2.0 by Universal Quantification");
-                }
-                
-                //check for -h flag to print out the syntax help information.
-                if(cmd.hasOption("h")){
-                    System.out.println("java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
-                }
-                
-            } catch (ParseException ex) {
-                Logger.getLogger(MainApplication.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-            //controller.addFile
-            
-            //controller.grade
-            
-            //gets the map of roster entries to pass back into controller.writeReports
-        
-        }
-        // run the GUI application instead
-        else {
-            // Mac Compatbilitiy
+          // Mac Compatbilitiy
 
-            try {
-                    System.setProperty("apple.laf.useScreenMenuBar", "true");
-                    System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Bubblit Version 1 - Universal Quanitification");
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            }
-            catch(ClassNotFoundException e) {
-                    System.out.println("ClassNotFoundException: " + e.getMessage());
-            }
-            catch(InstantiationException e) {
-                    System.out.println("InstantiationException: " + e.getMessage());
-            }
-            catch(IllegalAccessException e) {
-                    System.out.println("IllegalAccessException: " + e.getMessage());
-            }
-            catch(UnsupportedLookAndFeelException e) {
-                    System.out.println("UnsupportedLookAndFeelException: " + e.getMessage());
-            }
-
-            /* Create and display the form */
-            java.awt.EventQueue.invokeLater(new Runnable()
-            {
-                public void run()
-                {
-                    try
-                    {
-                        new MainApplication().setVisible(true);
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                        System.exit(1);
-                    }
-                }
-            });
-        
+        try {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Bubblit Version 1 - Universal Quanitification");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            System.out.println("ClassNotFoundException: " + e.getMessage());
+        } catch (InstantiationException e) {
+            System.out.println("InstantiationException: " + e.getMessage());
+        } catch (IllegalAccessException e) {
+            System.out.println("IllegalAccessException: " + e.getMessage());
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println("UnsupportedLookAndFeelException: " + e.getMessage());
         }
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                try {
+                    new MainApplication().setVisible(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+            }
+        });
+        
+       
+    }
+    
+    private static void runCli(String outputDir, String rosterFile,
+            String[] inputFiles)
+    {
+        ConsoleView view = new ConsoleView(NAME_AND_VERSION, rosterFile,
+                inputFiles, outputDir, new PrintWriter(System.out));
     }
 
+    private static void printHelp(Options options)
+    {
+        System.out.println("java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
+       
+        System.out.println("-v: Display version and team info.");
+        System.out.println("-h: Display syntax help info.");
+        System.out.println("-i: Path to PDF Input Exam File(s).");
+        System.out.println("-r: Path to student roster TSV file (relative or absolute).");
+        System.out.println("-o: Path to folder for placing result files.");
+        System.out.println("Correct flag usage syntax:");
+        System.out.println("java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
+
+    } 
+
+
+    public static void main(String[] args) throws ParseException
+    {
+        CommandLineParser parser = new GnuParser();
+     
+        CommandLine cmd = null;
+        try {
+            cmd = parser.parse(COMMAND_LINE_OPTIONS, args);
+        } catch (ParseException ex) {
+            System.err.println(ex.getMessage());
+            System.exit(1);
+        }
+     
+        //check for -v flag to print out the version of the application
+        //   and team information.
+        if (cmd.hasOption("v")) {
+            System.out.println(NAME_AND_VERSION);
+            return;
+        }
+
+        //check for -h flag to print out the syntax help information.
+        if (cmd.hasOption("h")) {
+   
+            return;
+        }
+       
+        String oArg = cmd.getOptionValue("o");
+        String rArg = cmd.getOptionValue("r");
+        String[] iArgs = cmd.getOptionValues("i");
+         
+        if (args.length != 0)
+        {
+            
+            if (rArg == null || iArgs == null)
+            {
+                System.out.println("Argument missing. See the --help option.");
+                System.exit(1);
+            }
+            runCli(oArg, rArg, iArgs);
+        }
+        else
+        {
+            runGui();
+        }   
+    }
     //private GradeExams task;
     
     // Variables for creation
