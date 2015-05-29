@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.Map;
 
@@ -24,6 +25,8 @@ public class ReportWriter
      * The directory where the reports shall be written
      */
     private File outputDirectory;
+    
+    private static final String RESOURCE_PATH = "resources";
     
     /**
      * Instantiate a writer to a particular file path.
@@ -74,7 +77,10 @@ public class ReportWriter
             String nameWithoutExtension = Files.getNameWithoutExtension(f.getName());
             FileWriter outfile = new FileWriter(new File(outputDirectory, nameWithoutExtension + "_aggregate.csv"));
             // INIT a new FileReader with the template path
-            FileReader aggregateTemplate = new FileReader("src/com/universalquantification/examgrader/reporter/resources/aggregate_report.csv");
+   
+            InputStreamReader aggregateTemplate = new InputStreamReader(this.getClass().getResourceAsStream(
+                RESOURCE_PATH + "/aggregate_report.csv"));
+            //FileReader aggregateTemplate = new FileReader(ior);
             // INIT a new AggregateReport with file + "_aggregate", examCollection
             AggregateReport ar = new AggregateReport(gradedExams, outfile, aggregateTemplate);
             // CALL AggregateReport.writeReport
