@@ -38,13 +38,10 @@ public class ConsoleView implements AppView, Observer
         
         write(nameAndVersion + "\n");
         
-        try
+        boolean success = this.controller.changeRosterFile(new File(rosterPath));
+        if (!success)
         {
-            this.controller.changeRosterFile(new File(rosterPath));
-        }
-        catch (FileNotFoundException e)
-        {
-            this.showError("Roster file was not found.\n");
+            System.exit(1);
         }
         
         write(rosterPath + " validated\n");

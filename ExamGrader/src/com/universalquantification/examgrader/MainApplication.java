@@ -44,7 +44,6 @@ import org.apache.commons.cli.ParseException;
  */
 public class MainApplication extends javax.swing.JFrame implements AppView, Observer
 {
-    private final MainApplication _this = this;
     private Controller controller;
     private List<String> fileLocations;
 
@@ -62,7 +61,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     
     public void checkRoster(final Map<File, GradedExamCollection> results, final List<RosterEntry> roster)
     {   
-        final List<Student> bigList = new ArrayList<Student>();
+        final List<Student> bigList = new ArrayList<>();
         for (GradedExamCollection collection : results.values()) {
             bigList.addAll(collection.getAllStudents());
         }
@@ -86,7 +85,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
                             successMessage = successMessage.concat("\t•  " + new File(fileLocation).getParent() + "\n");
                         }
                         
-                        JOptionPane.showMessageDialog(_this, successMessage, "Success!", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainApplication.this, successMessage, "Success!", JOptionPane.INFORMATION_MESSAGE);
                     }
                 };
 
@@ -439,7 +438,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             public Void doInBackground() {
                 ListModel<Class<?>> model = fileList.getModel();
                 
-                fileLocations = new ArrayList<String>();
+                fileLocations = new ArrayList<>();
                 
                 for(int i = 0; i < model.getSize(); i++) {
                     fileLocations.add(model.getElementAt(i) + "");
@@ -505,12 +504,14 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             File file = fileChooser.getSelectedFile();
             
             if (file.getName().endsWith(".tsv")) {
-                try {
+                boolean succeeded = controller.changeRosterFile(file);
+                
+                if (succeeded)
+                {
                     rosterFileLabel.setText(file.getName());
-                    controller.changeRosterFile(file);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MainApplication.class.getName()).log(Level.SEVERE, null, ex);
+                    gradeButton.setEnabled(succeeded);
                 }
+                
             }
             else {
                  JOptionPane.showMessageDialog(this, "You may only add roster " +

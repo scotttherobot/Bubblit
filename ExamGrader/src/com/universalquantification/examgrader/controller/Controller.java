@@ -89,11 +89,33 @@ public class Controller {
      * 
      * @param rosterFile new roster file to use
      */
-    
-    public void changeRosterFile(File rosterFile) throws FileNotFoundException
+    public boolean changeRosterFile(File rosterFile)
     {
-        this.rosterEntries =
+        try
+        {
+            this.rosterEntries =
                 RosterParser.parseRoster(new Roster(new FileReader(rosterFile)));
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+            appView.showError("The file could not be found.");
+            return false;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            appView.showError("The roster file format was incorrect.");
+            return false;
+        }
+        
+        if (rosterEntries.isEmpty())
+        {
+            appView.showError("No students were found in the roster file. Please"
+                    + "try another file.");
+        }
+        
+        return true;
     }
     
     /**
@@ -113,9 +135,10 @@ public class Controller {
                 return;
             }
             
-            if (rosterEntries == null)
+            if (rosterEntries.isEmpty())
             {
-                appView.showError("You must add a roster file.");
+                appView.showError("You must add a roster file that contains "
+                        + "students.");
                 return;
             }
             // INIT grader
@@ -152,14 +175,6 @@ public class Controller {
         }
         // END
         
-    }
-    
-    /**
-     * Stops any grading tasks that are currently in progress.
-     * @pre There is a grading task in progress.
-     */
-    public void cancel()
-    {
     }
     
     /**
