@@ -3,11 +3,11 @@ package com.universalquantification.examgrader;
 import com.universalquantification.examgrader.controller.Controller;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
-import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.models.Student;
 import com.universalquantification.examgrader.ui.AppView;
+import com.universalquantification.examgrader.ui.AppViewExceptionHandler;
 import com.universalquantification.examgrader.ui.ConsoleView;
 import com.universalquantification.examgrader.ui.VerifyDialog;
 import com.universalquantification.examgrader.utils.PreferencesManager;
@@ -15,7 +15,6 @@ import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -46,7 +46,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 {
     private Controller controller;
     private List<String> fileLocations;
-
+    
     /**
      * Creates new form NewApplication
      */
@@ -98,29 +98,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     
     public void showError(String e)
     {
-          /* Create and display the form */
-        /*
-        java.awt.EventQueue.invokeLater(new Runnable()
+        if (this.isDisplayable())
         {
-            public void run()
-            {
-                try
-                {
-                    new MainApplication().setVisible(true);
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                    System.exit(1);
-                }
-            }
-        });
-        */
-  
-        if(this.isDisplayable()){
             JOptionPane.showMessageDialog(this, e, "Error! ):", JOptionPane.ERROR_MESSAGE);
         }
-        
     }
     
     public void update(Observable o, final Object arg)
@@ -553,6 +534,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
      */
     public static void runGui()
     {
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -617,7 +599,12 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
             public void run() {
                 try {
-                    new MainApplication().setVisible(true);
+                    final MainApplication app = new MainApplication();
+                    app.setVisible(true);
+                    
+                    Thread.setDefaultUncaughtExceptionHandler(
+                            new AppViewExceptionHandler(app));
+                    
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.exit(1);
@@ -687,7 +674,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         String[] iArgs = cmd.getOptionValues("i");
          
         if (args.length != 0)
-        {
+        {   
             
             if (rArg == null || iArgs == null)
             {

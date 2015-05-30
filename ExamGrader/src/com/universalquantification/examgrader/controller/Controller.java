@@ -114,8 +114,6 @@ public class Controller {
             appView.showError("No students were found in the roster file. Please"
                     + "try another file.");
         }
-        
-        return true;
     }
     
     /**

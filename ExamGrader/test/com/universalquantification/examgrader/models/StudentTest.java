@@ -1,6 +1,5 @@
 package com.universalquantification.examgrader.models;
 
-import static junit.framework.Assert.assertEquals;
 import junit.framework.TestCase;
 
 import static com.universalquantification.examgrader.helpers.ExamHelper.createStudent;
