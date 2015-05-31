@@ -7,42 +7,59 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Roster loads in a student roster file and turns it into a list of map 
- * of student information.
+ * Roster loads in a student roster file and turns it into a list of map of
+ * student information.
+ *
  * @version 2.0
  * @author Scott Vanderlind
  */
 public class Roster
 {
-    private final static int rosterHeaderLineCount = 8;
-    
+    private final static int kRosterHeaderLineCount = 8;
+
     /**
      * A list of maps, each of which represents the record for a student.
      */
     private List<HashMap> students = new ArrayList<HashMap>();
-    
+
+    private static final String kTSVHeaderFormat
+        = "No.\tStudent Name\tStudent Username\tEMPLID\t";
+
     /**
      * A Roster takes in a reader.
-     * 
+     *
      * The reader must contain content with the format defined <a href=
      * "http://pastebin.com/raw.php?i=QuutPx6h">here.</a>
+     *
      * @param reader reader to take in
-     * 
+     *
      * @pre the reader must not be closed
      */
-    public Roster (Reader reader)
+    public Roster(Reader reader) throws Exception
     {
-        // TODO: sub in the count variable here.
         // Skip the header
-        Scanner input = new Scanner(reader).skip("(?:.*\\r?\\n|\\r){8}");
-        //String line = "";
-        
+        Scanner input = new Scanner(reader);
+        String line = "";
+        int numLines = 0;
+
+        // skip the correct number of lines
+        while (input.hasNext() && numLines++ <= kRosterHeaderLineCount)
+        {
+            line = input.nextLine();
+            //System.out.println(line);
+        }
+
+        // ensure that we still have input left and that we have a valid header.
+        if (!input.hasNext() || !line.startsWith(kTSVHeaderFormat))
+        {
+            throw new Exception();
+        }
+
         // The first line is our headers
-        String line = input.nextLine();
         String[] columns = explode(line);
-        
+
         boolean doContinue = true;
-        
+
         line = input.nextLine();
         // The line after the roster starts with a tab
         while (!line.startsWith("\t") && doContinue)
@@ -67,17 +84,20 @@ public class Roster
                 //System.out.println("ERROR: COLUMN/VALUE MISMATCH! " + line);
                 //System.out.println(values.length + "!=" + columns.length);
             }
-            
-            if(input.hasNext()){
+
+            // make sure we still have input
+            if (input.hasNext())
+            {
                 line = input.nextLine();
             }
-            else {
+            else
+            {
                 doContinue = false;
             }
-            
+
         }
     }
-    
+
     /**
      * Return a record by a known column value
      *
@@ -101,7 +121,7 @@ public class Roster
         }
         return null;
     }
-    
+
     /**
      * Takes a string of delimiter separated values and returns a string array.
      *
@@ -118,9 +138,10 @@ public class Roster
         // Split on the delimiter and return
         return row.split("\t");
     }
-    
+
     /**
      * Get the number of students on this roster.
+     *
      * @return the number of students.
      */
     public int getNumStudents()
