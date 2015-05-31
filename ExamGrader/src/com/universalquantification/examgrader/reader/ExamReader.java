@@ -79,6 +79,7 @@ public class ExamReader
         BufferedImage fileImage = file.getBufferedImage();
         fileImage = getBinaryImage(fileImage);
         invertBW(fileImage);
+        boolean isRotated = false;
 
         Bounds bounds = getFormBounds(fileImage);
 
@@ -90,17 +91,17 @@ public class ExamReader
 
         double slope = (1.0 * bounds.maxY - bounds.minY) / (1.0 * bounds.maxX
             - bounds.minX);
-        double slopeDiff = slope - BubblitFormV2Details.kDonutSlope;
 
         // rotate the exam if rotation was detected
-        if (Math.abs(slopeDiff) >= kMaximumNonRotatedAngle)
+        if (Math.abs(slope - BubblitFormV2Details.kDonutSlope)
+            >= kMaximumNonRotatedAngle)
         {
+            isRotated = true;
             double angleDifference = Math.atan(
                 (slope - BubblitFormV2Details.kDonutSlope) / (1 + slope
                 * BubblitFormV2Details.kDonutSlope)
             );
-            fileImage = rotateImage(fileImage, -angleDifference);
-            fileImage = getBinaryImage(fileImage);
+            fileImage = getBinaryImage(rotateImage(fileImage, -angleDifference));
             invertBW(fileImage);
 
             bounds = getFormBounds(fileImage);
@@ -113,12 +114,11 @@ public class ExamReader
 
         BubblitFormV2Details formDetails = new BubblitFormV2Details(bounds);
         CalibrationBubbleRegion cbInfo = getCalibrationBubbleStats(fileImage,
-                formDetails.getBoundsForCalibrationBubbles());
+            formDetails.getBoundsForCalibrationBubbles());
 
         if (shouldFlip(formDetails, fileImage))
         {
-            fileImage = rotate180(fileImage);
-            fileImage = getBinaryImage(fileImage);
+            fileImage = getBinaryImage(rotate180(fileImage));
             invertBW(fileImage);
             bounds = getFormBounds(fileImage);
             formDetails = new BubblitFormV2Details(bounds);
@@ -134,12 +134,9 @@ public class ExamReader
 
         double fillRatio = cbInfo.avgFillRatio * kFillRatioMultiplier;
 
-        // get all questions for this exam
-        answers = getExamAnswers(fileImage, formDetails, fillRatio);
-
-        Student student = getStudentFromExam(fileImage, formDetails);
-
-        return new Exam(answers, student, file);
+        return new Exam(
+            getExamAnswers(fileImage, formDetails, fillRatio),
+            getStudentFromExam(fileImage, formDetails, isRotated), file);
     }
 
     private CalibrationBubbleRegion getCalibrationBubbleStats(
@@ -182,7 +179,7 @@ public class ExamReader
      * @return a {@link StochasticString} representing possible names
      */
     private StochasticString extractNameFromField(BufferedImage img,
-        int numLetters)
+        int numLetters, boolean isRotated)
     {
         StochasticString str = new StochasticString();
 
@@ -192,7 +189,7 @@ public class ExamReader
         for (int i = 0; i < nameCharacters.length; i++)
         {
             //ShowImages.showDialog(nameCharacters[i]);
-            removeBorders(nameCharacters[i]);
+            removeBorders(nameCharacters[i], isRotated);
             //ShowImages.showDialog(nameCharacters[i]);
             if (getBlackRatio(nameCharacters[i]) > 0.02)
             {
@@ -497,7 +494,7 @@ public class ExamReader
      *
      * @param img the image to remove borders from
      */
-    private void removeBorders(BufferedImage img)
+    private void removeBorders(BufferedImage img, boolean isRotated)
     {
         int black = -16777216;
         int white = -1;
@@ -505,8 +502,17 @@ public class ExamReader
         int width = img.getWidth();
         int numBlacks;
         int[] whiteRow = new int[width + height];
-        int colsToClear = (int) (0.15 * width);
-        int rowsToClear = (int) (0.15 * height);
+        double ratioToClear;
+        if (isRotated)
+        {
+            ratioToClear = 0.25;
+        }
+        else
+        {
+            ratioToClear = 0.15;
+        }
+        int colsToClear = (int) (ratioToClear * width);
+        int rowsToClear = (int) (ratioToClear * height);
 
         for (int i = 0; i < width + height; i++)
         {
@@ -573,7 +579,12 @@ public class ExamReader
             return false;
         }
 
-        return !(bounds.minX >= bounds.maxX || bounds.minY >= bounds.maxY);
+        // If the bounds are invalid, this page is not an exam.
+        if (bounds.minX >= bounds.maxX || bounds.minY >= bounds.maxY)
+        {
+            return false;
+        }
+        return true;
     }
 
     private BufferedImage rotateImage(BufferedImage image, double angle)
@@ -660,7 +671,7 @@ public class ExamReader
     }
 
     private Student getStudentFromExam(BufferedImage fileImage,
-        BubblitFormV2Details formDetails)
+        BubblitFormV2Details formDetails, boolean isRotated)
     {
         BufferedImage firstName = getSubImage(fileImage,
             formDetails.getBoundsForFirstName());
@@ -670,9 +681,9 @@ public class ExamReader
 
         return new Student(
             extractNameFromField(firstName,
-                BubblitFormV2Details.kNumFirstNameLetters),
+                BubblitFormV2Details.kNumFirstNameLetters, isRotated),
             extractNameFromField(lastName,
-                BubblitFormV2Details.kNumLastNameLetters),
+                BubblitFormV2Details.kNumLastNameLetters, isRotated),
             firstName, lastName
         );
     }
