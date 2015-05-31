@@ -166,7 +166,7 @@ public class GradedExamCollection
     /**
      * Returns a formatted string from the passed double.
      *
-     * @returns A string formatted to two decimal places
+     * @return A string formatted to two decimal places
      */
     private String formatDecimal(double dec)
     {

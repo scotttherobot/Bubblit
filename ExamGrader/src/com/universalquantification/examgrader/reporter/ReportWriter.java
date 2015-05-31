@@ -32,7 +32,7 @@ public class ReportWriter
      * Instantiate a writer to a particular file path.
      * If outputDirectoryOverride is not set, the default output path will
      * be used.
-     * @param outputDirectoryOverride - the base directory to write reports to
+     * @param outputDirectory the directory to write to
      */
     public ReportWriter(File outputDirectory)
     {

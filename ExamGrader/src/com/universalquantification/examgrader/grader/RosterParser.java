@@ -14,8 +14,7 @@ public class RosterParser
 {
 
     /**
-     * Parses a list of {@code RosterEntry}s, one per line. Each line should be
-     * of the form expected by {@link #parseRosterEntry(String)}.
+     * Parses a list of RosterEntrys, one per line.
      *
      * @param roster the roster to read from
      * @return a list of newly constructed {@code RosterEntry}s

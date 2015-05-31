@@ -332,7 +332,7 @@ public class Exam
     /**
      * Returns the max possible score.
      * IE how many questions were bubbled on the key, the grading basis, etc.
-     * @return 
+     * @return the maximum score
      */
     public int getMaxScore()
     {
@@ -341,7 +341,7 @@ public class Exam
     
     /**
      * Returns a formatted string of the score percentage.
-     * @returns A string formatted to two decimal places representing the percentage score.
+     * @return A string formatted to two decimal places representing the percentage score.
      */
     public String getFormattedPercentScore()
     {

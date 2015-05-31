@@ -239,7 +239,7 @@ public class Grader extends Observable
     /**
      * Get the total number of files that have been graded so far.
      *
-     * @return
+     * @return the number of files graded
      */
     public int getFilesGraded()
     {

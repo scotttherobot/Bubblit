@@ -106,7 +106,7 @@ public class ExamReport
     
     /**
      * Renders the HTML and returns it as a string.
-     * @return 
+     * @return the rendered html
      */
     public String renderHTML()
     {

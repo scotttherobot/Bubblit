@@ -42,6 +42,7 @@ public class Controller
 
     /**
      * Initializes a controller with a new InputFileList and Grader.
+     *
      * @param view the AppView to use
      */
     public Controller(AppView view)
@@ -51,11 +52,12 @@ public class Controller
     }
 
     /**
-     * Initializes a controller with an InputFileList
+     * Initializes the controller with a given view, file list, and report
+     * writer.
      *
-     * @param inputFileList InputFileList: an inputFileList to use
-     * @param grader a grader to use
-     * @pre the grader must be tied to the InputFileList
+     * @param view the AppView to use, either console or GUI.
+     * @param inputFileList the list of input files
+     * @param reportWriter the report writer
      */
     Controller(AppView view, InputFileList inputFileList,
         ReportWriter reportWriter)
@@ -173,7 +175,8 @@ public class Controller
         catch (Exception e)
         {
             e.printStackTrace();
-            appView.showError("An error occured with message: " + e.getMessage());
+            appView.
+                showError("An error occured with message: " + e.getMessage());
             // CALL setError view "Grading failed. Please check that the
             // format is correct"
         }
