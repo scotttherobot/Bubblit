@@ -233,10 +233,10 @@ public class BubblitFormV2Details
         // SET bounds to new Bounds WITH minx, max, miny, maxy
         // RETURN bounds
         int minx = (int) (this.bounds.minX + (this.width
-            * this.questionOffsets[qNum].x));
+            * this.questionOffsets[qNum].pX));
         int maxx = (int) (minx + this.questionWidth);
         int miny = (int) (this.bounds.minY + (this.height
-            * this.questionOffsets[qNum].y));
+            * this.questionOffsets[qNum].pY));
         int maxy = (int) (miny + this.questionHeight);
 
         return new Bounds(
@@ -258,10 +258,10 @@ public class BubblitFormV2Details
         // SET bounds to new Bounds WITH minx, maxx, miny, maxy
         // RETURN bounds
         int minx = (int) (this.bounds.minX + (this.width
-            * this.firstName.x));
+            * this.firstName.pX));
         int maxx = (int) (minx + this.firstNameWidth);
         int miny = (int) (this.bounds.minY + (this.height
-            * this.firstName.y));
+            * this.firstName.pY));
         int maxy = (int) (miny + this.firstNameHeight);
 
         return new Bounds(
@@ -283,10 +283,10 @@ public class BubblitFormV2Details
         // SET bounds to new Bounds WITH minx, maxx, miny, maxy
         // RETURN bounds
         int minx = (int) (this.bounds.minX + (this.width
-            * this.lastName.x));
+            * this.lastName.pX));
         int maxx = (int) (minx + this.lastNameWidth);
         int miny = (int) (this.bounds.minY + (this.height
-            * this.lastName.y));
+            * this.lastName.pY));
         int maxy = (int) (miny + this.lastNameHeight);
 
         return new Bounds(
@@ -310,10 +310,10 @@ public class BubblitFormV2Details
         // SET bounds to new Bounds WITH minx, maxx, miny, maxy
         // RETURN bounds
         int minx = (int) (this.bounds.minX + (this.width
-            * this.calibrationBubbles.x));
+            * this.calibrationBubbles.pX));
         int maxx = (int) (minx + this.questionWidth);
         int miny = (int) (this.bounds.minY + (this.height
-            * this.calibrationBubbles.y));
+            * this.calibrationBubbles.pY));
         int maxy = (int) (miny + this.questionHeight);
 
         return new Bounds(
