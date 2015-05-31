@@ -10,18 +10,13 @@ import com.universalquantification.examgrader.reader.InvalidExamException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -158,6 +153,8 @@ public class Grader extends Observable
         // MAP file to graded in fileExamsMap
         // ENDFOR
         // RETURN fileExamMap
+        setChanged();
+        notifyObservers();
         ExamRosterMatcher matcher = new ExamRosterMatcher();
         List<InputFile> files = this.inputFiles.getInputFiles();
         Map<File, GradedExamCollection> fileExamsMap
