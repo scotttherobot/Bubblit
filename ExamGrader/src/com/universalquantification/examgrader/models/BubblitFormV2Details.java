@@ -60,8 +60,22 @@ public class BubblitFormV2Details
     /**
      * The slope between the two donuts. Used for rotation detection
      */
-    
     public static final double kDonutSlope = (3202.0 - 98.0) / (2452.0 - 98.0);
+    
+    /**
+     * The choices for answers.
+     */
+    public static final char[] kAnswerChoices = {'A', 'B', 'C', 'D', 'E'};
+    
+    /**
+     * The number of questions.
+     */
+    public static final int kNumQuestions = 100;
+    
+    /**
+     * The number of choices per answer.
+     */
+    public static final int kNumChoicesPerAnswer = 5;
     
     // These are all relative to where the donuts appear
     private final ImagePointOffset[] questionOffsets =
