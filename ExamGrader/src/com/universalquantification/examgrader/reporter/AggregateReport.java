@@ -76,7 +76,7 @@ public class AggregateReport
         this.scope.put("creationDate", date);
     }
     
-    /**
+    /** 
      * Writes the report to the file.
      */
     public void writeReport()

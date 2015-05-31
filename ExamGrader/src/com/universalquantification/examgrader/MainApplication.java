@@ -15,12 +15,12 @@ import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.FileNameMap;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +38,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -587,10 +589,16 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
             this.addOption("v", "version", false,
                 "display version and team info.");
             this.addOption("h", "help", false, "display syntax help info.");
-            // add i flag with argument boolean SET to true 
-            this.addOption("i", "input-file", true,
-                "Path to PDF Input Exam File(s)");
             // add r flag with argument boolean SET to true
+            Option inputFile = Option.builder("i")
+                    .longOpt("input-file")
+                    .hasArg(true)
+                    .desc("Path to student roster TSV file (relative or absolute)")
+                    .required(false)
+                    .hasArgs()
+                    .build();
+            // add i flag with argument boolean SET to true 
+            this.addOption(inputFile);
             this.addOption("r", "roster", true,
                 "Path to student roster TSV file (relative or absolute)");
             // add o flag with argument boolean SET to true
@@ -771,6 +779,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
                 System.out.println("Argument missing. See the --help option.");
                 System.exit(1);
             }
+            
             runCli(oArg, rArg, iArgs);
         }
         else
