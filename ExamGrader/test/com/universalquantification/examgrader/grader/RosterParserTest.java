@@ -5,7 +5,7 @@
  */
 package com.universalquantification.examgrader.grader;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 import junit.framework.TestCase;
@@ -16,18 +16,18 @@ import junit.framework.TestCase;
  */
 public class RosterParserTest extends TestCase
 {
-
+    
     public RosterParserTest(String testName)
     {
         super(testName);
     }
-
+    
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
     }
-
+    
     @Override
     protected void tearDown() throws Exception
     {
@@ -35,49 +35,20 @@ public class RosterParserTest extends TestCase
     }
 
     /**
-     * Test of parseRosterEntry method, of class RosterParser.
-     */
-    public void testParseRosterEntry()
-    {
-        /*
-         System.out.println("parseRosterEntry");
-         String line = "";
-         RosterEntry expResult = null;
-         RosterEntry result = RosterParser.parseRosterEntry(line);
-         assertEquals(expResult, result);
-         // TODO review the generated test code and remove the default call to fail.
-         fail("The test case is a prototype.");
-         */
-    }
-
-    /**
      * Test of parseRoster method, of class RosterParser.
      */
-    public void testParseRoster() throws FileNotFoundException
+    public void testParseRoster() throws Exception
     {
-        Roster studentReader = null;
-        FileReader rosterFile = null;
-
-        //try
-        //{
-            rosterFile = new FileReader("students.tsv");
-            studentReader = new Roster(rosterFile);
-        //}
-        //catch (Exception ex)
-        //{
-            //System.out.println("Error loading CSV file" + ex.getMessage());
-        //}
-        
-        List<RosterEntry> result = RosterParser.parseRoster(studentReader);
-        for(RosterEntry e : result)
-        {
-            System.out.println(e.getSequenceNumber() + " " + e.getFirst() + " " + e.getLast());
-        }
-        
-        
-        //assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+        File f = new File("test-input-files/cpe307-01-roster.tsv");
+        FileReader r;
+        r = new FileReader(f);
+        Roster roster = new Roster(r);
+        List<RosterEntry> result = RosterParser.parseRoster(roster);
+        RosterEntry luis = result.get(6);
+        assertEquals(luis.getFirst(), "Luis");
+        assertEquals(luis.getLast(), "Cuellar");
+        assertEquals(luis.getSequenceNumber(), 7);
+        assertEquals(luis.getId(), "'348083977");
     }
-
+    
 }
