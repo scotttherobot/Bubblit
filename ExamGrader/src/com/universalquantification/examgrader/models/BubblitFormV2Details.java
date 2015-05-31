@@ -19,42 +19,50 @@ public class BubblitFormV2Details
 
     private final double questionHeight;
     private final double questionWidth;
-    
-    private final ImagePointOffset calibrationBubbles = new ImagePointOffset(0.425658453696, 0.245201030928);
-    
-    private final ImagePointOffset firstName = new ImagePointOffset(0.535559898046, 0.0776417525773);
+
+    private final ImagePointOffset calibrationBubbles = new ImagePointOffset(
+        0.425658453696, 0.245201030928);
+
+    private final ImagePointOffset firstName = new ImagePointOffset(
+        0.535559898046, 0.0776417525773);
     private final double firstNameHeightRatio = 0.0257731958763;
     private final double firstNameWidthRatio = 0.363636363636;
     private final double firstNameHeight;
     private final double firstNameWidth;
-    
-    private final ImagePointOffset lastName = new ImagePointOffset(0.535559898046, 0.11243556701);
+
+    private final ImagePointOffset lastName = new ImagePointOffset(
+        0.535559898046, 0.11243556701);
     private double lastNameHeightRatio = 0.0257731958763;
     private double lastNameWidthRatio = 0.363636363636;
     private final double lastNameHeight;
     private final double lastNameWidth;
-    
+
     /**
      * The number of letters in the first name field.
      */
     public static final int kNumFirstNameLetters = 12;
-    
+
     /**
      * The number of letters in the last name field.
      */
     public static final int kNumLastNameLetters = 12;
-    
+
     /**
      * The vertical ratio of the corner in which a donut exists.
      */
     public static final float kCornerVerticalRatio = 0.11f;
-    
+
     /**
      * The horizontal ratio of the corner in which a donut exists.
      */
     public static final float kCornerHorizontalRatio = 0.25f;
+
+    /**
+     * The slope between the two donuts. Used for rotation detection
+     */
     
-    public static final double kDonutSlope = (3202.0 - 98.0)/(2452.0 - 98.0);    
+    public static final double kDonutSlope = (3202.0 - 98.0) / (2452.0 - 98.0);
+    
     // These are all relative to where the donuts appear
     private final ImagePointOffset[] questionOffsets =
     {
@@ -202,21 +210,23 @@ public class BubblitFormV2Details
         // SET rowNum to qNum - 75
         // ENDIF
 
-        // SET minx to this.bounds.minx + magic number for the x start of question block + colNum * magic number for question block width
+        // SET minx to this.bounds.minx + magic number for the x start of 
+        // question block + colNum * magic number for question block width
         // SET maxx to minx + magic number for question block width
-        // SET miny to this.bounds.miny + magic number for the y start of question block + rowNum * magic number for question block height
+        // SET miny to this.bounds.miny + magic number for the y start of 
+        // question block + rowNum * magic number for question block height
         // SET maxy to miny + magic number for question block height
         // SET bounds to new Bounds WITH minx, max, miny, maxy
         // RETURN bounds
         int minx = (int) (this.bounds.minX + (this.width
-                * this.questionOffsets[qNum].x));
+            * this.questionOffsets[qNum].x));
         int maxx = (int) (minx + this.questionWidth);
         int miny = (int) (this.bounds.minY + (this.height
-                * this.questionOffsets[qNum].y));
+            * this.questionOffsets[qNum].y));
         int maxy = (int) (miny + this.questionHeight);
 
         return new Bounds(
-                minx, maxx, miny, maxy
+            minx, maxx, miny, maxy
         );
     }
 
@@ -234,14 +244,14 @@ public class BubblitFormV2Details
         // SET bounds to new Bounds WITH minx, maxx, miny, maxy
         // RETURN bounds
         int minx = (int) (this.bounds.minX + (this.width
-                * this.firstName.x));
+            * this.firstName.x));
         int maxx = (int) (minx + this.firstNameWidth);
         int miny = (int) (this.bounds.minY + (this.height
-                * this.firstName.y));
+            * this.firstName.y));
         int maxy = (int) (miny + this.firstNameHeight);
 
         return new Bounds(
-                minx, maxx, miny, maxy
+            minx, maxx, miny, maxy
         );
     }
 
@@ -259,14 +269,14 @@ public class BubblitFormV2Details
         // SET bounds to new Bounds WITH minx, maxx, miny, maxy
         // RETURN bounds
         int minx = (int) (this.bounds.minX + (this.width
-                * this.lastName.x));
+            * this.lastName.x));
         int maxx = (int) (minx + this.lastNameWidth);
         int miny = (int) (this.bounds.minY + (this.height
-                * this.lastName.y));
+            * this.lastName.y));
         int maxy = (int) (miny + this.lastNameHeight);
 
         return new Bounds(
-                minx, maxx, miny, maxy
+            minx, maxx, miny, maxy
         );
     }
 
@@ -277,26 +287,29 @@ public class BubblitFormV2Details
      */
     public Bounds getBoundsForCalibrationBubbles()
     {
-        // SET minx to this.bounds.minx + magic number for xstart of calibration bubbles block
+        // SET minx to this.bounds.minx + magic number for xstart of calibration 
+        // bubbles block
         // SET maxx to minx + magic number for width of calibration bubbles block
-        // SET miny to this.bounds.miny + magic number for ystart of calibration bubbles  block
+        // SET miny to this.bounds.miny + magic number for ystart of calibration 
+        // bubbles  block
         // SET maxy to miny + magic number for height of calibration bubbles block
         // SET bounds to new Bounds WITH minx, maxx, miny, maxy
         // RETURN bounds
         int minx = (int) (this.bounds.minX + (this.width
-                * this.calibrationBubbles.x));
+            * this.calibrationBubbles.x));
         int maxx = (int) (minx + this.questionWidth);
         int miny = (int) (this.bounds.minY + (this.height
-                * this.calibrationBubbles.y));
+            * this.calibrationBubbles.y));
         int maxy = (int) (miny + this.questionHeight);
 
         return new Bounds(
-                minx, maxx, miny, maxy
+            minx, maxx, miny, maxy
         );
     }
 
     /**
      * Get the width of a donut relative to the width of the page.
+     *
      * @param width the width of the document
      * @return the width of the donut
      */
