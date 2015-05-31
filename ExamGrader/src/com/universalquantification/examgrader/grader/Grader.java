@@ -73,6 +73,9 @@ public class Grader extends Observable
      */
     private final List<RosterEntry> rosterEntries;
 
+    /**
+     * Whether the task was cancelled
+     */
     private boolean doGrade;
 
     /**
@@ -87,7 +90,7 @@ public class Grader extends Observable
      * format
      */
     public Grader(InputFileList inputFileList, ExamReader examReader,
-            List<RosterEntry> rosterEntries)
+        List<RosterEntry> rosterEntries)
     {
         // SET this.inputFiles to inputFileList
         // SET this.examReader to examReader
@@ -135,8 +138,8 @@ public class Grader extends Observable
      * @pre has been constructed.
      */
     public Map<File, GradedExamCollection> grade()
-            throws GradingException, FileNotFoundException, IOException,
-            InvalidExamException
+        throws GradingException, FileNotFoundException, IOException,
+        InvalidExamException
     {
         // SET fileExamsMap to new Map<File, GradedExamCollection>
 
@@ -158,7 +161,7 @@ public class Grader extends Observable
         ExamRosterMatcher matcher = new ExamRosterMatcher();
         List<InputFile> files = this.inputFiles.getInputFiles();
         Map<File, GradedExamCollection> fileExamsMap
-                = new LinkedHashMap<File, GradedExamCollection>();
+            = new LinkedHashMap<File, GradedExamCollection>();
 
         Iterator<InputFile> filesIterator = files.iterator();
         // iterate over the files to grade them
