@@ -1,7 +1,7 @@
 package com.universalquantification.examgrader.reader;
 
 /**
- * Describes bounds for a letter in an image.
+ * Describes bounds for a subimage in an image.
  *
  */
 public class Bounds
@@ -55,45 +55,5 @@ public class Bounds
             + "[minY " + this.minY + "]"
             + "[maxY " + this.maxY + "]";
 
-    }
-
-    /**
-     * Get minimum x coordinate
-     *
-     * @return min x coordinate
-     */
-    public int getMinX()
-    {
-        return minX;
-    }
-
-    /**
-     * get maximum x coordinate
-     *
-     * @return max x coordinate
-     */
-    public int getMaxX()
-    {
-        return maxX;
-    }
-
-    /**
-     * get minimum y coordinate
-     *
-     * @return min y coordinate
-     */
-    public int getMinY()
-    {
-        return minY;
-    }
-
-    /**
-     * get maximum y coordinate
-     *
-     * @return max y coordinate
-     */
-    public int getMaxY()
-    {
-        return maxY;
     }
 }
