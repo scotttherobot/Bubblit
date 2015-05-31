@@ -1,7 +1,7 @@
 package com.universalquantification.examgrader.reader;
 
 /**
- * Describes bounds for a subimage in an image.
+ * Describes bounds for a sub image in an image.
  *
  */
 public class Bounds
