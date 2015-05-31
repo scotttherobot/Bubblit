@@ -32,8 +32,8 @@ public class BubblitFormV2Details
 
     private final ImagePointOffset lastName = new ImagePointOffset(
         0.535559898046, 0.11243556701);
-    private double lastNameHeightRatio = 0.0257731958763;
-    private double lastNameWidthRatio = 0.363636363636;
+    private final double lastNameHeightRatio = 0.0257731958763;
+    private final double lastNameWidthRatio = 0.363636363636;
     private final double lastNameHeight;
     private final double lastNameWidth;
 
