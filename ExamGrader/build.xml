@@ -11,6 +11,7 @@
     <description>Builds, tests, and runs the project ExamGrader.</description>    
     <import file="nbproject/build-impl.xml"/>
     
+    <property name="jarName" value="dist/Bubblit2.0.jar"/>
     
   <fileset dir="${basedir}/lib-build" id="runtime.files">
         <include name="*.jar"/>
@@ -54,7 +55,7 @@
                 SYSTEM TEST SECTION
                 =================
      -->
-    <target depends="init,compile,jar" description="Run console-based system tests." name="systest">
+    <target depends="init,compile,jar,deploy" description="Run console-based system tests." name="systest">
         <property name="systemtest.dir" value="systemtest"/>
         <property name="diffresults" value="${systemtest.dir}/diffresults.txt"/>
         <property name="error.log" value="${systemtest.dir}/errorlog.txt"/>
@@ -70,8 +71,8 @@
         <echo message="running systest11"/>
         <!-- System Test Case 11 -->
         <!-- Tests that the -v flag works -->
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest11.out"
             error="${error.log}">
@@ -85,8 +86,8 @@
         <echo message="running systest1"/>
         <!-- System Test Case 1 -->
         <!-- The application can accept multiple PDF documents for scoring. -->
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest1.out"
             error="${error.log}">
@@ -103,8 +104,8 @@
         <echo message="running systest10"/>
         <!-- System Test Case 10 -->
         <!-- The application will generate individual student score reports in HTML formats. -->
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest10.out"
             error="${error.log}">
@@ -121,16 +122,16 @@
         <echo message="running systest2"/>
         <!-- System Test Case 2 -->
         <!-- The application can grade skewed exams. -->
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest2Part1.out"
             error="${error.log}">
 
             <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SantiAndLuisRotated.pdf"/>
         </java>
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest2Part2.out"
             error="${error.log}">
@@ -155,16 +156,16 @@
             <arg line="ExamSets/SantiAndLuisNormal_aggregate.csv ExamSets/SantiAndLuisRotated_aggregate.csv"/>
         </exec>
         
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest2Part3.out"
             error="${error.log}">
 
             <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/YvonneAndCaroleRotated.pdf"/>
         </java>
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest2Part4.out"
             error="${error.log}">
@@ -189,16 +190,16 @@
             <arg line="ExamSets/YvonneAndCaroleNormal_aggregate.csv ExamSets/YvonneAndCaroleRotated_aggregate.csv"/>
         </exec>
 
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest2Part5.out"
             error="${error.log}">
 
             <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/FeliciaAndLuisRotatedUpsideDown.pdf"/>
         </java>
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest2Part6.out"
             error="${error.log}">
@@ -242,8 +243,8 @@
         <echo message="running systest4"/>
         <!-- System Test Case 4 -->
         <!-- The application will generate an aggregate CSV report containing scores and statistics from a single PDF input. -->
-        <java classname="${main.class}"
-            classpath="${dist.jar}"
+        <java jar="${jarName}"
+            
             fork="true"
             output="${systemtest.dir}/SysTest4.out"
             error="${error.log}">
