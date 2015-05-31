@@ -1,7 +1,6 @@
 package com.universalquantification.examgrader.grader;
 
 import com.universalquantification.examgrader.models.Exam;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +17,6 @@ public class ExamRosterMatcher
      *
      * @param forms the list of exams
      * @param entries the candidate students who could be matched
-     * @return a list of results
      */
     public static void match(List<Exam> forms,
             List<RosterEntry> entries)
