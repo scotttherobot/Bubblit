@@ -48,8 +48,6 @@ public class InputFile
      *
      * @param file path to use
      * @throws IOException if the file is invalid
-     * @throws FileFormatException if the file cannot be converted into a list
-     * of InputPages.
      */
     public InputFile(File file) throws IOException
     {
@@ -68,12 +66,13 @@ public class InputFile
     private void addPages()
     {
         // FOR each page in pdf
-        pages = new ArrayList<>();
-        for (int i = 1; i < pdf.getNumPages() + 1; i++)
+        pages = new ArrayList<InputPage>();
+        
+        // go through every page in the PDF and create an InputPage from it.
+        for (int onPage = 1; onPage < pdf.getNumPages() + 1; onPage++)
         {
-
             // INIT inputPage as InputPage with page    
-            InputPage inputPage = new InputPage(file, pdf.getPage(i));
+            InputPage inputPage = new InputPage(file, pdf.getPage(onPage));
             // ADD inputPage to pages
             pages.add(inputPage);
         }
@@ -99,7 +98,11 @@ public class InputFile
      */
     public InputPage getAnswerKeyPage()
     {
-        if(!pagesGenerated) addPages();
+        // get pages if the haven't been added yet
+        if(!pagesGenerated)
+        {
+            addPages();
+        }
         
         // RETURN pages[0]
         return pages.get(0);
@@ -112,7 +115,12 @@ public class InputFile
      */
     public List<InputPage> getStudentExamPages()
     {
-        if(!pagesGenerated) addPages();
+        // get pages if the haven't been added yet
+        if(!pagesGenerated)
+        {
+            addPages();
+        }
+        
         // RETURN pages[1:]
         return pages.subList(1, pages.size());
     }
@@ -125,7 +133,12 @@ public class InputFile
      */
     public int getNumPages()
     {
-        if(!pagesGenerated) addPages();
+        // get pages if the haven't been added yet
+        if(!pagesGenerated)
+        {
+            addPages();
+        }
+        
         // RETURN length of pages
         return pages.size();
     }
@@ -145,24 +158,26 @@ public class InputFile
     /**
      * Checks that another object is equal to this InputFile
      *
+     * @param obj other object
      * @return true if the objects are equal, false if not
      */
     @Override
-    public boolean equals(Object o)
+    public boolean equals(Object obj)
     {
         // IF other is null
         // RETURN false
         // ELSE IF other is not a InputFile
         // RETURN FALSE
-
-        if (o == null || !(o instanceof InputFile))
+        
+        // if the object is null or isn't an InputFile, it is not equal.
+        if (obj == null || !(obj instanceof InputFile))
         {
             return false;
         }
         // ELSE
         // RETURN true iff this object's file is equal to that object's file
         // END IF
-        InputFile other = (InputFile) o;
+        InputFile other = (InputFile) obj;
 
         return other.file == this.file;
     }
