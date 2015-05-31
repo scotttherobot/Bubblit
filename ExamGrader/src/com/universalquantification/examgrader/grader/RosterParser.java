@@ -10,9 +10,13 @@ import java.util.regex.Pattern;
  * Parses a roster using a {@link Roster} to read information about records
  * @author luis
  */
-public class RosterParser
+public final class RosterParser
 {
 
+    private RosterParser()
+    {
+    }
+    
     /**
      * Parses a list of RosterEntrys, one per line.
      *

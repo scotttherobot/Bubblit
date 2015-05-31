@@ -8,6 +8,7 @@ package com.universalquantification.examgrader.grader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.util.HashMap;
 import junit.framework.TestCase;
 
@@ -58,6 +59,32 @@ public class RosterTest extends TestCase
         e.put("No.", "7");
         assertEquals(e, m);
 
+    }
+    
+    public void testGetRecordByNullColumnValue() throws FileNotFoundException, Exception
+    {
+        File f = new File("test-input-files/cpe307-01-roster.tsv");
+        FileReader r = new FileReader(f);
+        Roster rr = new Roster(r);
+        HashMap<String, String> m = rr.getRecordByColumnValue("No.", "notfound");
+ 
+        assertNull(m);
+
+    }
+    
+    public void testExceptionWithBadRosterFile()
+    {
+        StringReader reader = new StringReader("I am not a roster file.");
+        boolean exceptionCaught = false;
+        try
+        {
+            new Roster(reader);
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = true;
+        }
+        assertTrue(exceptionCaught);
     }
 
     /**

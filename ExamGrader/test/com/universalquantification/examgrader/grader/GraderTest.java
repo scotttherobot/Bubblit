@@ -4,21 +4,13 @@
  * and open the template in the editor.
  */
 package com.universalquantification.examgrader.grader;
-
-import boofcv.gui.image.ShowImages;
-import com.sun.pdfview.PDFFile;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
-import com.universalquantification.examgrader.models.InputPage;
 import com.universalquantification.examgrader.reader.ExamReader;
 import com.universalquantification.examgrader.reader.NameRecognitionGateway;
-import com.universalquantification.examgrader.reader.StudentNameMapper;
 import java.io.File;
 import java.io.FileReader;
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;
@@ -117,6 +109,9 @@ public class GraderTest extends TestCase
         //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
+        
+        assertEquals(instance.getPagesGraded(), list.getTotalPages());
+        assertEquals(instance.getTotalPagesToGrade(), list.getTotalPages());
     }
 
     /**

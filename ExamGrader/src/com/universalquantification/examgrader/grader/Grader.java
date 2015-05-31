@@ -28,12 +28,6 @@ import java.util.concurrent.ExecutorService;
  */
 public class Grader extends Observable
 {
-
-    /**
-     * An executor service for multithreading.
-     */
-    private ExecutorService executorService;
-
     /**
      * List of input files to be read.
      */
@@ -98,28 +92,6 @@ public class Grader extends Observable
         this.rosterEntries = rosterEntries;
         doGrade = true;
         this.filesToGrade = this.inputFiles.getInputFiles().size();
-    }
-
-    /**
-     * Cancels execution of current grading and notifies observers.
-     *
-     * @throws IllegalStateException Execution must be in progress.
-     */
-    public void cancel()
-    {
-        doGrade = false;
-        setChanged();
-        notifyObservers();
-    }
-
-    /**
-     * Determines whether this instance is still in the process of grading.
-     *
-     * @return whether this instance has canceled grading
-     */
-    public boolean isCancelled()
-    {
-        return !doGrade;
     }
 
     /**
@@ -222,24 +194,5 @@ public class Grader extends Observable
     {
         return pagesToGrade;
     }
-
-    /**
-     * Get the total number of files that this instance needs to grade.
-     *
-     * @return the number of files to grade
-     */
-    public int getTotalFilesToGrade()
-    {
-        return filesToGrade;
-    }
-
-    /**
-     * Get the total number of files that have been graded so far.
-     *
-     * @return the number of files graded
-     */
-    public int getFilesGraded()
-    {
-        return filesGraded;
-    }
+;
 }
