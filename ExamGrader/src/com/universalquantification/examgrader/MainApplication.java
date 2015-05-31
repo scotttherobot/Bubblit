@@ -39,7 +39,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -437,18 +436,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         {
             File file = fileChooser.getSelectedFile();
             
-            if (file.getName().endsWith(".pdf"))
-            {
-                controller.addInputFile(file);
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(this, "You may only add exam "
-                    + "files of Portable Document Format (PDF). "
-                    + "\nPlease see the user manual available in the 'Help' "
-                    + "menu for \nmore information.", "Wrong File Type",
-                    JOptionPane.INFORMATION_MESSAGE);
-            }
+            controller.addInputFile(file);
         }
         else
         {
@@ -551,17 +539,6 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
             if (succeeded)
             {
                 rosterFileLabel.setText(file.getName());
-                gradeButton.setEnabled(succeeded);
-            }
-            else
-            {
-                FileNameMap fileNameMap = URLConnection.getFileNameMap();
-
-                JOptionPane.showMessageDialog(this, "You may only add roster "
-                    + "files of Tab Separated Values (TSV) "
-                    + "\nformat. Please see the user manual available in the 'Help' "
-                    + "menu \nfor more information.", "Wrong File Type",
-                    JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else

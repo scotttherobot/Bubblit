@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.controller;
 
+import com.sun.pdfview.PDFParseException;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.Roster;
 import com.universalquantification.examgrader.grader.RosterEntry;
@@ -116,7 +117,10 @@ public class Controller
         catch (Exception e)
         {
             //The roster file format was incorrect
-            
+            appView.showError("You may only add roster "
+                    + "files in the roster file format."
+                    + "Please see the user manual available in the 'Help' "
+                    + "menu \nfor more information.");
             return false;
         }
 
@@ -205,6 +209,12 @@ public class Controller
         {
             // CALL addInputFile inputFileList WITH inputFile
             inputFileList.addInputFile(inputFile);
+        }
+        // EXCEPTION PDFParseException
+        catch (PDFParseException e)
+        {
+            appView.showError( "You may only add exam files of "
+                    + "Portable Document Format (PDF). ");
         }
         // EXCEPTION IOException
         catch (IOException e)
