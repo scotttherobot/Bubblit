@@ -82,7 +82,7 @@ public class Grader extends Observable
      *
      * @param inputFileList list of files to grade.
      * @param examReader reader to be used for reading the inputFiles.
-     * @param rosterFile the path to the TSV file username
+     * @param rosterEntries the entries in the roster
      * @pre inputFiles have been read in and confirmed to be of the correct
      * format
      */
@@ -135,8 +135,8 @@ public class Grader extends Observable
      * @pre has been constructed.
      */
     public Map<File, GradedExamCollection> grade()
-        throws GradingException, FileNotFoundException, IOException,
-        InvalidExamException
+            throws GradingException, FileNotFoundException, IOException,
+            InvalidExamException
     {
         // SET fileExamsMap to new Map<File, GradedExamCollection>
 
@@ -157,22 +157,22 @@ public class Grader extends Observable
         // RETURN fileExamMap
         ExamRosterMatcher matcher = new ExamRosterMatcher();
         List<InputFile> files = this.inputFiles.getInputFiles();
-        Map<File, GradedExamCollection> fileExamsMap =
-                new LinkedHashMap<File, GradedExamCollection>();
+        Map<File, GradedExamCollection> fileExamsMap
+                = new LinkedHashMap<File, GradedExamCollection>();
 
         Iterator<InputFile> filesIterator = files.iterator();
         // iterate over the files to grade them
         while (filesIterator.hasNext() && this.doGrade)
         {
-            List<Exam> exams = new ArrayList<>();
+            List<Exam> exams = new ArrayList<Exam>();
             InputFile file = filesIterator.next();
             InputPage answerPage = file.getAnswerKeyPage();
             Exam answerKey = examReader.getExam(answerPage);
-            
+
             this.pagesGraded++;
             setChanged();
             notifyObservers();
-            
+
             List<InputPage> examPages = file.getStudentExamPages();
 
             Iterator<InputPage> pageIterator = examPages.iterator();
@@ -191,10 +191,10 @@ public class Grader extends Observable
 
             // do roster matching
             ExamRosterMatcher.match(exams, rosterEntries);
-            
+
             // INIT collection as GradedExamCollection WITH answerKey, exams
-            GradedExamCollection current =
-                    new GradedExamCollection(answerKey, exams);
+            GradedExamCollection current = new GradedExamCollection(answerKey,
+                    exams);
             fileExamsMap.put(file.getFileName(), current);
 
             filesGraded++;
@@ -225,6 +225,7 @@ public class Grader extends Observable
 
     /**
      * Get the total number of files that this instance needs to grade.
+     *
      * @return the number of files to grade
      */
     public int getTotalFilesToGrade()
@@ -234,7 +235,8 @@ public class Grader extends Observable
 
     /**
      * Get the total number of files that have been graded so far.
-     * @return 
+     *
+     * @return
      */
     public int getFilesGraded()
     {
