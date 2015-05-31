@@ -1,24 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.universalquantification.examgrader;
 
 /**
+ * Represents application preferences.
  *
  * @author CY
  */
-public class ExamPreferences extends javax.swing.JFrame {
+public class ExamPreferences extends javax.swing.JFrame
+{
     MainApplication application;
+
     /**
      * Creates new form ExamPreferences
+     * @param application the application to use
      */
-    public ExamPreferences(MainApplication application) {
+    public ExamPreferences(MainApplication application)
+    {
         initComponents();
-        
+
         setLocationRelativeTo(null);
-        
+
         this.application = application;
     }
 
@@ -90,11 +90,13 @@ public class ExamPreferences extends javax.swing.JFrame {
     }//GEN-LAST:event_examImagePreferenceItemStateChanged
 
     private void examCorrectAnswerDisplayPreferenceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_examCorrectAnswerDisplayPreferenceItemStateChanged
-        application.setShowCorrectAnswerPreference(examCorrectAnswerDisplayPreference.getState());
+        application.setShowCorrectAnswerPreference(
+            examCorrectAnswerDisplayPreference.getState());
     }//GEN-LAST:event_examCorrectAnswerDisplayPreferenceItemStateChanged
 
     private void examIncorrectAnswerDisplayPreferenceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_examIncorrectAnswerDisplayPreferenceItemStateChanged
-        application.setShowIncorrectAnswerPreference(examIncorrectAnswerDisplayPreference.getState());
+        application.setShowIncorrectAnswerPreference(
+            examIncorrectAnswerDisplayPreference.getState());
     }//GEN-LAST:event_examIncorrectAnswerDisplayPreferenceItemStateChanged
 
 
