@@ -18,11 +18,19 @@ public class StochasticCharacter
     /**
      * The probability masses for each character.
      */
-    private final Map<Character, Double> probabilities = new HashMap<>();
+    private final Map<Character, Double> probabilities;
+    
+    /**
+     * Create a new StochasticCharacter
+     */
+    public StochasticCharacter()
+    {
+        probabilities =  new HashMap<Character, Double>();
+    }
 
     /**
      * Sets the probability that this character's true value
-     * is the value of the given cahracter.
+     * is the value of the given character.
      *
      * @param character
      *      the candidate value
@@ -58,6 +66,10 @@ public class StochasticCharacter
         return probability;
     }
 
+    /**
+     * Get a string representation for this character.
+     * @return the string
+     */
     @Override
     public String toString()
     {
