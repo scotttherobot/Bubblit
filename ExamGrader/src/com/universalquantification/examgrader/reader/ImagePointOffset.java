@@ -7,21 +7,32 @@ package com.universalquantification.examgrader.reader;
 
 /**
  * A relative offset from the top and left for a point on an image
+ *
  * @author luis
  */
 public class ImagePointOffset
 {
-    public final double x;
-    public final  double y;
+    public final double pX;
+    public final double pY;
 
+    /**
+     * Create a new image point offset
+     * @param px the x coordinate
+     * @param py the y coordinate
+     */
     public ImagePointOffset(double px, double py)
     {
-        this.x = px;
-        this.y = py;
+        this.pX = px;
+        this.pY = py;
     }
+
+    /**
+     * Get the string representation of this ImagePointOffset
+     * @return the string
+     */
     public String toString()
     {
-        return "ImagePointOffset: (" + this.x + ", " + this.y + ")";
-            
+        return "ImagePointOffset: (" + this.pX + ", " + this.pY + ")";
+
     }
 }
