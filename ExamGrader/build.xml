@@ -65,6 +65,7 @@
         <delete file="${systemtest.dir}/SysTest*.out"/>
         <delete file="${systemtest.dir}/*_aggregate.csv"/>
         <delete dir="${systemtest.dir}/*_www/"/>
+             
         
         <echo message="running systest11"/>
         <!-- System Test Case 11 -->
@@ -116,6 +117,7 @@
         
 
         
+             
         <echo message="running systest2"/>
         <!-- System Test Case 2 -->
         <!-- The application can grade skewed exams. -->
@@ -125,7 +127,7 @@
             output="${systemtest.dir}/SysTest2Part1.out"
             error="${error.log}">
 
-            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SampleExams.pdf"/>
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SantiAndLuisRotated.pdf"/>
         </java>
         <java classname="${main.class}"
             classpath="${dist.jar}"
@@ -133,52 +135,108 @@
             output="${systemtest.dir}/SysTest2Part2.out"
             error="${error.log}">
 
-            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SkewedExams.pdf"/>
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/SantiAndLuisNormal.pdf"/>
         </java>
+        
+        <replaceregexp file="${systemtest.dir}/ExamSets/SantiAndLuisNormal_aggregate.csv"
+               match="^.*(Creation\sDate|Input\sFile).*$"
+               replace=""
+               byline="true"
+        />
+        
+        <replaceregexp file="${systemtest.dir}/ExamSets/SantiAndLuisRotated_aggregate.csv"
+               match="^.*(Creation\sDate|Input\sFile).*$"
+               replace=""
+               byline="true"
+        />
         
         <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
               output="${diffresults}" append="true">
-            <arg line="ExamSets/SampleExams_aggregate.csv ExamSets/SkewedExams_aggregate.csv"/>
+            <arg line="ExamSets/SantiAndLuisNormal_aggregate.csv ExamSets/SantiAndLuisRotated_aggregate.csv"/>
         </exec>
+        
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest2Part3.out"
+            error="${error.log}">
+
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/YvonneAndCaroleRotated.pdf"/>
+        </java>
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest2Part4.out"
+            error="${error.log}">
+
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/YvonneAndCaroleNormal.pdf"/>
+        </java>
+        
+        <replaceregexp file="${systemtest.dir}/ExamSets/YvonneAndCaroleNormal_aggregate.csv"
+               match="^.*(Creation\sDate|Input\sFile).*$"
+               replace=""
+               byline="true"
+        />
+        
+        <replaceregexp file="${systemtest.dir}/ExamSets/YvonneAndCaroleRotated_aggregate.csv"
+               match="^.*(Creation\sDate|Input\sFile).*$"
+               replace=""
+               byline="true"
+        />
+        
         <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
-             output="${diffresults}" append="true">
-           <arg line="ExamSets/SampleExams_www/323453234.html ExamSets/SkewedExams_www/323453234.html"/>
+              output="${diffresults}" append="true">
+            <arg line="ExamSets/YvonneAndCaroleNormal_aggregate.csv ExamSets/YvonneAndCaroleRotated_aggregate.csv"/>
         </exec>
 
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest2Part5.out"
+            error="${error.log}">
+
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/FeliciaAndLuisRotatedUpsideDown.pdf"/>
+        </java>
+        <java classname="${main.class}"
+            classpath="${dist.jar}"
+            fork="true"
+            output="${systemtest.dir}/SysTest2Part6.out"
+            error="${error.log}">
+
+            <arg line="-r ${systemtest.dir}/RosterFiles/roster.tsv -i ${systemtest.dir}/ExamSets/FeliciaAndLuisNormal.pdf"/>
+        </java>
+        
+        <replaceregexp file="${systemtest.dir}/ExamSets/FeliciaAndLuisNormal_aggregate.csv"
+               match="^.*(Creation\sDate|Input\sFile).*$"
+               replace=""
+               byline="true"
+        />
+        
+        <replaceregexp file="${systemtest.dir}/ExamSets/FeliciaAndLuisRotatedUpsideDown_aggregate.csv"
+               match="^.*(Creation\sDate|Input\sFile).*$"
+               replace=""
+               byline="true"
+        />
+        
         <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
-             output="${diffresults}" append="true">
-           <arg line="ExamSets/SampleExams_www/555555555.html ExamSets/SkewedExams_www/555555555.html"/>
+              output="${diffresults}" append="true">
+            <arg line="ExamSets/FeliciaAndLuisNormal_aggregate.csv ExamSets/FeliciaAndLuisRotatedUpsideDown_aggregate.csv"/>
         </exec>
 
-        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
-             output="${diffresults}" append="true">
-           <arg line="ExamSets/SampleExams_www/123454321.html ExamSets/SkewedExams_www/123454321.html"/>
-        </exec>
-
-        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
-             output="${diffresults}" append="true">
-           <arg line="ExamSets/SampleExams_www/399746331.html ExamSets/SkewedExams_www/399746331.html"/>
-        </exec>
-
-        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
-             output="${diffresults}" append="true">
-           <arg line="ExamSets/SampleExams_www/934728594.html ExamSets/SkewedExams_www/934728594.html"/>
-        </exec>
-
-        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
-             output="${diffresults}" append="true">
-           <arg line="ExamSets/SampleExams_www/143364799.html ExamSets/SkewedExams_www/143364799.html"/>
-        </exec>
-
-        <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
-             output="${diffresults}" append="true">
-           <arg line="ExamSets/SampleExams_www/444444444.html ExamSets/SkewedExams_www/444444444.html"/>
-        </exec>
-        <delete file="${systemtest.dir}/ExamSets/SampleExams_aggregate.csv"/>
-        <delete file="${systemtest.dir}/ExamSets/SkewedExams_aggregate.csv"/>
-        <delete dir="${systemtest.dir}/ExamSets/SampleExams_www"/>
-        <delete dir="${systemtest.dir}/ExamSets/SkewedExams_www"/>
-
+        <delete file="${systemtest.dir}/ExamSets/SantiAndLuisNormal_aggregate.csv"/>
+        <delete file="${systemtest.dir}/ExamSets/SantiAndLuisRotated_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/ExamSets/SantiAndLuisNormal_www"/>
+        <delete dir="${systemtest.dir}/ExamSets/SantiAndLuisRotated_www"/>
+        
+        <delete file="${systemtest.dir}/ExamSets/YvonneAndCaroleNormal_aggregate.csv"/>
+        <delete file="${systemtest.dir}/ExamSets/YvonneAndCaroleRotated_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/ExamSets/YvonneAndCaroleNormal_www"/>
+        <delete dir="${systemtest.dir}/ExamSets/YvonneAndCaroleRotated_www"/>
+        
+        <delete file="${systemtest.dir}/ExamSets/FeliciaAndLuisNormal_aggregate.csv"/>
+        <delete file="${systemtest.dir}/ExamSets/FeliciaAndLuisRotatedUpsideDown_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/ExamSets/FeliciaAndLuisNormal_www"/>
+        <delete dir="${systemtest.dir}/ExamSets/FeliciaAndLuisRotatedUpsideDown_www"/>
         
 
         <echo message="running systest4"/>
