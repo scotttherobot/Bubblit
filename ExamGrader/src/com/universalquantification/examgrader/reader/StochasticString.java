@@ -28,7 +28,15 @@ public class StochasticString
     /**
      * The list of characters that this string comprises.
      */
-    private final List<StochasticCharacter> characters = new ArrayList<>();
+    private final List<StochasticCharacter> characters;
+    
+    /**
+     * Construct a new StochasticString
+     */
+    public StochasticString()
+    {
+        characters = new ArrayList<StochasticCharacter>();
+    }
 
     /**
      * Adds the given character to the end of this string.
@@ -82,6 +90,10 @@ public class StochasticString
         return distance;
     }
 
+    /**
+     * Return a string representation for this StochasticString
+     * @return the string
+     */
     @Override
     public String toString()
     {
