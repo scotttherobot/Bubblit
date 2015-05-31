@@ -115,8 +115,8 @@ public class Controller
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            appView.showError("The roster file format was incorrect.");
+            //The roster file format was incorrect
+            
             return false;
         }
 

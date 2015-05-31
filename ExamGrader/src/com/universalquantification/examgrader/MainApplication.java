@@ -6,6 +6,7 @@ import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.models.Student;
+import com.universalquantification.examgrader.ui.AppFileFilter;
 import com.universalquantification.examgrader.ui.AppView;
 import com.universalquantification.examgrader.ui.AppViewExceptionHandler;
 import com.universalquantification.examgrader.ui.ConsoleView;
@@ -17,7 +18,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -28,7 +32,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -420,6 +423,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
     }// </editor-fold>//GEN-END:initComponents
 
     private void addFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFileButtonActionPerformed
+        AppFileFilter filter = new AppFileFilter("Portable Document Format (*.pdf)", new String [] {"PDF"});
+        
+        fileChooser.resetChoosableFileFilters();
+        fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle("Choose a PDF File");
 
         int returnVal = fileChooser.showOpenDialog(this);
@@ -427,7 +434,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
             File file = fileChooser.getSelectedFile();
-
+            
             if (file.getName().endsWith(".pdf"))
             {
                 controller.addInputFile(file);
@@ -524,6 +531,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
     }//GEN-LAST:event_fileListValueChanged
 
     private void addRosterFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRosterFileButtonActionPerformed
+        AppFileFilter filter = new AppFileFilter("Tab Separated Values (*.tsv)", new String [] {"TSV"});
+        
+        fileChooser.resetChoosableFileFilters();
+        fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle("Choose a TSV File");
 
         int returnVal = fileChooser.showOpenDialog(this);
@@ -532,22 +543,18 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
             File file = fileChooser.getSelectedFile();
-
+            boolean succeeded = controller.changeRosterFile(file);
+            
             // check that the file has a valid extension
-            if (file.getName().endsWith(".tsv"))
+            if (succeeded)
             {
-                boolean succeeded = controller.changeRosterFile(file);
-
-                // check that the roster was successfully changed
-                if (succeeded)
-                {
-                    rosterFileLabel.setText(file.getName());
-                    gradeButton.setEnabled(succeeded);
-                }
-
+                rosterFileLabel.setText(file.getName());
+                gradeButton.setEnabled(succeeded);
             }
             else
             {
+                FileNameMap fileNameMap = URLConnection.getFileNameMap();
+
                 JOptionPane.showMessageDialog(this, "You may only add roster "
                     + "files of Tab Separated Values (TSV) "
                     + "\nformat. Please see the user manual available in the 'Help' "
