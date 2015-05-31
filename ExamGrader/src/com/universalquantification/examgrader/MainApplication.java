@@ -40,13 +40,15 @@ import org.apache.commons.cli.ParseException;
 
 /**
  * main program
+ *
  * @author Luis
  */
-public class MainApplication extends javax.swing.JFrame implements AppView, Observer
+public class MainApplication extends javax.swing.JFrame implements AppView,
+    Observer
 {
     private Controller controller;
     private List<String> fileLocations;
-    
+
     /**
      * Creates new form NewApplication
      */
@@ -55,37 +57,58 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         controller = new Controller(this);
         initComponents();
         removeFileButton.setEnabled(false);
-        
+
         setLocationRelativeTo(null);
     }
-    
-    public void checkRoster(final Map<File, GradedExamCollection> results, final List<RosterEntry> roster)
-    {   
-        final List<Student> bigList = new ArrayList<>();
-        for (GradedExamCollection collection : results.values()) {
+
+    /**
+     * Present the verification dialog after exams have been graded.
+     *
+     * @param results the results of grading
+     * @param roster the list of roster entries
+     */
+    @Override
+    public void checkRoster(final Map<File, GradedExamCollection> results,
+        final List<RosterEntry> roster)
+    {
+        final List<Student> bigList = new ArrayList<Student>();
+
+        // add each collection to the list
+        for (GradedExamCollection collection : results.values())
+        {
             bigList.addAll(collection.getAllStudents());
         }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
 
-            public void run() {
+            @Override
+            public void run()
+            {
 
                 final VerifyDialog dialog = new VerifyDialog(bigList, roster);
-                ActionListener finishedListener = new ActionListener() {
+                ActionListener finishedListener = new ActionListener()
+                {
 
                     @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        String successMessage = "Success! Your score reports have been written to:\n\n";
-                        
+                    public void actionPerformed(ActionEvent evt)
+                    {
+                        String successMessage
+                            = "Success! Your score reports have been written to:\n\n";
+
                         dialog.setVisible(false);
                         dialog.dispose();
                         controller.writeReports(results);
-                        
-                        for (String fileLocation : fileLocations) {
-                            successMessage = successMessage.concat("\t•  " + new File(fileLocation).getParent() + "\n");
+
+                        for (String fileLocation : fileLocations)
+                        {
+                            successMessage = successMessage.concat("\t•  "
+                                + new File(fileLocation).getParent() + "\n");
                         }
-                        
-                        JOptionPane.showMessageDialog(MainApplication.this, successMessage, "Success!", JOptionPane.INFORMATION_MESSAGE);
+
+                        JOptionPane.showMessageDialog(MainApplication.this,
+                            successMessage, "Success!",
+                            JOptionPane.INFORMATION_MESSAGE);
                     }
                 };
 
@@ -95,15 +118,18 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             }
         });
     }
-    
+
+    @Override
     public void showError(String e)
     {
         if (this.isDisplayable())
         {
-            JOptionPane.showMessageDialog(this, e, "Error! ):", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, e, "Error! ):",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
+    @Override
     public void update(Observable o, final Object arg)
     {
         if (o instanceof InputFileList)
@@ -116,6 +142,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             final Grader grader = (Grader) o;
             java.awt.EventQueue.invokeLater(new Runnable()
             {
+                @Override
                 public void run()
                 {
                     progressBar.setMaximum(grader.getTotalPagesToGrade());
@@ -124,27 +151,29 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
             });
         }
     }
-    
+
     /**
-     * Sets the preference for whether or not to display the full test image
-     * on the results web page for each exam.
-     * 
-     * @param isFullImage Boolean condition representing whether or not to 
+     * Sets the preference for whether or not to display the full test image on
+     * the results web page for each exam.
+     *
+     * @param isFullImage Boolean condition representing whether or not to
      * display a full image.
      */
-    public void setTestImagePreference(boolean isFullImage) {
+    public void setTestImagePreference(boolean isFullImage)
+    {
         // do something with isFullImage
         PreferencesManager.getInstance().set("show-full-image", isFullImage);
     }
-    
+
     /**
-     * Sets the preference for whether or not to display the correct answers
-     * on the results web page for each exam.
-     * 
-     * @param doShow Boolean condition representing whether or not to 
-     * display the correct answers.
+     * Sets the preference for whether or not to display the correct answers on
+     * the results web page for each exam.
+     *
+     * @param doShow Boolean condition representing whether or not to display
+     * the correct answers.
      */
-    public void setShowCorrectAnswerPreference(boolean doShow) {
+    public void setShowCorrectAnswerPreference(boolean doShow)
+    {
         // do something with doShow
         PreferencesManager.getInstance().set("show-correct-answers", doShow);
     }
@@ -152,15 +181,16 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
     /**
      * Sets the preference for whether or not to display the incorrect answers
      * on the results web page for each exam.
-     * 
-     * @param doShow Boolean condition representing whether or not to 
-     * display the incorrect answers.
+     *
+     * @param doShow Boolean condition representing whether or not to display
+     * the incorrect answers.
      */
-    public void setShowIncorrectAnswerPreference(boolean doShow) {
+    public void setShowIncorrectAnswerPreference(boolean doShow)
+    {
         // do something with doShow
         PreferencesManager.getInstance().set("show-incorrect-answers", doShow);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -391,53 +421,63 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
     private void addFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFileButtonActionPerformed
         fileChooser.setDialogTitle("Choose a PDF File");
-        
+
         int returnVal = fileChooser.showOpenDialog(this);
-        
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
             File file = fileChooser.getSelectedFile();
-            
-            if (file.getName().endsWith(".pdf")) {
+
+            if (file.getName().endsWith(".pdf"))
+            {
                 controller.addInputFile(file);
             }
-            else {
-                 JOptionPane.showMessageDialog(this, "You may only add exam " +
-                         "files of Portable Document Format (PDF). " + 
-                         "\nPlease see the user manual available in the 'Help' " +
-                         "menu for \nmore information.", "Wrong File Type", JOptionPane.INFORMATION_MESSAGE);
+            else
+            {
+                JOptionPane.showMessageDialog(this, "You may only add exam "
+                    + "files of Portable Document Format (PDF). "
+                    + "\nPlease see the user manual available in the 'Help' "
+                    + "menu for \nmore information.", "Wrong File Type",
+                    JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        else {
+        else
+        {
             System.out.println("File access cancelled by user.");
         }
     }//GEN-LAST:event_addFileButtonActionPerformed
 
     private void gradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradeButtonActionPerformed
-        SwingWorker<Void, Void> task = new SwingWorker<Void, Void>() {
+        SwingWorker<Void, Void> task = new SwingWorker<Void, Void>()
+        {
 
             @Override
-            public Void doInBackground() {
+            public Void doInBackground()
+            {
                 ListModel<Class<?>> model = fileList.getModel();
-                
-                fileLocations = new ArrayList<>();
-                
-                for(int i = 0; i < model.getSize(); i++) {
-                    fileLocations.add(model.getElementAt(i) + "");
-                } 
+
+                fileLocations = new ArrayList<String>();
+
+                // get all selected files
+                for (int onFile = 0; onFile < model.getSize(); onFile++)
+                {
+                    fileLocations.add(model.getElementAt(onFile) + "");
+                }
 
                 controller.grade();
-                        
+
                 return null;
             }
-            
-             @Override
-             protected void done() {
+
+            @Override
+            protected void done()
+            {
                 gradeButton.setEnabled(true);
                 gradeButton.setText("Grade!");
-             }       
+            }
 
         };
-                
+
         task.execute();
         gradeButton.setEnabled(false);
         gradeButton.setText("Grading...");
@@ -449,24 +489,31 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
         File htmlFile = new File("UserManual.html");
-        
-        try {
+
+        try
+        {
             Desktop.getDesktop().browse(htmlFile.toURI());
-        } catch (IOException ex) {
-            Logger.getLogger(MainApplication.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(MainApplication.class.getName()).log(Level.SEVERE,
+                null, ex);
         }
     }//GEN-LAST:event_contentsMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
         // TODO add your handling code here:
-         JOptionPane.showMessageDialog(this, "Welcome to Bubblit, a grading software that uses computer vision to grade tests. Created by Universal Quantification.", 
-                 "About", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this,
+            "Welcome to Bubblit, a grading software that uses computer vision to grade tests. Created by Universal Quantification.",
+            "About", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void removeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFileButtonActionPerformed
         int selectedIndex = fileList.getSelectedIndex();
-        
-        if (selectedIndex != -1) {
+
+        // delete the input file
+        if (selectedIndex != -1)
+        {
             controller.deleteInputFile(selectedIndex);
             removeFileButton.setEnabled(false);
         }
@@ -480,61 +527,77 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         fileChooser.setDialogTitle("Choose a TSV File");
 
         int returnVal = fileChooser.showOpenDialog(this);
-        
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+        // if the user selected a file
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
             File file = fileChooser.getSelectedFile();
-            
-            if (file.getName().endsWith(".tsv")) {
+
+            // check that the file has a valid extension
+            if (file.getName().endsWith(".tsv"))
+            {
                 boolean succeeded = controller.changeRosterFile(file);
-                
+
+                // check that the roster was successfully changed
                 if (succeeded)
                 {
                     rosterFileLabel.setText(file.getName());
                     gradeButton.setEnabled(succeeded);
                 }
-                
+
             }
-            else {
-                 JOptionPane.showMessageDialog(this, "You may only add roster " +
-                         "files of Tab Separated Values (TSV) " + 
-                         "\nformat. Please see the user manual available in the 'Help' " +
-                         "menu \nfor more information.", "Wrong File Type", JOptionPane.INFORMATION_MESSAGE);
+            else
+            {
+                JOptionPane.showMessageDialog(this, "You may only add roster "
+                    + "files of Tab Separated Values (TSV) "
+                    + "\nformat. Please see the user manual available in the 'Help' "
+                    + "menu \nfor more information.", "Wrong File Type",
+                    JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        else {
+        else
+        {
             System.out.println("File access cancelled by user.");
         }
     }//GEN-LAST:event_addRosterFileButtonActionPerformed
 
     private void preferencesMenuItemSelected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesMenuItemSelected
         if (preferencesWindow == null)
+        {
             preferencesWindow = new ExamPreferences(this);
+        }
 
         preferencesWindow.setVisible(true);
     }//GEN-LAST:event_preferencesMenuItemSelected
 
-   private static final String NAME_AND_VERSION =
-            "Bubblit V2.0 by Universal Quantification";
-    
-    private static final Options COMMAND_LINE_OPTIONS = new Options()
-    {{
-        // add v option, with no arguments
-        this.addOption("v", "version", false, "display version and team info.");
-        this.addOption("h", "help", false, "display syntax help info.");
-        // add i flag with argument boolean SET to true 
-        this.addOption("i", "input-file", true, "Path to PDF Input Exam File(s)");
-        // add r flag with argument boolean SET to true
-        this.addOption("r", "roster", true, "Path to student roster TSV file (relative or absolute)");
-        // add o flag with argument boolean SET to true
-        this.addOption("o", "outputDirectoryOverride", true, "Path to folder for placing result files");
-    }};  
-    
-     /**
-     * @param args the command line arguments
+    private static final String kNameAndVersion
+        = "Bubblit V2.0 by Universal Quantification";
+
+    private static final Options kCommandLineOptions = new Options()
+    {
+        {
+            // add v option, with no arguments
+            this.addOption("v", "version", false,
+                "display version and team info.");
+            this.addOption("h", "help", false, "display syntax help info.");
+            // add i flag with argument boolean SET to true 
+            this.addOption("i", "input-file", true,
+                "Path to PDF Input Exam File(s)");
+            // add r flag with argument boolean SET to true
+            this.addOption("r", "roster", true,
+                "Path to student roster TSV file (relative or absolute)");
+            // add o flag with argument boolean SET to true
+            this.addOption("o", "outputDirectoryOverride", true,
+                "Path to folder for placing result files");
+        }
+    };
+
+    /**
+     * Run the GUI
      */
     public static void runGui()
     {
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -543,12 +606,12 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         try
         {
             for (javax.swing.UIManager.LookAndFeelInfo info
-                    : javax.swing.UIManager.getInstalledLookAndFeels())
+                : javax.swing.UIManager.getInstalledLookAndFeels())
             {
                 if ("Nimbus".equals(info.getName()))
                 {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    
+
                     break;
                 }
             }
@@ -556,87 +619,109 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         catch (ClassNotFoundException ex)
         {
             java.util.logging.Logger.getLogger(MainApplication.class.getName()).
-                    log(java.util.logging.Level.SEVERE, null, ex);
+                log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (InstantiationException ex)
         {
             java.util.logging.Logger.getLogger(MainApplication.class.getName()).
-                    log(java.util.logging.Level.SEVERE, null, ex);
+                log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (IllegalAccessException ex)
         {
             java.util.logging.Logger.getLogger(MainApplication.class.getName()).
-                    log(java.util.logging.Level.SEVERE, null, ex);
+                log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
             java.util.logging.Logger.getLogger(MainApplication.class.getName()).
-                    log(java.util.logging.Level.SEVERE, null, ex);
+                log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
-        
-          // Mac Compatbilitiy
 
-        try {
+          // Mac Compatbilitiy
+        try
+        {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Bubblit Version 1 - Universal Quanitification");
+            System.
+                setProperty("com.apple.mrj.application.apple.menu.about.name",
+                    "Bubblit Version 1 - Universal Quanitification");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
+        }
+        catch (ClassNotFoundException e)
+        {
             System.out.println("ClassNotFoundException: " + e.getMessage());
-        } catch (InstantiationException e) {
+        }
+        catch (InstantiationException e)
+        {
             System.out.println("InstantiationException: " + e.getMessage());
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e)
+        {
             System.out.println("IllegalAccessException: " + e.getMessage());
-        } catch (UnsupportedLookAndFeelException e) {
-            System.out.println("UnsupportedLookAndFeelException: " + e.getMessage());
+        }
+        catch (UnsupportedLookAndFeelException e)
+        {
+            System.out.println("UnsupportedLookAndFeelException: " + e.
+                getMessage());
         }
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
 
-            public void run() {
-                try {
+            public void run()
+            {
+                try
+                {
                     final MainApplication app = new MainApplication();
                     app.setVisible(true);
-                    
+
                     Thread.setDefaultUncaughtExceptionHandler(
-                            new AppViewExceptionHandler(app));
-                    
-                } catch (IOException e) {
+                        new AppViewExceptionHandler(app));
+
+                }
+                catch (IOException e)
+                {
                     e.printStackTrace();
                     System.exit(1);
                 }
             }
         });
-        
-       
+
     }
-    
+
     private static void runCli(String outputDir, String rosterFile,
-            String[] inputFiles)
+        String[] inputFiles)
     {
-        ConsoleView view = new ConsoleView(NAME_AND_VERSION, rosterFile,
-                inputFiles, outputDir, new PrintWriter(System.out));
+        ConsoleView view = new ConsoleView(kNameAndVersion, rosterFile,
+            inputFiles, outputDir, new PrintWriter(System.out));
     }
 
     private static void printHelp(Options options)
     {
-        System.out.println("java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
-       
+        System.out.println(
+            "java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
+
         System.out.println("-v: Display version and team info.");
         System.out.println("-h: Display syntax help info.");
         System.out.println("-i: Path to PDF Input Exam File(s).");
-        System.out.println("-r: Path to student roster TSV file (relative or absolute).");
+        System.out.println(
+            "-r: Path to student roster TSV file (relative or absolute).");
         System.out.println("-o: Path to folder for placing result files.");
         System.out.println("Correct flag usage syntax:");
-        System.out.println("java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
+        System.out.println(
+            "java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
 
-    } 
+    }
 
-
+    /**
+     * Run the application.
+     * @param args command arguments
+     * @throws ParseException 
+     */
     public static void main(String[] args) throws ParseException
     {
         // Init our preferences to false. We should do this later, but it will
@@ -644,38 +729,42 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         PreferencesManager.getInstance().set("show-full-image", false);
         PreferencesManager.getInstance().set("show-incorrect-answers", false);
         PreferencesManager.getInstance().set("show-correct-answers", false);
-        
-        
+
         CommandLineParser parser = new GnuParser();
-     
+
         CommandLine cmd = null;
-        try {
-            cmd = parser.parse(COMMAND_LINE_OPTIONS, args);
-        } catch (ParseException ex) {
+        try
+        {
+            cmd = parser.parse(kCommandLineOptions, args);
+        }
+        catch (ParseException ex)
+        {
             System.err.println(ex.getMessage());
             System.exit(1);
         }
-     
+
         //check for -v flag to print out the version of the application
         //   and team information.
-        if (cmd.hasOption("v")) {
-            System.out.println(NAME_AND_VERSION);
+        if (cmd.hasOption("v"))
+        {
+            System.out.println(kNameAndVersion);
             return;
         }
 
         //check for -h flag to print out the syntax help information.
-        if (cmd.hasOption("h")) {
-            printHelp(COMMAND_LINE_OPTIONS);
+        if (cmd.hasOption("h"))
+        {
+            printHelp(kCommandLineOptions);
             return;
         }
-       
+
         String oArg = cmd.getOptionValue("o");
         String rArg = cmd.getOptionValue("r");
         String[] iArgs = cmd.getOptionValues("i");
-         
+
         if (args.length != 0)
-        {   
-            
+        {
+
             if (rArg == null || iArgs == null)
             {
                 System.out.println("Argument missing. See the --help option.");
@@ -686,14 +775,13 @@ public class MainApplication extends javax.swing.JFrame implements AppView, Obse
         else
         {
             runGui();
-        }   
+        }
     }
     //private GradeExams task;
-    
+
     // Variables for creation
-    
     private ExamPreferences preferencesWindow;
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addFileButton;
