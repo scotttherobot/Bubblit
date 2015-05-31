@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.universalquantification.examgrader.grader;
 
 import java.util.ArrayList;
@@ -12,33 +7,32 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Parses a roster using a {@link Roster} to read information about records
  * @author luis
  */
 public class RosterParser
 {
 
     /**
-     * Parses a list of {@code RosterEntry}s, one per line.
-     * Each line should be of the form
-     * expected by {@link #parseRosterEntry(String)}.
+     * Parses a list of {@code RosterEntry}s, one per line. Each line should be
+     * of the form expected by {@link #parseRosterEntry(String)}.
      *
-     * @param file
-     *      the file containing the roster entries to parse
-     * @return
-     *      a list of newly constructed {@code RosterEntry}s
+     * @param roster the roster to read from
+     * @return a list of newly constructed {@code RosterEntry}s
      */
     public static List<RosterEntry> parseRoster(Roster roster)
     {
-        List<RosterEntry> result = new ArrayList<>();
+        List<RosterEntry> result = new ArrayList<RosterEntry>();
 
-        for(int i = 1; i < roster.getNumStudents() + 1; i++)
+        // Iterate over every record and parse it
+        for (int onStudent = 1; onStudent < roster.getNumStudents() + 1; onStudent++)
         {
             //int sequenceNumber, String first, String last
-            Map<String,String> entry = roster.getRecordByColumnValue("No.", Integer.toString(i));
+            Map<String, String> entry = roster.getRecordByColumnValue("No.",
+                Integer.toString(onStudent));
             String name = entry.get("Student Name");
             String id = entry.get("EMPLID");
-            
+
             final String pattern = "\"?([^,]+),\\s*([^\\s\"]+).*\"?";
             Matcher matcher = Pattern.compile(pattern).matcher(name);
 
@@ -51,9 +45,9 @@ public class RosterParser
             String last = matcher.group(1);
             String first = matcher.group(2);
 
-            result.add(new RosterEntry(i, first, last, id));
+            result.add(new RosterEntry(onStudent, first, last, id));
         }
-        
+
         return result;
     }
 }

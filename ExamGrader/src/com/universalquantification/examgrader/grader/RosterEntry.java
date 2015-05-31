@@ -112,8 +112,7 @@ public class RosterEntry
         double dfirst = 
             form.getStudentRecord().getStochasticFirst().computeDistance(first);
         double dlast = 
-            form.getStudentRecord().getStochasticLast().
-            computeDistance(last);
+            form.getStudentRecord().getStochasticLast().computeDistance(last);
         return dfirst * kWeightFirst + dlast * kWeightLast;
     }
 
