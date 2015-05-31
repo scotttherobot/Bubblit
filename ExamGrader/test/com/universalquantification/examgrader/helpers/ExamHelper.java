@@ -1,6 +1,7 @@
 
 package com.universalquantification.examgrader.helpers;
 
+import java.io.File;
 import com.universalquantification.examgrader.models.Answer;
 import com.universalquantification.examgrader.models.Bubble;
 import com.universalquantification.examgrader.models.Exam;
@@ -48,7 +49,10 @@ public class ExamHelper {
             answers.add(createAnswer(answerBits.get(i), i + 1));
         }
         
-        return new Exam(answers, createStudent(firstName, lastName), mock(InputPage.class));
+        InputPage inputPage = mock(InputPage.class);
+        when(inputPage.getFile()).thenReturn(new File("aoeu"));
+        
+        return new Exam(answers, createStudent(firstName, lastName), inputPage);
     }
     
 }

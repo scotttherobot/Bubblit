@@ -724,12 +724,6 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
      */
     public static void main(String[] args) throws ParseException
     {
-        // Init our preferences to false. We should do this later, but it will
-        // cause a crash if it's NOT done. So here.
-        PreferencesManager.getInstance().set("show-full-image", false);
-        PreferencesManager.getInstance().set("show-incorrect-answers", false);
-        PreferencesManager.getInstance().set("show-correct-answers", false);
-
         CommandLineParser parser = new GnuParser();
 
         CommandLine cmd = null;

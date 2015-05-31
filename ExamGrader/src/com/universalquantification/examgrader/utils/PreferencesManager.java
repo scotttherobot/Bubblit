@@ -25,6 +25,13 @@ public final class PreferencesManager
         }
         
         prefs = new HashMap<String, Object>();
+        
+          // Init our preferences to false. We should do this later, but it will
+        // cause a crash if it's NOT done. So here.
+        set("show-full-image", false);
+        set("show-incorrect-answers", false);
+        set("show-correct-answers", false);
+
     }
     
     /**
