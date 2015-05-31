@@ -3,9 +3,9 @@ package com.universalquantification.examgrader.grader;
 import com.universalquantification.examgrader.models.Exam;
 
 /**
- * An entry representing a student in the class roster.
- * Each roster entry has a unique sequence number,
- * as well as reference strings for the student's first and last names.
+ * An entry representing a student in the class roster. Each roster entry has a
+ * unique sequence number, as well as reference strings for the student's first
+ * and last names.
  *
  * @author William Chargin, Luis Cuellar
  * @version 15 May 2015
@@ -47,12 +47,10 @@ public class RosterEntry
     /**
      * Creates a {@code RosterEntry} with the given parameters.
      *
-     * @param sequenceNumber
-     *      the sequence number for this roster entry
-     * @param first
-     *      the student's first name
-     * @param last
-     *      the student's last name
+     * @param sequenceNumber the sequence number for this roster entry
+     * @param first the student's first name
+     * @param last the student's last name
+     * @param id the student's id
      */
     public RosterEntry(int sequenceNumber, String first, String last, String id)
     {
@@ -66,8 +64,7 @@ public class RosterEntry
     /**
      * Gets the sequence number associated with this roster entry.
      *
-     * @return
-     *      the associated sequence number
+     * @return the associated sequence number
      */
     public int getSequenceNumber()
     {
@@ -77,8 +74,7 @@ public class RosterEntry
     /**
      * Gets the first name of the student on this roster entry.
      *
-     * @return
-     *      the student's first name
+     * @return the student's first name
      */
     public String getFirst()
     {
@@ -88,8 +84,7 @@ public class RosterEntry
     /**
      * Gets the last name of the student on this roster entry.
      *
-     * @return
-     *      the student's last name
+     * @return the student's last name
      */
     public String getLast()
     {
@@ -98,6 +93,7 @@ public class RosterEntry
 
     /**
      * Gets the student's id
+     *
      * @return the student's ID
      */
     public String getId()
@@ -105,18 +101,31 @@ public class RosterEntry
         return id;
     }
 
+    /**
+     * Return the matching confidence for the match
+     *
+     * @param form the exam to evaluate
+     * @return the confidence
+     */
     public double evaluateMatch(Exam form)
     {
-        double dfirst = form.getStudentRecord().getStochasticFirst().computeDistance(first);
-        double dlast = form.getStudentRecord().getStochasticLast().computeDistance(last);
+        double dfirst = 
+            form.getStudentRecord().getStochasticFirst().computeDistance(first);
+        double dlast = 
+            form.getStudentRecord().getStochasticLast().
+            computeDistance(last);
         return dfirst * kWeightFirst + dlast * kWeightLast;
     }
 
+    /**
+     * get a string representation of RosterEntry
+     * @return the string
+     */
     @Override
     public String toString()
     {
         return "RosterEntry [seqno=" + sequenceNumber + ", first=" + first
-                + ", last=" + last + "]";
+            + ", last=" + last + "]";
     }
 
 }
