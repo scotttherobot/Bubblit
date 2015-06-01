@@ -6,7 +6,7 @@ package com.universalquantification.examgrader.grader;
  * @author Luis
  * @version 2.0
  */
-class GradingException extends Exception
+public class GradingException extends Exception
 {
     
 }

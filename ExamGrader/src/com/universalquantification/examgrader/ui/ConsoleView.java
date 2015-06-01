@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.universalquantification.examgrader.ui;
 
 import com.universalquantification.examgrader.controller.Controller;
@@ -10,10 +5,8 @@ import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -21,13 +14,12 @@ import java.util.Observer;
 
 /**
  *
- * @author admin
+ * @author jenwang
  */
 public class ConsoleView implements AppView, Observer
 {
     private Writer outWriter;
     private Controller controller;
-    
     
     public ConsoleView(String nameAndVersion, String rosterPath, String[] inputPaths,
             String outputDir, Writer outWriter)
@@ -57,8 +49,7 @@ public class ConsoleView implements AppView, Observer
             write("Grading " + file.getName() + "\n");
             this.controller.addInputFile(file);
             this.controller.grade();
-        }
-        
+        }   
     }
 
     @Override

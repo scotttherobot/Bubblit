@@ -40,7 +40,8 @@ public class Controller
     private ReportWriter reportWriter;
 
     private List<RosterEntry> rosterEntries;
-
+    private GraderFactory graderFactory;
+    
     /**
      * Initializes a controller with a new InputFileList and Grader.
      *
@@ -48,8 +49,9 @@ public class Controller
      */
     public Controller(AppView view)
     {
-        this(view, new InputFileList(), new ReportWriter(null));
-
+        this(view, new InputFileList(), new ReportWriter(null),
+                new GraderFactory());
+        
     }
 
     /**
@@ -59,20 +61,22 @@ public class Controller
      * @param view the AppView to use, either console or GUI.
      * @param inputFileList the list of input files
      * @param reportWriter the report writer
+     * @param graderFactory factory used to build a grader
      */
     Controller(AppView view, InputFileList inputFileList,
-        ReportWriter reportWriter)
+        ReportWriter reportWriter, GraderFactory graderFactory)
     {
         this.appView = view;
         // INIT a new InputFileList as inputFileList field
-        this.inputFileList = new InputFileList();
+        this.inputFileList = inputFileList;
+        this.inputFileList.addObserver(appView);
 
         // INIT a new StudentNameMapper studentNameMapper
         // INIT a new ExamReader examReader with studentNameMapper as reader
         // INIT a new Grader with inputFileList, reader, mapper as grader field
-        this.inputFileList.addObserver(appView);
         this.reportWriter = reportWriter;
         this.rosterEntries = new ArrayList<RosterEntry>();
+        this.graderFactory = graderFactory;
 
     }
 
@@ -127,9 +131,11 @@ public class Controller
         // check that we actually got some roster entries
         if (rosterEntries.isEmpty())
         {
+            System.out.print("'''''''''''''''");
             appView.showError(
                 "No students were found in the roster file. Please"
                 + "try another file.");
+            return false;
         }
 
         return true;
@@ -141,11 +147,7 @@ public class Controller
      */
     public void grade()
     {
-        Grader grader = null;
-        // BEGIN
-        try
-        {
-            // check that we have files to grade
+           // check that we have files to grade
             if (inputFileList.getInputFiles().isEmpty())
             {
                 appView.showError("You must add an input file.");
@@ -160,9 +162,11 @@ public class Controller
                 return;
             }
             // INIT grader
-            grader = new Grader(inputFileList,
-                new ExamReader(new NameRecognitionGateway()), rosterEntries);
-            grader.addObserver(appView);
+        Grader grader = graderFactory.buildNewGrader(inputFileList, rosterEntries);
+        grader.addObserver(appView);        
+        //BEGIN
+        try
+        {
             // CALL grade grader RETURNING gradingResults
             Map<File, GradedExamCollection> results = grader.grade();
 
@@ -174,6 +178,8 @@ public class Controller
             // INIT reportWriter gradingResults
             // CALL writeReports reportWriter
 //            new ReportWriter(null).writeReports(results);
+            
+            grader.deleteObserver(appView);
         }
         // EXCEPTION GradingException
         catch (Exception e)
@@ -183,14 +189,8 @@ public class Controller
                 showError("An error occured with message: " + e.getMessage());
             // CALL setError view "Grading failed. Please check that the
             // format is correct"
-        }
-        finally
-        {
-            // make sure we correctly instantiated a grader
-            if (grader != null)
-            {
-                grader.deleteObserver(appView);
-            }
+            
+            grader.deleteObserver(appView);
         }
         // END
 
@@ -209,6 +209,7 @@ public class Controller
         {
             // CALL addInputFile inputFileList WITH inputFile
             inputFileList.addInputFile(inputFile);
+            
         }
         // EXCEPTION PDFParseException
         catch (PDFParseException e)
