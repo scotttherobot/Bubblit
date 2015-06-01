@@ -89,7 +89,7 @@ public class ConsoleViewTest extends TestCase {
                 inputPaths, "asdf", stringWriter, controllerFactory);
         
         assertEquals(PreferencesManager.getInstance().get(
-                PreferencesManager.OVERRIDE_DIR), new File("asdf"));
+                PreferencesManager.kOverrideDir), new File("asdf"));
         
     }
     

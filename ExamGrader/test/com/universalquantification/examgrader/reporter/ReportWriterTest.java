@@ -67,7 +67,7 @@ public class ReportWriterTest extends TestCase {
         Path overrideDir = Files.createTempDirectory("override");;
         File dirFile = new File(overrideDir.toUri());
         dirFile.deleteOnExit();
-        PreferencesManager.getInstance().set(PreferencesManager.OVERRIDE_DIR,
+        PreferencesManager.getInstance().set(PreferencesManager.kOverrideDir,
                 dirFile);
         ReportWriter writer = new ReportWriter();
         
