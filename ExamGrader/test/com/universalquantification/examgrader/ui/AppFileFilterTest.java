@@ -37,5 +37,9 @@ public class AppFileFilterTest extends TestCase {
         assertTrue(filter.accept(new File("aoeu.pdf")));
         
         assertTrue(filter.accept(new File(".")));
+        assertFalse(filter.accept(new File("aoeu.")));
+        
+        assertFalse(filter.accept(new File(".bashrc")));
+        assertTrue(filter.accept(new File("..")));
     }
 }
