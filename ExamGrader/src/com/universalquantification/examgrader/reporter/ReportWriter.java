@@ -36,7 +36,7 @@ public class ReportWriter
         File parent;
 
         Object outputDirectory = PreferencesManager.getInstance().get(
-            PreferencesManager.OVERRIDE_DIR);
+            PreferencesManager.kOverrideDir);
         // make sure that the output directory exists
         if (outputDirectory == null)
         {
