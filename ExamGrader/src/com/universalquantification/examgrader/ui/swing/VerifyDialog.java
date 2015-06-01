@@ -23,6 +23,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * Partially functioning prototype of a verify dialog.
@@ -46,9 +48,17 @@ public class VerifyDialog extends javax.swing.JFrame
         nameTable.setDefaultRenderer(JButton.class,
                 new JTableButtonRenderer(defaultRenderer));
         
-        nameTable.getColumnModel().getColumn(0).setPreferredWidth(260);
-        nameTable.getColumnModel().getColumn(2).setPreferredWidth(260);
+        nameTable.getColumnModel().getColumn(0).setPreferredWidth(240);
+        nameTable.getColumnModel().getColumn(2).setPreferredWidth(240);
+        nameTable.getColumnModel().getColumn(4).setPreferredWidth(60);
         nameTable.getColumnModel().getColumn(5).setPreferredWidth(100);
+        
+        ((DefaultTableCellRenderer)nameTable.getTableHeader().
+                getDefaultRenderer()).
+                setHorizontalAlignment(JLabel.CENTER);
+        
+        listRoster.setEnabled(false);
+        listRoster.setBackground(new Color(240, 240, 240));
         
         TableColumn chooseColumn = nameTable.getColumnModel().getColumn(5);
         
@@ -75,7 +85,7 @@ public class VerifyDialog extends javax.swing.JFrame
             "Last Name Image",
             "Last Name",
             "Confidence",
-            "Change Name",
+            "",
         };
         
         private String[][] model;
@@ -146,7 +156,7 @@ public class VerifyDialog extends javax.swing.JFrame
         @Override
         public boolean isCellEditable(int row, int col)
         {
-            return (col == 2 || col == 3);
+            return (col == 1 || col == 3 || col == 5);
         }
 
         @Override
@@ -284,6 +294,7 @@ public class VerifyDialog extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Verification Dialog");
+        setPreferredSize(new java.awt.Dimension(1280, 720));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         InstructionLabel.setText("Please verify that the students have been correctly identified.");
@@ -297,9 +308,11 @@ public class VerifyDialog extends javax.swing.JFrame
 
         jSeparator1.setPreferredSize(new java.awt.Dimension(10, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0E-4;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         getContentPane().add(jSeparator1, gridBagConstraints);
 
@@ -346,6 +359,7 @@ public class VerifyDialog extends javax.swing.JFrame
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jSplitPane1, gridBagConstraints);
@@ -353,6 +367,7 @@ public class VerifyDialog extends javax.swing.JFrame
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0E-4;
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 10, 10);
         getContentPane().add(jSeparator2, gridBagConstraints);
 
@@ -364,7 +379,7 @@ public class VerifyDialog extends javax.swing.JFrame
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 8, 10);
         getContentPane().add(VerifyButton, gridBagConstraints);
 
         pack();
@@ -380,7 +395,6 @@ public class VerifyDialog extends javax.swing.JFrame
             tModel.setNameFromRoster(desiredName, chosenTableRow);
 
             listRoster.setEnabled(false);
-            
             listRoster.setBackground(new Color(240, 240, 240));
             //NameSelectionPane.setPreferredSize(new Dimension(0, 0));
         }
