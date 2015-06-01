@@ -566,7 +566,7 @@ public class ExamReader
     /**
      * Check if col should be cleared when removing borders
      * @param img image to remove borders from
-     * @param onRow col to check
+     * @param onCol col to check
      * @return whether col should be cleared
      */
     private boolean shouldClearCol(BufferedImage img, int onCol)
