@@ -104,7 +104,7 @@ public class AppRunner
      * Run the application.
      *
      * @param args command arguments
-     * @throws ParseException
+     * @throws org.apache.commons.cli.ParseException
      */
     public void run(String[] args) throws ParseException
     {
@@ -140,9 +140,10 @@ public class AppRunner
         String rArg = cmd.getOptionValue("r");
         String[] iArgs = cmd.getOptionValues("i");
 
+        // check if we have arguments
         if (args.length != 0)
         {
-
+            // check that no arguments are missing
             if (rArg == null || iArgs == null)
             {
                 System.out.println("Argument missing. See the --help option.");
@@ -168,6 +169,11 @@ public class AppRunner
         formatter.printHelp("Bubblit2.0.jar", options, /* show usage */ true);
     }
 
+    /**
+     * Run the application
+     * @param args the command line arguments
+     * @throws ParseException 
+     */
     public static void main(String[] args) throws ParseException
     {
         new AppRunner(new ViewInitializer()).run(args);
