@@ -253,6 +253,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Version 2 - Universal Quantification");
         setForeground(java.awt.Color.white);
+        setPreferredSize(new java.awt.Dimension(460, 420));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -326,7 +327,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(6, 10, 4, 10);
         getContentPane().add(jSeparator1, gridBagConstraints);
 
         rosterFileLabel.setText("No Roster File Selected");
@@ -360,7 +361,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(4, 10, 4, 10);
         getContentPane().add(jSeparator2, gridBagConstraints);
 
         gradePanel.setDoubleBuffered(false);
