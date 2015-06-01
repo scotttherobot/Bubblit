@@ -8,6 +8,7 @@ import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.InputPage;
 import com.universalquantification.examgrader.models.Student;
 import java.awt.image.BufferedImage;
+import java.awt.image.IndexColorModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,8 @@ public class ExamHelper {
         
         InputPage inputPage = mock(InputPage.class);
         when(inputPage.getFile()).thenReturn(new File("aoeu"));
+        when(inputPage.getMetaBufferedImage()).thenReturn(
+                new BufferedImage(100, 100, IndexColorModel.BITMASK));
         
         return new Exam(answers, createStudent(firstName, lastName), inputPage);
     }
