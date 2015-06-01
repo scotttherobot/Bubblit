@@ -20,7 +20,7 @@ public class InputPage
     private BufferedImage image;
     private File file;
     private static final int kPageHeight = 1000;
-    private static final int kPageWidth = (int)((8.5/11.0) * kPageHeight);
+    private static final int kPageWidth = (int) ((8.5 / 11.0) * kPageHeight);
     private static final int kMetaBoxHeight = 300;
 
     /**
@@ -37,11 +37,11 @@ public class InputPage
 
         this.file = file;
         Rectangle rect = new Rectangle(0, 0, (int) page.getBBox().getWidth(),
-                (int) page.getBBox().getHeight());
+            (int) page.getBBox().getHeight());
         Image pageImage = page.getImage(kPageWidth, kPageHeight, rect, null,
-                true, true);
+            true, true);
         BufferedImage bImage = new BufferedImage(kPageWidth, kPageHeight,
-                BufferedImage.TYPE_INT_RGB);
+            BufferedImage.TYPE_INT_RGB);
         Graphics2D bufImageGraphics = bImage.createGraphics();
         bufImageGraphics.drawImage(pageImage, null, null);
         bufImageGraphics.dispose();
@@ -59,7 +59,7 @@ public class InputPage
     {
         return this.image;
     }
-    
+
     /**
      * Gets the BufferedImage of the meta box (name field).
      *
@@ -67,17 +67,19 @@ public class InputPage
      */
     public BufferedImage getMetaBufferedImage()
     {
-        
-        BufferedImage snap = new BufferedImage(kPageWidth, kMetaBoxHeight, BufferedImage.TYPE_INT_RGB);
+
+        BufferedImage snap = new BufferedImage(kPageWidth, kMetaBoxHeight,
+            BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = snap.createGraphics();
         g2d.drawImage(this.image, null, null);
         g2d.dispose();
-        
+
         return snap;
     }
-    
+
     /**
      * Gets theFile associated with the page.
+     *
      * @return file the page belongs to.
      */
     public File getFile()
