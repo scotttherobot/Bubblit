@@ -19,15 +19,18 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 /**
- *
+ * This is the main entry point for the Bubblit application.
+ * Parses command line arguments. If found, passes them to the ConsoleView.
+ * If it finds none, spawns a GUIView.
  * @author scottvanderlind
  */
 public class AppRunner
 {
-    
-     private static final String kNameAndVersion
+    // The name and version string to use in the interfaces
+    private static final String kNameAndVersion
         = "Bubblit V2.0 by Universal Quantification";
 
+    // The command line options to parse before starting a console.
     private static final Options kCommandLineOptions = new Options()
     {
         {
@@ -108,13 +111,24 @@ public class AppRunner
         }
     }
     
+    /**
+     * Prints the help for the Console interface
+     * @param options an Options object containing the CLI options
+     */
     private static void printHelp(Options options)
     {
         // Use Apache's neato CommonsCLI Helptext generator
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("Bubblit2.0.jar", options, /* show usage */ true);
     }
-        
+    
+    /**
+     * Instantiate and run a ConsoleView interface.
+     * Starts a console for running the app.
+     * @param outputDir the directory to output files to
+     * @param rosterFile the roster file to use
+     * @param inputFiles the paths of the files to grade
+     */
     private static void runCli(String outputDir, String rosterFile,
         String[] inputFiles)
     {
