@@ -511,18 +511,35 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
         String url = "http://cytancy.github.io/BubblitUserManual/";
-        try
-        {
-            Desktop.getDesktop().browse(new URL(url).toURI());
+        
+        if (Desktop.isDesktopSupported()) {
+            try
+            {
+                Desktop.getDesktop().browse(new URL(url).toURI());
+            }
+            catch (IOException | URISyntaxException ex)
+            {
+                JTextArea textarea = new JTextArea("There was an error opening your browser. Please visit " + url + " to view the User Manaual.");
+                
+                JOptionPane.showMessageDialog(this,
+                textarea,
+                "User Manual", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
-        catch (IOException | URISyntaxException ex)
-        {
-             JTextArea textarea= new JTextArea("There was an error opening your browser. Please visit " + url + " to view the user manaual.");
-            textarea.setEditable(true);
-            JOptionPane.showMessageDialog(this,
-            textarea,
-            "User Manual", JOptionPane.INFORMATION_MESSAGE);
+        else{
+            Runtime runtime = Runtime.getRuntime();
+            
+            try {
+                runtime.exec("xdg-open " + url);
+            } catch (IOException e) {
+                JTextArea textarea = new JTextArea("There was an error opening your browser. Please visit " + url + " to view the User Manaual.");
+                
+                JOptionPane.showMessageDialog(this,
+                textarea,
+                "User Manual", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
+            
     }//GEN-LAST:event_contentsMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
