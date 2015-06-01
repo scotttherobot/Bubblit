@@ -40,6 +40,9 @@ public class ExamReader
      */
     private static final double kMaximumNonRotatedAngle = 0.018;
 
+    private static final int kBlack = -16777216;
+    private static final int kWhite = -1;
+    
     /**
      * The minimum ratio of blackness that a bubble must have to be filled in.
      */
@@ -535,6 +538,52 @@ public class ExamReader
 
         return numBlack / numPixels;
     }
+    
+    /**
+     * Check if row should be cleared when removing borders
+     * @param img image to remove borders from
+     * @param onRow row to check
+     * @return whether row should be cleared
+     */
+    private boolean shouldClearRow(BufferedImage img, int onRow)
+    {
+        int numBlacks = 0;
+
+        // coutn the blacks in this row
+        for (int onCol = 0; onCol < img.getWidth(); onCol++)
+        {
+            // check if this pixel is black
+            if (img.getRGB(onCol, onRow) == kBlack)
+            {
+                numBlacks++;
+            }
+        }
+
+        // check if this row should be cleared
+        return numBlacks > .25 * img.getWidth();
+    }
+    
+    /**
+     * Check if col should be cleared when removing borders
+     * @param img image to remove borders from
+     * @param onRow col to check
+     * @return whether col should be cleared
+     */
+    private boolean shouldClearCol(BufferedImage img, int onCol)
+    {
+        int numBlacks = 0;
+        // count the blacks in this column
+        for (int onRow = 0; onRow < img.getHeight(); onRow++)
+        {
+            // check if this pixel is black
+            if (img.getRGB(onCol, onRow) == kBlack)
+            {
+                numBlacks++;
+            }
+        }
+        // check if we should clear this column
+        return numBlacks > .25 * img.getHeight();
+    }
 
     /**
      * Remove top and left black borders from a buffered image.
@@ -543,20 +592,17 @@ public class ExamReader
      */
     private void removeBorders(BufferedImage img, boolean isRotated)
     {
-        int black = -16777216;
-        int white = -1;
+
         int height = img.getHeight();
         int width = img.getWidth();
-        int numBlacks;
         int[] whiteRow = new int[width + height];
         double ratioToClear;
-        
+
         // set the ratio of pixels to clear for rotated images
         if (isRotated)
         {
             ratioToClear = 0.25;
-        }
-        // set the ratio of pixels to clear for non-rotated images
+        } // set the ratio of pixels to clear for non-rotated images
         else
         {
             ratioToClear = 0.15;
@@ -567,33 +613,23 @@ public class ExamReader
         // set every pixel to white
         for (int onPixel = 0; onPixel < width + height; onPixel++)
         {
-            whiteRow[onPixel] = white;
+            whiteRow[onPixel] = kWhite;
         }
         // count the number of black pixels for each row
         for (int onRow = 0; onRow < rowsToClear; onRow++)
         {
-            numBlacks = 0;
-            // coutn the blacks in this row
-            for (int onCol = 0; onCol < width; onCol++)
-            {
-                // check if this pixel is black
-                if (img.getRGB(onCol, onRow) == black)
-                {
-                    numBlacks++;
-                }
-            }
 
-            // check if this row should be cleared
-            if (numBlacks > .25 * width)
+            // check if row needs clearing
+            if (shouldClearRow(img, onRow))
             {
                 img.setRGB(
-                    0, // startx
-                    onRow, // starty
-                    width, // w
-                    1, // h
-                    whiteRow, // rgbarray
-                    0, //offset
-                    1 // scansize
+                        0, // startx
+                        onRow, // starty
+                        width, // w
+                        1, // 
+                        whiteRow, // rgbarray
+                        0, //offset
+                        1 // scansize
                 );
             }
         }
@@ -601,27 +637,17 @@ public class ExamReader
         // remove the left border
         for (int onCol = 0; onCol < colsToClear; onCol++)
         {
-            numBlacks = 0;
-            // count the blacks in this column
-            for (int onRow = 0; onRow < height; onRow++)
-            {
-                // check if this pixel is black
-                if (img.getRGB(onCol, onRow) == black)
-                {
-                    numBlacks++;
-                }
-            }
-            // check if we should clear this column
-            if (numBlacks > .25 * height)
+            // check if col needs clearing
+            if (shouldClearCol(img, onCol))
             {
                 img.setRGB(
-                    onCol, // startx
-                    0, // starty
-                    1, // w
-                    height, // h
-                    whiteRow, // rgbarray
-                    0, //offset
-                    1 // scansize
+                        onCol, // startx
+                        0, // starty
+                        1, // w
+                        height, // h
+                        whiteRow, // rgbarray
+                        0, //offset
+                        1 // scansize
                 );
             }
         }
@@ -629,18 +655,11 @@ public class ExamReader
 
     private boolean checkFormBoundsSanity(Bounds bounds)
     {
-        // If no anchors were found then this page is not an exam.
-        if (bounds == null)
-        {
-            return false;
-        }
-
-        // If the bounds are invalid, this page is not an exam.
-        if (bounds.minX >= bounds.maxX || bounds.minY >= bounds.maxY)
-        {
-            return false;
-        }
-        return true;
+        // If no anchors were found then this page is not an exam 
+        // or the bounds are invalid, this page is not an exam.
+        
+        return bounds != null &&
+                !(bounds.minX >= bounds.maxX || bounds.minY >= bounds.maxY);
     }
 
     private BufferedImage rotateImage(BufferedImage image, double angle)
