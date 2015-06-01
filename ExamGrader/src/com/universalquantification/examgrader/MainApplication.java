@@ -1,6 +1,7 @@
 package com.universalquantification.examgrader;
 
 import com.universalquantification.examgrader.controller.Controller;
+import com.universalquantification.examgrader.controller.ControllerFactory;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
@@ -690,7 +691,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         String[] inputFiles)
     {
         ConsoleView view = new ConsoleView(kNameAndVersion, rosterFile,
-            inputFiles, outputDir, new PrintWriter(System.out));
+            inputFiles, outputDir, new PrintWriter(System.out),
+                new ControllerFactory());
     }
 
     private static void printHelp(Options options)

@@ -1,6 +1,7 @@
 package com.universalquantification.examgrader.ui;
 
 import com.universalquantification.examgrader.controller.Controller;
+import com.universalquantification.examgrader.controller.ControllerFactory;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
@@ -21,20 +22,17 @@ public class ConsoleView implements AppView, Observer
     private Writer outWriter;
     private Controller controller;
     
-    public ConsoleView(String nameAndVersion, String rosterPath, String[] inputPaths,
-            String outputDir, Writer outWriter)
+    public ConsoleView(String nameAndVersion, String rosterPath,
+            String[] inputPaths, String outputDir, Writer outWriter,
+            ControllerFactory controllerFactory)
     {
         this.outWriter = outWriter;
         
-        this.controller = new Controller(this);
+        this.controller = controllerFactory.buildController(this);
         
         write(nameAndVersion + "\n");
         
-        boolean success = this.controller.changeRosterFile(new File(rosterPath));
-        if (!success)
-        {
-            System.exit(1);
-        }
+        this.controller.changeRosterFile(new File(rosterPath));
         
         write(rosterPath + " validated\n");
         
