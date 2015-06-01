@@ -572,7 +572,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
             Option inputFile = Option.builder("i")
                     .longOpt("input-file")
                     .hasArg(true)
-                    .desc("Path to student roster TSV file (relative or absolute)")
+                    .desc("Path to PDF Input Exam File(s)")
                     .required(false)
                     .hasArgs()
                     .build();
