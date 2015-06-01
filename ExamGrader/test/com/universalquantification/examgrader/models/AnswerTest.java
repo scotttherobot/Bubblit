@@ -154,4 +154,17 @@ public class AnswerTest extends TestCase {
         assertEquals(c.toString(), "ABCDE");
         assertEquals(d.toString(), "");
     }
+     
+     public void testInvalidEquals()
+     {
+        List<Bubble> bubbles = Arrays.asList(
+                new Bubble(false, "A"),
+                new Bubble(false, "B"),
+                new Bubble(false, "C"),
+                new Bubble(false, "D"),
+                new Bubble(false, "E"));
+        
+        Answer a = new Answer(bubbles, 10);
+        assertFalse(a.equals(new Object()));
+     }
 }

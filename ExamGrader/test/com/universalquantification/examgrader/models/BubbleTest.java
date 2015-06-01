@@ -29,6 +29,7 @@ public class BubbleTest extends TestCase {
         assertTrue(a.equals(b));
         assertTrue(!b.equals(c));
         assertTrue(!c.equals(d));
+        assertFalse(a.equals(new Object()));
     }
     
     public void testHashCode() {

@@ -42,4 +42,8 @@ public class InputPageTest extends TestCase {
                 any(ImageObserver.class), anyBoolean(), anyBoolean());
     }
     
+    public void testGetFile()
+    {
+        assertEquals(inputPage.getFile(), new File("test.pdf"));
+    }
 }

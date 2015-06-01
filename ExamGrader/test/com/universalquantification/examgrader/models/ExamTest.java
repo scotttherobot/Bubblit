@@ -166,4 +166,14 @@ public class ExamTest extends TestCase
 
         assertNotNull(exam.toString());
     }
+    
+    public void testGetMaxScore()
+    {
+       Exam exam = createExam(Arrays.asList(0b10000, 0b01000, 0b00100, 0b00010), "Nickel", "Dime");
+       Exam answerKey = createExam(Arrays.asList(0b10000, 0b00001, 0b10000, 0b00010), "5 Dollar Coffee", "Crime");
+
+       exam.grade(answerKey);
+        
+       assertEquals(exam.getMaxScore(), answerKey.getQuestionCount());
+    }
 }
