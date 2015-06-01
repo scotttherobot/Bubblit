@@ -28,7 +28,11 @@ public class ImagePointTest extends TestCase {
     }
     
     public void testImagePoint() throws Exception {
-        assertNull(new ImagePoint().toString());
+        ImagePoint ip = new ImagePoint();
+        ip.setpX(12);
+        ip.setpY(24);
+        
+        assertEquals("point [x: 12,y: 24] ", ip.toString());
     }
 
     // TODO add test methods here. The name must begin with 'test'. For example:
