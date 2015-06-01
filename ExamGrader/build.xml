@@ -31,10 +31,11 @@
              classpath="lib-build/308checks.jar;lib-build/checkstyle-all-4.4.jar"/>
     <checkstyle config="nbproject/308style.xml" failOnViolation="true">
                 <!-- Specify includes and excludes -->
-                <fileset dir="src/com/universalquantification/examgrader" includes="**/*.java"/>
+                <fileset dir="src/com/universalquantification/examgrader"
+                         includes="**/*.java"
+                         excludes="**/Bounds.java,**/CalibrationBubbleRegion.java,**/Bounds.java,**/ImagePointOffset.java,**/ExamPreferences.java,**/VerifyDialog.java,**/GUIView.java"
                 
-                <!-- To add excludes above, do something like this:
-                excludes="**/AboutBox.java"-->
+                />
     </checkstyle>
     </target>
     
