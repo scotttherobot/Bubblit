@@ -13,10 +13,10 @@ import com.universalquantification.examgrader.ui.swing.ExamPreferences;
 import com.universalquantification.examgrader.ui.swing.VerifyDialog;
 import com.universalquantification.examgrader.utils.AppFileFilter;
 import com.universalquantification.examgrader.utils.PreferencesManager;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,6 +24,7 @@ import java.net.FileNameMap;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
@@ -507,14 +510,18 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
+        String url = "http://cytancy.github.io/BubblitUserManual/";
         try
         {
-            Desktop.getDesktop().browse(new URL("http://cytancy.github.io/BubblitUserManual/").toURI());
+            Desktop.getDesktop().browse(new URL(url).toURI());
         }
         catch (IOException | URISyntaxException ex)
         {
-            Logger.getLogger(GUIView.class.getName()).log(Level.SEVERE,
-                null, ex);
+             JTextArea textarea= new JTextArea("There was an error opening your browser. Please visit " + url + " to view the user manaual.");
+            textarea.setEditable(true);
+            JOptionPane.showMessageDialog(this,
+            textarea,
+            "User Manual", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_contentsMenuItemActionPerformed
 
