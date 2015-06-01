@@ -7,8 +7,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -209,6 +211,7 @@ public class Exam
         return correctQuestions.contains(question);
     }
 
+
     /**
      * Returns a list of the correct answers for the incorrect responses.
      *
@@ -217,7 +220,7 @@ public class Exam
      */
     public Set<Map.Entry<String, String>> getIncorrectFeedback()
     {
-        Map feedback = new HashMap();
+        Map<String, String> feedback = new LinkedHashMap<String, String>();
         //List<String> feedback = new ArrayList<String>();
 
         // go through every correct question and generate feedback for it.
@@ -229,7 +232,7 @@ public class Exam
             Answer correctAnswer = (Answer) correctAnswerMap.get(onQ);
             fbStr.append(correctAnswer.toString());
 
-            feedback.put(onQ, fbStr.toString());
+            feedback.put("" + onQ, fbStr.toString());
         }
 
         return feedback.entrySet();
@@ -243,7 +246,7 @@ public class Exam
      */
     public Set<Map.Entry<String, String>> getCorrectFeedback()
     {
-        Map feedback = new HashMap();
+        Map<String, String> feedback = new LinkedHashMap<String, String>();
 
         // go through every correct question and generate feedback for it.
         for (Integer onQ : getCorrectQuestions())
@@ -252,7 +255,7 @@ public class Exam
 
             fbStr.append(getAnswer(onQ).toString());
 
-            feedback.put(onQ, fbStr.toString());
+            feedback.put("" + onQ, fbStr.toString());
         }
 
         return feedback.entrySet();
@@ -405,8 +408,8 @@ public class Exam
 
         this.correctAnswerMap = answerKey.answerMap;
 
-        correctQuestions = new HashSet<Integer>();
-        incorrectQuestions = new HashSet<Integer>();
+        correctQuestions = new TreeSet<Integer>();
+        incorrectQuestions = new TreeSet<Integer>();
 
         // go through every question in our set and check if its correct.
         for (Map.Entry pair : correctAnswerMap.entrySet())

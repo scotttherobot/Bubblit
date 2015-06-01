@@ -1,13 +1,20 @@
 package com.universalquantification.examgrader.models;
 
+import com.google.common.collect.Maps;
 import java.util.HashSet;
 import java.util.Arrays;
 import junit.framework.TestCase;
 
 import static com.universalquantification.examgrader.helpers.ExamHelper.createExam;
 import static com.universalquantification.examgrader.helpers.ExamHelper.createAnswer;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedSet;
 
 /**
  *
@@ -175,5 +182,59 @@ public class ExamTest extends TestCase
        exam.grade(answerKey);
         
        assertEquals(exam.getMaxScore(), answerKey.getQuestionCount());
+    }
+    
+    public void getImage()
+    {
+        Exam exam = createExam(Arrays.asList(0b10000, 0b01000, 0b00100, 0b00010), "Nickel", "Dime");
+        assertNotNull(exam.getExamImageB64());
+    }
+    
+    public void testGetCorrectQuestionsFeedback()
+    {
+       Exam exam = createExam(Arrays.asList(0b10000, 0b01000, 0b00100, 0b00010), "Nickel", "Dime");
+       Exam answerKey = createExam(Arrays.asList(0b10000, 0b00001, 0b10000, 0b00010), "5 Dollar Coffee", "Crime");
+
+       exam.grade(answerKey);
+        
+       Map<String, String> correct = Maps.newLinkedHashMap();
+       correct.put("1", exam.getAnswer(1).toString());
+       correct.put("4", exam.getAnswer(4).toString());
+       
+       List<Entry<String, String>> expected = new ArrayList<>(exam.getCorrectFeedback());
+       
+       List<Entry<String, String>> correctEntries =  new ArrayList<>(correct.entrySet());
+      
+       for (int i = 0; i < correctEntries.size(); i++)
+       {
+           assertEquals(expected.get(i).getKey(), correctEntries.get(i).getKey());  
+           assertEquals(expected.get(i).getValue(), correctEntries.get(i).getValue());
+       }
+       
+       assertEquals(expected.size(), correctEntries.size());
+    }
+    
+    public void testGetIncorrectQuestionsFeedback()
+    {
+       Exam exam = createExam(Arrays.asList(0b10000, 0b01000, 0b00100, 0b00010), "Nickel", "Dime");
+       Exam answerKey = createExam(Arrays.asList(0b10000, 0b00001, 0b10000, 0b00010), "5 Dollar Coffee", "Crime");
+
+       exam.grade(answerKey);
+        
+       Map<String, String> incorrectActual = Maps.newLinkedHashMap();
+       incorrectActual.put("2", answerKey.getAnswer(2).toString());
+       incorrectActual.put("3", answerKey.getAnswer(3).toString());
+       
+       List<Entry<String, String>> expected = new ArrayList<>(exam.getIncorrectFeedback());
+       
+       List<Entry<String, String>> incorrect =  new ArrayList<>(incorrectActual.entrySet());
+      
+       for (int i = 0; i < incorrect.size(); i++)
+       {
+           assertEquals(expected.get(i).getKey(), incorrect.get(i).getKey());  
+           assertEquals(expected.get(i).getValue(), incorrect.get(i).getValue());
+       }
+       
+       assertEquals(expected.size(), incorrect.size());
     }
 }
