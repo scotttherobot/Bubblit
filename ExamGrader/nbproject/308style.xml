@@ -233,6 +233,9 @@
         <module name="MissingSwitchDefault"/>
         <module name="RedundantThrows">
             <property name="severity" value="warning"/>
+            <property name="allowUnchecked" value="true"/>
+            <property name="allowSubclasses" value="true"/>
+            <property name="suppressLoadErrors" value="true"/>
         </module>
 
         <module name="SimplifyBooleanExpression"/>
