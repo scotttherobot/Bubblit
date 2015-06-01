@@ -275,7 +275,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 134);
         getContentPane().add(addFileButton, gridBagConstraints);
 
@@ -292,7 +291,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 10);
         getContentPane().add(removeFileButton, gridBagConstraints);
 
@@ -326,8 +324,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(6, 10, 4, 10);
+        gridBagConstraints.insets = new java.awt.Insets(12, 10, 10, 10);
         getContentPane().add(jSeparator1, gridBagConstraints);
 
         rosterFileLabel.setText("No Roster File Selected");
@@ -360,8 +357,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 10, 4, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jSeparator2, gridBagConstraints);
 
         gradePanel.setDoubleBuffered(false);
@@ -396,6 +392,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(-10, 10, 0, 128);
         getContentPane().add(progressBar, gridBagConstraints);
 

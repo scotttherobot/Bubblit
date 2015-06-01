@@ -284,7 +284,6 @@ public class VerifyDialog extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Verification Dialog");
-        setPreferredSize(new java.awt.Dimension(1280, 720));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         InstructionLabel.setText("Please verify that the students have been correctly identified.");
@@ -299,7 +298,6 @@ public class VerifyDialog extends javax.swing.JFrame
         jSeparator1.setPreferredSize(new java.awt.Dimension(10, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
