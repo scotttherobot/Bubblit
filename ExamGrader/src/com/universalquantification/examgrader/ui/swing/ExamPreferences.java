@@ -2,6 +2,7 @@ package com.universalquantification.examgrader.ui.swing;
 
 import com.universalquantification.examgrader.ui.swing.GUIView;
 import com.universalquantification.examgrader.utils.AppFileFilter;
+import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.io.File;
 import javax.swing.JFileChooser;
 
@@ -166,12 +167,9 @@ public class ExamPreferences extends javax.swing.JFrame
             
             OutputDirectoryLabel.setText(selectedPath);
             
-            // Hey! Over here!
-            System.out.println("Path: " + selectedPath);
-        }
-        else
-        {
-            System.out.println("File chooser has been closed by the user.");
+            PreferencesManager.getInstance().set(
+                    PreferencesManager.kOverrideDir,
+                    selectedDirectory);
         }
     }//GEN-LAST:event_SetOutputButtonActionPerformed
 

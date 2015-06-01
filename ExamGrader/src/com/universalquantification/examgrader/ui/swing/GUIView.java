@@ -109,10 +109,23 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                         dialog.dispose();
                         controller.writeReports(results);
 
-                        for (String fileLocation : fileLocations)
+                        Object overrideDir = PreferencesManager.getInstance()
+                                .get(PreferencesManager.kOverrideDir);
+                        
+                        for (File fileLocation : results.keySet())
                         {
-                            successMessage = successMessage.concat("\t•  "
-                                + new File(fileLocation).getParent() + "\n");
+                            if (overrideDir == null)
+                            {
+                                successMessage = successMessage.concat("\t•  " +
+                                        fileLocation.getParent()
+                                        + "\n");
+                            }
+                            else
+                            {
+                                successMessage = successMessage.concat("\t•  "
+                                        + ((File) overrideDir).getPath()
+                                        + "\n");
+                            }
                         }
 
                         JOptionPane.showMessageDialog(GUIView.this,
@@ -466,7 +479,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                 // get all selected files
                 for (int onFile = 0; onFile < model.getSize(); onFile++)
                 {
-                    fileLocations.add(model.getElementAt(onFile) + "");
+                    fileLocations.add(new File(
+                            model.getElementAt(onFile) + "").getName());
                 }
 
                 controller.grade();

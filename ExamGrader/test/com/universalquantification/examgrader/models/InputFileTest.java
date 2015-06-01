@@ -33,7 +33,7 @@ public class InputFileTest extends TestCase {
         assertFalse(file.equals(new Object()));
         assertTrue(file.equals(file));
     }
-    
+
     public void testToString()
     {
         assertNotNull(file.toString());
