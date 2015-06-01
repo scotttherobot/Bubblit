@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.FileNameMap;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
 import java.util.List;
@@ -491,13 +493,11 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
-        File htmlFile = new File("UserManual.html");
-
         try
         {
-            Desktop.getDesktop().browse(htmlFile.toURI());
+            Desktop.getDesktop().browse(new URL("http://cytancy.github.io/BubblitUserManual/").toURI());
         }
-        catch (IOException ex)
+        catch (IOException | URISyntaxException ex)
         {
             Logger.getLogger(GUIView.class.getName()).log(Level.SEVERE,
                 null, ex);
