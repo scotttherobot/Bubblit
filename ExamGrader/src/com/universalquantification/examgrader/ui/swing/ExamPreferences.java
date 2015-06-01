@@ -1,6 +1,6 @@
-package com.universalquantification.examgrader.ui;
+package com.universalquantification.examgrader.ui.swing;
 
-import com.universalquantification.examgrader.ui.GUIView;
+import com.universalquantification.examgrader.ui.swing.GUIView;
 
 /**
  * Represents application preferences.

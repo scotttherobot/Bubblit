@@ -1,10 +1,11 @@
-package com.universalquantification.examgrader.ui;
+package com.universalquantification.examgrader.ui.console;
 
 import com.universalquantification.examgrader.controller.Controller;
 import com.universalquantification.examgrader.controller.ControllerFactory;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
+import com.universalquantification.examgrader.ui.AppView;
 import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.io.File;
 import java.io.IOException;

@@ -1,8 +1,8 @@
 package com.universalquantification.examgrader;
 
 import com.universalquantification.examgrader.controller.ControllerFactory;
-import com.universalquantification.examgrader.ui.ConsoleView;
-import com.universalquantification.examgrader.ui.GUIView;
+import com.universalquantification.examgrader.ui.console.ConsoleView;
+import com.universalquantification.examgrader.ui.swing.GUIView;
 import java.io.PrintWriter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

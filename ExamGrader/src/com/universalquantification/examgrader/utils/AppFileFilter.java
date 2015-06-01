@@ -1,4 +1,4 @@
-package com.universalquantification.examgrader.ui;
+package com.universalquantification.examgrader.utils;
 
 import java.io.File;
 import javax.swing.filechooser.*;

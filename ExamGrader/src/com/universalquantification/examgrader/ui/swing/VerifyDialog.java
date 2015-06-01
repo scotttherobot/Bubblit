@@ -1,4 +1,4 @@
-package com.universalquantification.examgrader.ui;
+package com.universalquantification.examgrader.ui.swing;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -257,7 +257,8 @@ public class VerifyDialog extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
@@ -284,7 +285,6 @@ public class VerifyDialog extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Verification Dialog");
-        setPreferredSize(new java.awt.Dimension(1200, 720));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         InstructionLabel.setText("Please verify that the students have been correctly identified.");
@@ -318,7 +318,6 @@ public class VerifyDialog extends javax.swing.JFrame
 
         nameTable.setModel(tableModel);
         nameTable.setFocusTraversalPolicyProvider(true);
-        nameTable.setGridColor(new java.awt.Color(255, 255, 255));
         nameTable.setInheritsPopupMenu(true);
         jScrollPane1.setViewportView(nameTable);
 
@@ -334,8 +333,10 @@ public class VerifyDialog extends javax.swing.JFrame
         listRoster.setRequestFocusEnabled(false);
         listRoster.setValueIsAdjusting(true);
         listRoster.setVisibleRowCount(4);
-        listRoster.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        listRoster.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+        {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+            {
                 listRosterValueChanged(evt);
             }
         });

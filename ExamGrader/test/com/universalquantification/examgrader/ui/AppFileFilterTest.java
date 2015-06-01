@@ -5,6 +5,7 @@
  */
 package com.universalquantification.examgrader.ui;
 
+import com.universalquantification.examgrader.utils.AppFileFilter;
 import java.io.File;
 import junit.framework.TestCase;
 

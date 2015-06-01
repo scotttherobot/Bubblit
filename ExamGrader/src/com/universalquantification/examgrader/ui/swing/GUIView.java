@@ -1,4 +1,4 @@
-package com.universalquantification.examgrader.ui;
+package com.universalquantification.examgrader.ui.swing;
 
 import com.universalquantification.examgrader.controller.Controller;
 import com.universalquantification.examgrader.controller.ControllerFactory;
@@ -7,11 +7,14 @@ import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.models.Student;
-import com.universalquantification.examgrader.ui.AppFileFilter;
+import com.universalquantification.examgrader.utils.AppFileFilter;
+import com.universalquantification.examgrader.utils.AppFileFilter;
+import com.universalquantification.examgrader.ui.AppView;
 import com.universalquantification.examgrader.ui.AppView;
 import com.universalquantification.examgrader.ui.AppViewExceptionHandler;
-import com.universalquantification.examgrader.ui.ConsoleView;
-import com.universalquantification.examgrader.ui.VerifyDialog;
+import com.universalquantification.examgrader.ui.AppViewExceptionHandler;
+import com.universalquantification.examgrader.ui.console.ConsoleView;
+import com.universalquantification.examgrader.ui.swing.VerifyDialog;
 import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;

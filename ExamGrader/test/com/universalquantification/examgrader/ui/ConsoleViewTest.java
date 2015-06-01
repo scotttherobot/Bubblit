@@ -5,6 +5,7 @@
  */
 package com.universalquantification.examgrader.ui;
 
+import com.universalquantification.examgrader.ui.console.ConsoleView;
 import com.universalquantification.examgrader.controller.Controller;
 import com.universalquantification.examgrader.controller.ControllerFactory;
 import com.universalquantification.examgrader.controller.ControllerFactoryTest;
