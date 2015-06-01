@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.universalquantification.examgrader;
 
 import com.universalquantification.examgrader.controller.ControllerFactory;
@@ -18,14 +13,18 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 /**
- * This is the main entry point for the Bubblit application.
- * Parses command line arguments. If found, passes them to the ConsoleView.
- * If it finds none, spawns a GUIView.
+ * This is the main entry point for the Bubblit application. Parses command line
+ * arguments. If found, passes them to the ConsoleView. If it finds none, spawns
+ * a GUIView.
+ *
  * @author scottvanderlind
  */
 public class AppRunner
 {
-    // The name and version string to use in the interfaces
+
+    /**
+     * The name and version string to use in the interfaces
+     */
     public static final String kNameAndVersion
         = "Bubblit V2.0 by Universal Quantification";
 
@@ -39,12 +38,12 @@ public class AppRunner
             this.addOption("h", "help", false, "display syntax help info.");
             // add r flag with argument boolean SET to true
             Option inputFile = Option.builder("i")
-                    .longOpt("input-file")
-                    .hasArg(true)
-                    .desc("Path to PDF Input Exam File(s)")
-                    .required(false)
-                    .hasArgs()
-                    .build();
+                .longOpt("input-file")
+                .hasArg(true)
+                .desc("Path to PDF Input Exam File(s)")
+                .required(false)
+                .hasArgs()
+                .build();
             // add i flag with argument boolean SET to true 
             this.addOption(inputFile);
             this.addOption("r", "roster", true,
@@ -54,13 +53,15 @@ public class AppRunner
                 "Path to folder for placing result files");
         }
     };
-    
+
     /**
      * A class for initializing the views. Separated out from AppRunner for
      * testability.
+     *
      * @author jenny
-     */         
-    public static class ViewInitializer {
+     */
+    public static class ViewInitializer
+    {
         /**
          * Runs the GUI.
          */
@@ -70,33 +71,40 @@ public class AppRunner
         }
 
         /**
-         * Instantiate and run a ConsoleView interface.
-         * Starts a console for running the app.
+         * Instantiate and run a ConsoleView interface. Starts a console for
+         * running the app.
+         *
+         * @param nameAndVersion the name and version of the app
          * @param outputDir the directory to output files to
          * @param rosterFile the roster file to use
          * @param inputFiles the paths of the files to grade
          */
         public void runCli(String nameAndVersion, String outputDir,
-                String rosterFile, String[] inputFiles)
-        { 
+            String rosterFile, String[] inputFiles)
+        {
             ConsoleView view = new ConsoleView(nameAndVersion, rosterFile,
                 inputFiles, outputDir, new PrintWriter(System.out),
-                    new ControllerFactory());
+                new ControllerFactory());
         }
 
     }
-    
+
     private ViewInitializer viewInitializer;
-    
+
+    /**
+     * Create a new AppRunner with a given {@link ViewInitializer}
+     * @param viewInitializer the initializer to use
+     */
     public AppRunner(ViewInitializer viewInitializer)
     {
         this.viewInitializer = viewInitializer;
     }
-    
+
     /**
      * Run the application.
+     *
      * @param args command arguments
-     * @throws ParseException 
+     * @throws ParseException
      */
     public void run(String[] args) throws ParseException
     {
@@ -147,9 +155,10 @@ public class AppRunner
             viewInitializer.runGui();
         }
     }
-    
+
     /**
      * Prints the help for the Console interface
+     *
      * @param options an Options object containing the CLI options
      */
     private void printHelp(Options options)
@@ -163,5 +172,5 @@ public class AppRunner
     {
         new AppRunner(new ViewInitializer()).run(args);
     }
-    
+
 }
