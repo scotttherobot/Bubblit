@@ -70,7 +70,7 @@ public class ExamReader
      *
      * @param file The input page to scan names.
      * @return an Exam with questions and student name filled in.
-     * @throws InvalidExamException
+     * @throws com.universalquantification.examgrader.reader.InvalidExamException
      */
     public Exam getExam(InputPage file) throws InvalidExamException
     {
@@ -116,6 +116,7 @@ public class ExamReader
         CalibrationBubbleRegion cbInfo = getCalibrationBubbleStats(fileImage,
             formDetails.getBoundsForCalibrationBubbles());
 
+        // check if the exam should be flipped
         if (shouldFlip(formDetails, fileImage))
         {
             fileImage = getBinaryImage(rotate180(fileImage));
@@ -123,6 +124,7 @@ public class ExamReader
             bounds = getFormBounds(fileImage);
             formDetails = new BubblitFormV2Details(bounds);
 
+            // if the exam still needs to be flipped, its invalid.
             if (shouldFlip(formDetails, fileImage))
             {
                 throw new InvalidExamException();
@@ -145,16 +147,26 @@ public class ExamReader
         // if fill min ratio for bubbles is 0, flip.
         BufferedImage calibrationRegion = getSubImage(fileImage, cbBounds);
 
-        BufferedImage calibrationBubbles[] = splitImageHorizontally(
+        BufferedImage[] calibrationBubbles = splitImageHorizontally(
             calibrationRegion, BubblitFormV2Details.kNumChoicesPerAnswer);
 
         double fillRatio = 0;
         double minRatio = 1;
+        
+        // go through every calibration bubble and check its fill ratio
         for (int onCb = 0; onCb < calibrationBubbles.length; onCb++)
         {
             double ratio = getBlackRatio(calibrationBubbles[onCb]);
-            fillRatio = ratio > fillRatio ? ratio : fillRatio;
-            minRatio = ratio < minRatio ? ratio : minRatio;
+            // check if this is the largest fill ratio
+            if(ratio > fillRatio)
+            {
+                fillRatio = ratio;
+            }
+            // check if this is smallest fill ratio
+            if(ratio < minRatio)
+            {
+                minRatio = ratio;
+            }
         }
 
         return new CalibrationBubbleRegion(minRatio, fillRatio);
@@ -183,18 +195,21 @@ public class ExamReader
     {
         StochasticString str = new StochasticString();
 
-        BufferedImage nameCharacters[] = splitImageHorizontally(img,
+        BufferedImage[] nameCharacters = splitImageHorizontally(img,
             numLetters, 0.08, 0.02);
 
-        for (int i = 0; i < nameCharacters.length; i++)
+        // go through every character and add it to the name
+        for (int onChar = 0; onChar < nameCharacters.length; onChar++)
         {
             //ShowImages.showDialog(nameCharacters[i]);
-            removeBorders(nameCharacters[i], isRotated);
+            removeBorders(nameCharacters[onChar], isRotated);
             //ShowImages.showDialog(nameCharacters[i]);
-            if (getBlackRatio(nameCharacters[i]) > 0.02)
+            if (getBlackRatio(nameCharacters[onChar]) > 0.02)
             {
-                StochasticCharacter chr = this.nameRecognitionGateway.
-                    detectStochasticCharacter(nameCharacters[i]);
+                StochasticCharacter chr = 
+                    this.nameRecognitionGateway.detectStochasticCharacter(
+                        nameCharacters[onChar]);
+                // make sure that we don't add null characters
                 if (chr != null)
                 {
                     str.append(chr);
@@ -290,6 +305,7 @@ public class ExamReader
         //ImagePoint leftAnchorLoc
         //        = getTemplateLocation(leftCorner, leftAnchor, 1);
         ImagePoint leftAnchorLoc = getDonutLocation(leftCorner, false);
+        // make sure that we found a left anchor
         if (leftAnchorLoc == null)
         {
             return null;
@@ -297,17 +313,16 @@ public class ExamReader
         //ImagePoint rightAnchorLoc
         //        = getTemplateLocation(rightCorner, rightAnchor, 1);
         ImagePoint rightAnchorLoc = getDonutLocation(rightCorner, true);
+        // make sure that we found a right anchor
         if (rightAnchorLoc == null)
         {
             return null;
         }
 
         int x0 = leftAnchorLoc.getpX();
-        int x1 = image.getWidth() - rightCorner.width + rightAnchorLoc.
-            getpX();
+        int x1 = image.getWidth() - rightCorner.width + rightAnchorLoc.getpX();
         int y0 = leftAnchorLoc.getpY();
-        int y1 = image.getHeight() - rightCorner.height + rightAnchorLoc.
-            getpY();
+        int y1 = image.getHeight() - rightCorner.height + rightAnchorLoc.getpY();
         Bounds bounds = new Bounds(x0, x1, y0, y1);
         return bounds;
     }
@@ -329,6 +344,7 @@ public class ExamReader
         List<Contour> contours = BinaryImageOps.contour(edgeImage,
             ConnectRule.EIGHT, null);
 
+        // make sure that we found enough contours to make a circle
         if (contours.size() < 2)
         {
             return null;
@@ -338,33 +354,56 @@ public class ExamReader
         int maxx = 0;
         int maxy = 0;
 
-        for (Contour c : contours)
+        // find the minimum x and y values for the contours to get location
+        for (Contour cont : contours)
         {
-            for (Point2D_I32 p : c.external)
+            // go through every point in this contour and check extrema
+            for (Point2D_I32 point : cont.external)
             {
-                minx = p.x < minx ? p.x : minx;
-                miny = p.y < miny ? p.y : miny;
-                maxx = p.x > maxx ? p.x : maxx;
-                maxy = p.y > maxy ? p.y : maxy;
+                // check if we've reached a minimum x
+                if(point.x < minx)
+                {
+                    minx = point.x;
+                }
+                // check if we've reached a minimum y
+                if(point.y < miny)
+                {
+                    miny = point.y;
+                }
+                //check if we've reached a maximum x
+                if(point.x > maxx)
+                {
+                    maxx = point.x;
+                }
+                // check if we've reached a maximum y
+                if(point.y > maxy)
+                {
+                    maxy = point.y;
+                }
             }
         }
-
-        ImagePoint p = new ImagePoint();
-        if (getRight)
-        {
-            p.setpX(maxx);
-            p.setpY(maxy);
-        }
-
-        else
-        {
-            p.setpX(minx);
-            p.setpY(miny);
-        }
-
-        return p;
+        return ipHelper(minx, maxx, miny, maxy, getRight);
     }
 
+    private static ImagePoint ipHelper(int minx, int maxx, int miny, int maxy,
+        boolean getRight)
+    {
+        ImagePoint point = new ImagePoint();
+        // return the max coordinates if we're getting the left anchor
+        if (getRight)
+        {
+            point.setpX(maxx);
+            point.setpY(maxy);
+        }
+        // return the min coordinates if we're getting the right anchor
+        else
+        {
+            point.setpX(minx);
+            point.setpY(miny);
+        }
+
+        return point;
+    }
     /**
      * Get a black-and-white version of an image
      *
@@ -393,26 +432,30 @@ public class ExamReader
     /**
      * invert a black and white image
      *
-     * @param img
+     * @param img the image to invert
      */
     public static void invertBW(BufferedImage img)
     {
-        int w = img.getWidth();
-        int h = img.getHeight();
+        int width = img.getWidth();
+        int height = img.getHeight();
         int black = -16777216;
         int white = -1;
 
-        for (int x = 0; x < w; x++)
+        // go through every column
+        for (int onX = 0; onX < width; onX++)
         {
-            for (int y = 0; y < h; y++)
+            // go through every row
+            for (int onY = 0; onY < height; onY++)
             {
-                if (img.getRGB(x, y) == white)
+                // check if this pixel is white, and change it to black if so.
+                if (img.getRGB(onX, onY) == white)
                 {
-                    img.setRGB(x, y, black);
+                    img.setRGB(onX, onY, black);
                 }
+                // change whites to blacks
                 else
                 {
-                    img.setRGB(x, y, white);
+                    img.setRGB(onX, onY, white);
                 }
             }
         }
@@ -431,12 +474,13 @@ public class ExamReader
     private BufferedImage[] splitImageHorizontally(BufferedImage img,
         int numSections, double xPadding, double yPadding)
     {
-        BufferedImage images[] = new BufferedImage[numSections];
+        BufferedImage[] images = new BufferedImage[numSections];
         double cellWidth = img.getWidth() / (double) numSections;
         double cellHeight = img.getHeight();
         double toRemoveX = cellWidth * xPadding;
         double toRemoveY = cellWidth * yPadding;
 
+        // got through the number of requested sections and split the image
         for (int onSection = 0; onSection < numSections; onSection++)
         {
             // remove the padding & crop
@@ -475,10 +519,13 @@ public class ExamReader
         double numBlack = 0;
         int black = -16777216;
 
+        // go through every column
         for (int xp = 0; xp < img.getWidth(); xp++)
         {
+            // go through every row
             for (int yp = 0; yp < img.getHeight(); yp++)
             {
+                // check if the pixel is black
                 if (img.getRGB(xp, yp) == black)
                 {
                     numBlack++;
@@ -503,10 +550,13 @@ public class ExamReader
         int numBlacks;
         int[] whiteRow = new int[width + height];
         double ratioToClear;
+        
+        // set the ratio of pixels to clear for rotated images
         if (isRotated)
         {
             ratioToClear = 0.25;
         }
+        // set the ratio of pixels to clear for non-rotated images
         else
         {
             ratioToClear = 0.15;
@@ -514,22 +564,26 @@ public class ExamReader
         int colsToClear = (int) (ratioToClear * width);
         int rowsToClear = (int) (ratioToClear * height);
 
-        for (int i = 0; i < width + height; i++)
+        // set every pixel to white
+        for (int onPixel = 0; onPixel < width + height; onPixel++)
         {
-            whiteRow[i] = white;
+            whiteRow[onPixel] = white;
         }
-        // remove the top border
+        // count the number of black pixels for each row
         for (int onRow = 0; onRow < rowsToClear; onRow++)
         {
             numBlacks = 0;
+            // coutn the blacks in this row
             for (int onCol = 0; onCol < width; onCol++)
             {
+                // check if this pixel is black
                 if (img.getRGB(onCol, onRow) == black)
                 {
                     numBlacks++;
                 }
             }
 
+            // check if this row should be cleared
             if (numBlacks > .25 * width)
             {
                 img.setRGB(
@@ -548,14 +602,16 @@ public class ExamReader
         for (int onCol = 0; onCol < colsToClear; onCol++)
         {
             numBlacks = 0;
+            // count the blacks in this column
             for (int onRow = 0; onRow < height; onRow++)
             {
+                // check if this pixel is black
                 if (img.getRGB(onCol, onRow) == black)
                 {
                     numBlacks++;
                 }
             }
-
+            // check if we should clear this column
             if (numBlacks > .25 * height)
             {
                 img.setRGB(
@@ -626,6 +682,7 @@ public class ExamReader
         ArrayList<Answer> answers = new ArrayList<Answer>();
         char[] choices = BubblitFormV2Details.kAnswerChoices;
 
+        // go through every question to add it
         for (int qNum = 1; qNum <= BubblitFormV2Details.kNumQuestions; qNum++)
         {
             ArrayList<Bubble> questionBubbles = new ArrayList<Bubble>();
@@ -633,18 +690,21 @@ public class ExamReader
             BufferedImage answerRegion = getSubImage(
                 fileImage, formDetails.getBoundsForQuestion(qNum));
 
-            BufferedImage bubbles[] = splitImageHorizontally(answerRegion,
+            BufferedImage[] bubbles = splitImageHorizontally(answerRegion,
                 BubblitFormV2Details.kNumChoicesPerAnswer);
 
+            // go through every bubble to check if its filled in
             for (int onB = 0; onB < BubblitFormV2Details.kNumChoicesPerAnswer;
                 onB++)
             {
                 Bubble bubble;
 
+                // check if this bubble is filled in 
                 if (getBlackRatio(bubbles[onB]) > fillRatio)
                 {
                     bubble = new Bubble(true, String.valueOf(choices[onB]));
                 }
+                // this bubble is not filled in
                 else
                 {
                     bubble = new Bubble(false, String.valueOf(choices[onB]));
