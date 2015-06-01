@@ -7,6 +7,7 @@ import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.grader.RosterParser;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
+import com.universalquantification.examgrader.reader.InvalidExamException;
 import com.universalquantification.examgrader.ui.AppView;
 import java.io.File;
 import java.io.IOException;
@@ -179,6 +180,14 @@ public class Controller
             grader.deleteObserver(appView);
         }
         // EXCEPTION GradingException
+        catch (InvalidExamException e)
+        {
+            int pageNum = grader.getPagesGraded() + 1;
+            int totalPages = grader.getTotalPagesToGrade();
+            appView.showError("Page " + pageNum + " of " + totalPages 
+                + " does not contain a valid exam. "
+                + "Please remove it from the PDF and grade again.");
+        }
         catch (Exception e)
         {
             e.printStackTrace();
