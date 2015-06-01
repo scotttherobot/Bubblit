@@ -229,7 +229,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         fileChooser = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
         addFileButton = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         removeFileButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         fileList = new javax.swing.JList();
@@ -254,7 +253,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Version 2 - Universal Quantification");
         setForeground(java.awt.Color.white);
-        setPreferredSize(new java.awt.Dimension(460, 400));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -275,9 +273,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 134);
         getContentPane().add(addFileButton, gridBagConstraints);
-        getContentPane().add(filler1, new java.awt.GridBagConstraints());
 
         removeFileButton.setText("Remove Exam File");
         removeFileButton.setToolTipText("");
@@ -291,6 +290,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 10);
         getContentPane().add(removeFileButton, gridBagConstraints);
 
@@ -323,6 +324,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jSeparator1, gridBagConstraints);
 
@@ -355,9 +358,13 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jSeparator2, gridBagConstraints);
 
+        gradePanel.setDoubleBuffered(false);
+        gradePanel.setMinimumSize(new java.awt.Dimension(110, 28));
         gradePanel.setLayout(new java.awt.BorderLayout());
 
         gradeButton.setText("Grade!");
@@ -749,7 +756,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     private DefaultListModel listModel;
     private javax.swing.JList fileList;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JButton gradeButton;
     private javax.swing.JPanel gradePanel;
     private javax.swing.JMenu helpMenu;
