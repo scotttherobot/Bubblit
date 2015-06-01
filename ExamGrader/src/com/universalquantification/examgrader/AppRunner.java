@@ -55,49 +55,19 @@ public class AppRunner
     };
 
     /**
-     * A class for initializing the views. Separated out from AppRunner for
-     * testability.
-     *
-     * @author jenny
+     * Runs the GUI.
      */
-    public static class ViewInitializer
+    void runGui()
     {
-        /**
-         * Runs the GUI.
-         */
-        public void runGui()
-        {
-            GUIView.runGui();
-        }
-
-        /**
-         * Instantiate and run a ConsoleView interface. Starts a console for
-         * running the app.
-         *
-         * @param nameAndVersion the name and version of the app
-         * @param outputDir the directory to output files to
-         * @param rosterFile the roster file to use
-         * @param inputFiles the paths of the files to grade
-         */
-        public void runCli(String nameAndVersion, String outputDir,
+        GUIView.runGui();  
+    }
+    
+    void runCli(String nameAndVersion, String outputDir,
             String rosterFile, String[] inputFiles)
-        {
-            ConsoleView view = new ConsoleView(nameAndVersion, rosterFile,
+    {
+        ConsoleView view = new ConsoleView(nameAndVersion, rosterFile,
                 inputFiles, outputDir, new PrintWriter(System.out),
                 new ControllerFactory());
-        }
-
-    }
-
-    private ViewInitializer viewInitializer;
-
-    /**
-     * Create a new AppRunner with a given {@link ViewInitializer}
-     * @param viewInitializer the initializer to use
-     */
-    public AppRunner(ViewInitializer viewInitializer)
-    {
-        this.viewInitializer = viewInitializer;
     }
 
     /**
@@ -149,11 +119,11 @@ public class AppRunner
                 System.out.println("Argument missing. See the --help option.");
                 return;
             }
-            viewInitializer.runCli(kNameAndVersion, oArg, rArg, iArgs);
+            runCli(kNameAndVersion, oArg, rArg, iArgs);
         }
         else
         {
-            viewInitializer.runGui();
+            runGui();
         }
     }
 
@@ -176,7 +146,7 @@ public class AppRunner
      */
     public static void main(String[] args) throws ParseException
     {
-        new AppRunner(new ViewInitializer()).run(args);
+        new AppRunner().run(args);
     }
 
 }

@@ -5,9 +5,10 @@
  */
 package com.universalquantification.examgrader;
 
-import com.universalquantification.examgrader.AppRunner.ViewInitializer;
 import junit.framework.TestCase;
 import static org.mockito.Matchers.any;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -34,61 +35,74 @@ public class AppRunnerTest extends TestCase {
 
     public void testCommandLine() throws Exception
     {
-        ViewInitializer initializer = mock(ViewInitializer.class);
-        AppRunner runner = new AppRunner(initializer);
+        AppRunner runner = Mockito.spy(new AppRunner());
+        doNothing().when(runner).runCli(any(String.class), any(String.class),
+                any(String.class), any(String[].class));
+        doNothing().when(runner).runGui();
+        
         runner.run("-i file1.pdf file2.pdf -o output -r roster".split(" "));
         
-        verify(initializer).runCli(AppRunner.kNameAndVersion, "output",
+        verify(runner).runCli(AppRunner.kNameAndVersion, "output",
                 "roster", new String[] {"file1.pdf", "file2.pdf"});
                 
     }
     
     public void testGui() throws Exception
     {
-        ViewInitializer initializer = mock(ViewInitializer.class);
-        AppRunner runner = new AppRunner(initializer);
+        AppRunner runner = Mockito.spy(new AppRunner());
+        doNothing().when(runner).runCli(any(String.class), any(String.class),
+                any(String.class), any(String[].class));
+        doNothing().when(runner).runGui();
         runner.run(new String[] {});
         
-        verify(initializer).runGui();
+        verify(runner).runGui();
     }
     
     public void testCliNoRoster() throws Exception
     {
-        ViewInitializer initializer = mock(ViewInitializer.class);
-        AppRunner runner = new AppRunner(initializer);
+        AppRunner runner = Mockito.spy(new AppRunner());
+        doNothing().when(runner).runCli(any(String.class), any(String.class),
+                any(String.class), any(String[].class));
+        doNothing().when(runner).runGui();
         runner.run("-i file1.pdf file2.pdf -o output".split(" "));
-        verify(initializer, never()).runGui();
-        verify(initializer, never()).runCli(any(String.class),
+        verify(runner, never()).runGui();
+        verify(runner, never()).runCli(any(String.class),
                 any(String.class), any(String.class), any(String[].class));
     }
     
     public void testCliNoInput() throws Exception
     {
-        ViewInitializer initializer = mock(ViewInitializer.class);
-        AppRunner runner = new AppRunner(initializer);
+        AppRunner runner = Mockito.spy(new AppRunner());
+        doNothing().when(runner).runCli(any(String.class), any(String.class),
+                any(String.class), any(String[].class));
+        doNothing().when(runner).runGui();
         runner.run("-r roster -o output".split(" "));
-        verify(initializer, never()).runGui();
-        verify(initializer, never()).runCli(any(String.class),
+        verify(runner, never()).runGui();
+        verify(runner, never()).runCli(any(String.class),
                 any(String.class), any(String.class), any(String[].class));
     }
     
     public void testHelp() throws Exception
     {
-        ViewInitializer initializer = mock(ViewInitializer.class);
-        AppRunner runner = new AppRunner(initializer);
+        AppRunner runner = Mockito.spy(new AppRunner());
+        doNothing().when(runner).runCli(any(String.class), any(String.class),
+                any(String.class), any(String[].class));
+        doNothing().when(runner).runGui();
         runner.run("-h".split(" "));
-        verify(initializer, never()).runGui();
-        verify(initializer, never()).runCli(any(String.class),
+        verify(runner, never()).runGui();
+        verify(runner, never()).runCli(any(String.class),
                 any(String.class), any(String.class), any(String[].class));   
     }
     
     public void testVersion() throws Exception
     {
-        ViewInitializer initializer = mock(ViewInitializer.class);
-        AppRunner runner = new AppRunner(initializer);
+        AppRunner runner = Mockito.spy(new AppRunner());
+        doNothing().when(runner).runCli(any(String.class), any(String.class),
+                any(String.class), any(String[].class));
+        doNothing().when(runner).runGui();
         runner.run("-v".split(" "));
-        verify(initializer, never()).runGui();
-        verify(initializer, never()).runCli(any(String.class),
+        verify(runner, never()).runGui();
+        verify(runner, never()).runCli(any(String.class),
                 any(String.class), any(String.class), any(String[].class));   
     }
     
