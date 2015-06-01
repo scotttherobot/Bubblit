@@ -33,7 +33,7 @@ public class ConsoleView implements AppView, Observer
         
         if (outputDir != null)
         {
-            PreferencesManager.getInstance().set(PreferencesManager.OVERRIDE_DIR,
+            PreferencesManager.getInstance().set(PreferencesManager.kOverrideDir,
                 new File(outputDir));
         }
         
