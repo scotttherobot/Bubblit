@@ -5,6 +5,7 @@ import com.universalquantification.examgrader.controller.ControllerFactory;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
+import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -29,6 +30,12 @@ public class ConsoleView implements AppView, Observer
         this.outWriter = outWriter;
         
         this.controller = controllerFactory.buildController(this);
+        
+        if (outputDir != null)
+        {
+            PreferencesManager.getInstance().set(PreferencesManager.OVERRIDE_DIR,
+                new File(outputDir));
+        }
         
         write(nameAndVersion + "\n");
         

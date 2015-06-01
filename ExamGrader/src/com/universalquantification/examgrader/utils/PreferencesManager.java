@@ -10,6 +10,8 @@ import java.util.Map;
  */
 public final class PreferencesManager
 {
+    public static final String OVERRIDE_DIR = "override_dir";
+    
     private static final PreferencesManager INSTANCE = new PreferencesManager();
     
     private Map<String, Object> prefs;

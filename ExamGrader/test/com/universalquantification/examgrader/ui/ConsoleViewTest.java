@@ -11,6 +11,7 @@ import com.universalquantification.examgrader.controller.ControllerFactoryTest;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
+import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -56,8 +57,8 @@ public class ConsoleViewTest extends TestCase {
         StringWriter stringWriter = new StringWriter();
         Grader grader = mock(Grader.class);
         
-        ConsoleView consoleView = new ConsoleView("bubblit", "roster", inputPaths, null,
-                stringWriter, controllerFactory);
+        ConsoleView consoleView = new ConsoleView("bubblit", "roster",
+                inputPaths, null, stringWriter, controllerFactory);
         
         when(grader.getPagesGraded()).thenReturn(0, 2);
         when(grader.getTotalPagesToGrade()).thenReturn(2);
@@ -72,6 +73,23 @@ public class ConsoleViewTest extends TestCase {
             "Grading a\n" +
             "0%... 100%\n" +
             "Done!\n");
+        
+    }
+    
+    public void testSettingOutputDir()
+    {
+          String[] inputPaths = {
+            "a"
+        };
+        
+        StringWriter stringWriter = new StringWriter();
+        Grader grader = mock(Grader.class);
+        
+        ConsoleView consoleView = new ConsoleView("bubblit", "roster",
+                inputPaths, "asdf", stringWriter, controllerFactory);
+        
+        assertEquals(PreferencesManager.getInstance().get(
+                PreferencesManager.OVERRIDE_DIR), new File("asdf"));
         
     }
     

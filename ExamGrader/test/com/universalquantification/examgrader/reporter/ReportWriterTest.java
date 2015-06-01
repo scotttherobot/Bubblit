@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import static com.universalquantification.examgrader.helpers.ExamHelper.createExam;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
+import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -66,7 +67,9 @@ public class ReportWriterTest extends TestCase {
         Path overrideDir = Files.createTempDirectory("override");;
         File dirFile = new File(overrideDir.toUri());
         dirFile.deleteOnExit();
-        ReportWriter writer = new ReportWriter(dirFile);
+        PreferencesManager.getInstance().set(PreferencesManager.OVERRIDE_DIR,
+                dirFile);
+        ReportWriter writer = new ReportWriter();
         
         Map<File, GradedExamCollection> map = Maps.newHashMap();
         map.put(new File("foo.txt"), gradedExamCollection);

@@ -3,6 +3,7 @@ package com.universalquantification.examgrader.reporter;
 import com.google.common.io.Files;
 import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.GradedExamCollection;
+import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -21,10 +22,6 @@ import java.util.Map;
  */
 public class ReportWriter
 {
-    /**
-     * The directory where the reports shall be written
-     */
-    private File outputDirectory;
     
     private static final String RESOURCE_PATH = "resources";
     
@@ -32,24 +29,24 @@ public class ReportWriter
      * Instantiate a writer to a particular file path.
      * If outputDirectoryOverride is not set, the default output path will
      * be used.
-     * @param outputDirectory the directory to write to
      */
-    public ReportWriter(File outputDirectory)
+    public ReportWriter()
     {
-        // SET this.outputDirectory to outputDirectory
-        this.outputDirectory = outputDirectory;
     }
     
     private File getOutputDirectory(File file)
     {
         File parent;
+        
+        Object outputDirectory = PreferencesManager.getInstance().get(
+            PreferencesManager.OVERRIDE_DIR);
         if (outputDirectory == null)
         {
             parent = file.getParentFile();
         }
         else
         {
-            parent = outputDirectory;
+            parent = (File) outputDirectory;
         }
         return parent;
     }

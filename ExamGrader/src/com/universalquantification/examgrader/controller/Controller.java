@@ -49,7 +49,7 @@ public class Controller
      */
     public Controller(AppView view)
     {
-        this(view, new InputFileList(), new ReportWriter(null),
+        this(view, new InputFileList(), new ReportWriter(),
                 new GraderFactory());
         
     }
