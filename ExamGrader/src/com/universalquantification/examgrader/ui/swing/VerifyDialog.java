@@ -302,7 +302,6 @@ public class VerifyDialog extends javax.swing.JFrame
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         getContentPane().add(jSeparator1, gridBagConstraints);
 
@@ -356,18 +355,17 @@ public class VerifyDialog extends javax.swing.JFrame
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 10, 10);
         getContentPane().add(jSeparator2, gridBagConstraints);
 
         VerifyButton.setText("Accept");
         VerifyButton.setToolTipText("");
-        VerifyButton.setActionCommand("Accept");
         VerifyButton.setMargin(new java.awt.Insets(2, 20, 2, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
         getContentPane().add(VerifyButton, gridBagConstraints);
 
