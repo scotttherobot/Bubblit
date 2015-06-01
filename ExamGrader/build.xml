@@ -116,7 +116,8 @@
         </java>
         <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
               output="${diffresults}" append="true">
-              <arg line="oracles/Sample10_www_oracles/&apos;001975213.html ExamSets/Sample10_www/&apos;001975213.html"/>
+              <arg value="oracles/Sample10_www_oracle/&apos;001975213.html"/>
+              <arg value="ExamSets/Sample10_www/&apos;001975213.html"/>
         </exec>
         <delete file="${systemtest.dir}/ExamSets/Sample10_aggregate.csv"/>
         <delete dir="${systemtest.dir}/ExamSets/Sample10_www"/>
