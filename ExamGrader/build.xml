@@ -98,8 +98,10 @@
             <arg line="oracles/SysTest1.oracle SysTest1.out"/>
         </exec>
         <delete file="${systemtest.dir}/SysTest*.out"/>
-        <delete file="${systemtest.dir}/*_aggregate.csv"/>
-        <delete dir="${systemtest.dir}/*_www/"/>
+        <delete file="${systemtest.dir}/ExamSets/SampleExams_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/ExamSets/SampleExams_www"/>
+        <delete file="${systemtest.dir}/ExamSets/SampleExams1_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/ExamSets/SampleExams1_www"/>
 
         <echo message="running systest10"/>
         <!-- System Test Case 10 -->
@@ -113,8 +115,10 @@
         </java>
         <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
               output="${diffresults}" append="true">
-              <arg line="001.html ${systemtest.dir}/ExamSets/Sample10_www/001.html"/>
+              <arg line="oracles/Sample10_www_oracles/&apos;001975213.html ExamSets/Sample10_www/&apos;001975213.html"/>
         </exec>
+        <delete file="${systemtest.dir}/ExamSets/Sample10_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/ExamSets/Sample10_www"/>
         
 
         
@@ -254,13 +258,19 @@
               output="${diffresults}" append="true">
             <arg line="oracles/SysTest4.oracle SysTest4.out"/>
         </exec>
+        
+        <replaceregexp file="${systemtest.dir}/ExamSets/SampleExams_aggregate.csv"
+               match="^.*(Creation\sDate|Input\sFile).*$"
+               replace=""
+               byline="true"
+        />
+        
         <exec dir="${systemtest.dir}" executable="/usr/bin/diff" osfamily="unix"
               output="${diffresults}" append="true">
             <arg line="oracles/SysTest4_aggregate.oracle ExamSets/SampleExams_aggregate.csv"/>
         </exec>
-        <delete file="${systemtest.dir}/SysTest*.out"/>
-        <delete file="${systemtest.dir}/*_aggregate.csv"/>
-        <delete dir="${systemtest.dir}/*_www/"/>
+        <delete file="${systemtest.dir}/ExamSets/SampleExams_aggregate.csv"/>
+        <delete dir="${systemtest.dir}/ExamSets/SampleExams_www"/>
         
 
     </target>
