@@ -131,7 +131,6 @@ public class Controller
         // check that we actually got some roster entries
         if (rosterEntries.isEmpty())
         {
-            System.out.print("'''''''''''''''");
             appView.showError(
                 "No students were found in the roster file. Please"
                 + "try another file.");
