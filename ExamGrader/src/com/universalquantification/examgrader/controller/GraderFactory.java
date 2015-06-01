@@ -13,16 +13,23 @@ import com.universalquantification.examgrader.reader.NameRecognitionGateway;
 import java.util.List;
 
 /**
- *
+ * Create a grader
  * @author jenny
  */
-public class GraderFactory {
-    
+public class GraderFactory
+{
+
+    /**
+     * Create a grader with a given {@link InputFileList} and {@link RosterEntry}s
+     * @param inputFileList the list of input files
+     * @param rosterEntries the list of roster entries
+     * @return the newly created Grader
+     */
     public Grader buildNewGrader(InputFileList inputFileList,
-            List<RosterEntry> rosterEntries)
+        List<RosterEntry> rosterEntries)
     {
         return new Grader(inputFileList,
-                new ExamReader(new NameRecognitionGateway()), rosterEntries);
+            new ExamReader(new NameRecognitionGateway()), rosterEntries);
     }
-    
+
 }
