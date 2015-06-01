@@ -35,6 +35,9 @@ public class BubbleTest extends TestCase {
     public void testHashCode() {
         Bubble a = new Bubble(true, "A");
         
-        assertEquals(a.hashCode(), a.hashCode());
+        assertNotNull(a.hashCode());
+        
+        Bubble n = new Bubble(false, "N");
+        assertNotNull(n.hashCode());
     }
 }
