@@ -5,10 +5,9 @@
  */
 package com.universalquantification.examgrader;
 
-import com.universalquantification.examgrader.ui.GUIView;
-import static com.universalquantification.examgrader.ui.GUIView.runGui;
 import com.universalquantification.examgrader.controller.ControllerFactory;
 import com.universalquantification.examgrader.ui.ConsoleView;
+import com.universalquantification.examgrader.ui.GUIView;
 import java.io.PrintWriter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -27,7 +26,7 @@ import org.apache.commons.cli.ParseException;
 public class AppRunner
 {
     // The name and version string to use in the interfaces
-    private static final String kNameAndVersion
+    public static final String kNameAndVersion
         = "Bubblit V2.0 by Universal Quantification";
 
     // The command line options to parse before starting a console.
@@ -57,11 +56,49 @@ public class AppRunner
     };
     
     /**
+     * A class for initializing the views. Separated out from AppRunner for
+     * testability.
+     * @author jenny
+     */         
+    public static class ViewInitializer {
+        /**
+         * Runs the GUI.
+         */
+        public void runGui()
+        {
+            GUIView.runGui();
+        }
+
+        /**
+         * Instantiate and run a ConsoleView interface.
+         * Starts a console for running the app.
+         * @param outputDir the directory to output files to
+         * @param rosterFile the roster file to use
+         * @param inputFiles the paths of the files to grade
+         */
+        public void runCli(String nameAndVersion, String outputDir,
+                String rosterFile, String[] inputFiles)
+        { 
+            ConsoleView view = new ConsoleView(nameAndVersion, rosterFile,
+                inputFiles, outputDir, new PrintWriter(System.out),
+                    new ControllerFactory());
+        }
+
+    }
+    
+    private ViewInitializer viewInitializer;
+    
+    public AppRunner(ViewInitializer viewInitializer)
+    {
+        this.viewInitializer = viewInitializer;
+    }
+    
+    /**
      * Run the application.
      * @param args command arguments
      * @throws ParseException 
      */
-    public static void main(String[] args) throws ParseException
+    public void run(String[] args) throws ParseException
     {
         CommandLineParser parser = new GnuParser();
 
@@ -73,7 +110,7 @@ public class AppRunner
         catch (ParseException ex)
         {
             System.err.println(ex.getMessage());
-            System.exit(1);
+            return;
         }
 
         //check for -v flag to print out the version of the application
@@ -101,13 +138,13 @@ public class AppRunner
             if (rArg == null || iArgs == null)
             {
                 System.out.println("Argument missing. See the --help option.");
-                System.exit(1);
+                return;
             }
-            runCli(oArg, rArg, iArgs);
+            viewInitializer.runCli(kNameAndVersion, oArg, rArg, iArgs);
         }
         else
         {
-            GUIView.runGui();
+            viewInitializer.runGui();
         }
     }
     
@@ -115,26 +152,16 @@ public class AppRunner
      * Prints the help for the Console interface
      * @param options an Options object containing the CLI options
      */
-    private static void printHelp(Options options)
+    private void printHelp(Options options)
     {
         // Use Apache's neato CommonsCLI Helptext generator
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("Bubblit2.0.jar", options, /* show usage */ true);
     }
-    
-    /**
-     * Instantiate and run a ConsoleView interface.
-     * Starts a console for running the app.
-     * @param outputDir the directory to output files to
-     * @param rosterFile the roster file to use
-     * @param inputFiles the paths of the files to grade
-     */
-    private static void runCli(String outputDir, String rosterFile,
-        String[] inputFiles)
+
+    public static void main(String[] args) throws ParseException
     {
-        ConsoleView view = new ConsoleView(kNameAndVersion, rosterFile,
-            inputFiles, outputDir, new PrintWriter(System.out),
-                new ControllerFactory());
+        new AppRunner(new ViewInitializer()).run(args);
     }
     
 }

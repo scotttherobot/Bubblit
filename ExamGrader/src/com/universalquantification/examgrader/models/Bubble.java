@@ -31,17 +31,6 @@ public class Bubble
         this.label = label;
     }
 
-    /**
-     * Constructs a bubble given it's fill condition.
-     *
-     * @param isFilled A boolean representing whether or not the bubble is
-     * filled.
-     */
-    public Bubble(boolean isFilled)
-    {
-        // SET the field isFilled to isFilled
-        this.isFilled = isFilled;
-    }
 
     /**
      * Returns whether or not the bubble is filled.
