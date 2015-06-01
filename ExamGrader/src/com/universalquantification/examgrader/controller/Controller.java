@@ -7,11 +7,9 @@ import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.grader.RosterParser;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFileList;
-import com.universalquantification.examgrader.reader.ExamReader;
 import com.universalquantification.examgrader.ui.AppView;
 import java.io.File;
 import java.io.IOException;
-import com.universalquantification.examgrader.reader.NameRecognitionGateway;
 import com.universalquantification.examgrader.reporter.ReportWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -41,7 +39,7 @@ public class Controller
 
     private List<RosterEntry> rosterEntries;
     private GraderFactory graderFactory;
-    
+
     /**
      * Initializes a controller with a new InputFileList and Grader.
      *
@@ -50,8 +48,8 @@ public class Controller
     public Controller(AppView view)
     {
         this(view, new InputFileList(), new ReportWriter(),
-                new GraderFactory());
-        
+            new GraderFactory());
+
     }
 
     /**
@@ -122,9 +120,9 @@ public class Controller
         {
             //The roster file format was incorrect
             appView.showError("You may only add roster "
-                    + "files in the roster file format."
-                    + "Please see the user manual available in the 'Help' "
-                    + "menu \nfor more information.");
+                + "files in the roster file format."
+                + "Please see the user manual available in the 'Help' "
+                + "menu \nfor more information.");
             return false;
         }
 
@@ -146,23 +144,24 @@ public class Controller
      */
     public void grade()
     {
-           // check that we have files to grade
-            if (inputFileList.getInputFiles().isEmpty())
-            {
-                appView.showError("You must add an input file.");
-                return;
-            }
+        // check that we have files to grade
+        if (inputFileList.getInputFiles().isEmpty())
+        {
+            appView.showError("You must add an input file.");
+            return;
+        }
 
-            // check that we have roster entries
-            if (rosterEntries.isEmpty())
-            {
-                appView.showError("You must add a roster file that contains "
-                    + "students.");
-                return;
-            }
-            // INIT grader
-        Grader grader = graderFactory.buildNewGrader(inputFileList, rosterEntries);
-        grader.addObserver(appView);        
+        // check that we have roster entries
+        if (rosterEntries.isEmpty())
+        {
+            appView.showError("You must add a roster file that contains "
+                + "students.");
+            return;
+        }
+        // INIT grader
+        Grader grader = graderFactory.buildNewGrader(inputFileList,
+            rosterEntries);
+        grader.addObserver(appView);
         //BEGIN
         try
         {
@@ -177,18 +176,16 @@ public class Controller
             // INIT reportWriter gradingResults
             // CALL writeReports reportWriter
 //            new ReportWriter(null).writeReports(results);
-            
             grader.deleteObserver(appView);
         }
         // EXCEPTION GradingException
         catch (Exception e)
         {
             e.printStackTrace();
-            appView.
-                showError("An error occured with message: " + e.getMessage());
+            appView.showError("An error occured with message: " + e.getMessage());
             // CALL setError view "Grading failed. Please check that the
             // format is correct"
-            
+
             grader.deleteObserver(appView);
         }
         // END
@@ -208,13 +205,13 @@ public class Controller
         {
             // CALL addInputFile inputFileList WITH inputFile
             inputFileList.addInputFile(inputFile);
-            
+
         }
         // EXCEPTION PDFParseException
         catch (PDFParseException e)
         {
-            appView.showError( "You may only add exam files of "
-                    + "Portable Document Format (PDF). ");
+            appView.showError("You may only add exam files of "
+                + "Portable Document Format (PDF). ");
         }
         // EXCEPTION IOException
         catch (IOException e)
