@@ -29,7 +29,7 @@ public class Student
 
     private BufferedImage firstNameImage;
     private BufferedImage lastNameImage;
-    
+
     private Double confidence;
 
     /**
@@ -39,9 +39,11 @@ public class Student
      * @param firstName A string representing the first name of the student.
      * @param lastName A string representing the last name of the student.
      * @param id A string representing the identification number of the student.
+     * @param firstNameImg the image of the first name
+     * @param lastNameImg the image of the last name
      */
     public Student(String firstName, String lastName, String id,
-            BufferedImage firstNameImg, BufferedImage lastNameImg)
+        BufferedImage firstNameImg, BufferedImage lastNameImg)
     {
         // SET the firstName field to firstName
         // SET the lastName field to lastName
@@ -57,8 +59,17 @@ public class Student
         this.confidence = 1.0;
     }
 
+    /**
+     * Construct a student given stochastic names and images of first/last
+     * names.
+     *
+     * @param first a {@link StochasticString} retrieved from the OCR process
+     * @param last a {@link StochasticString} retrieved from the OCR process
+     * @param firstNameImg a {@link BufferedImage} extracted from the exam
+     * @param lastNameImg a {@link BufferedImage} extracted from the exam
+     */
     public Student(StochasticString first, StochasticString last,
-            BufferedImage firstNameImg, BufferedImage lastNameImg)
+        BufferedImage firstNameImg, BufferedImage lastNameImg)
     {
         super();
         this.stochasticFirst = first;
@@ -66,13 +77,19 @@ public class Student
         this.firstNameImage = firstNameImg;
         this.lastNameImage = lastNameImg;
     }
-    
-    public void setRosterEntry(RosterEntry entry, Double confidence)
+
+    /**
+     * Update the {@link RosterEntry} that this student maps to.
+     *
+     * @param entry the entry to map to
+     * @param conf the confidence that this is the entry the student maps to.
+     */
+    public void setRosterEntry(RosterEntry entry, Double conf)
     {
         this.firstName = entry.getFirst();
         this.lastName = entry.getLast();
         this.id = entry.getId();
-        this.confidence = confidence;
+        this.confidence = conf;
     }
 
     /**
@@ -126,13 +143,13 @@ public class Student
     /**
      * Set the last name in the student record.
      *
-     * @param lastName The last name in the student record.
+     * @param name The last name in the student record.
      */
-    public void setlastName(String lastName)
+    public void setlastName(String name)
     {
         // SET the lastName field to lastName
 
-        this.lastName = lastName;
+        this.lastName = name;
     }
 
     /**
@@ -147,31 +164,59 @@ public class Student
         this.id = id;
     }
 
+    /**
+     * Get the {@link StochasticString} for the first name.
+     *
+     * @return the first name.
+     */
     public StochasticString getStochasticFirst()
     {
         return this.stochasticFirst;
     }
 
+    /**
+     * Get the {@link StochasticString} for the last name.
+     *
+     * @return the last name.
+     */
     public StochasticString getStochasticLast()
     {
         return this.stochasticLast;
     }
-    
+
+    /**
+     * Get the image of the first name field that was written on the exam.
+     *
+     * @return the region of the exam that contains the first name.
+     */
     public BufferedImage getFirstNameImage()
     {
         return this.firstNameImage;
     }
-    
+
+    /**
+     * Get the image of the last name field that was written on the exam.
+     *
+     * @return the region of the exam that contains the last name.
+     */
     public BufferedImage getLastNameImage()
     {
         return this.lastNameImage;
     }
-    
+
+    /**
+     * Get the confidence of the match between this student and a {@link RosterEntry}
+     * @return the confidence
+     */
     public double getConfidence()
     {
         return confidence;
     }
-    
+
+    /**
+     * Set the confidence of the match between this student and a {@link RosterEntry}
+     * @param confidence the confidence
+     */
     public void setConfidence(Double confidence)
     {
         this.confidence = confidence;
