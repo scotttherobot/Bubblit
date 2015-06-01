@@ -1,4 +1,6 @@
-package com.universalquantification.examgrader;
+package com.universalquantification.examgrader.ui;
+
+import com.universalquantification.examgrader.ui.GUIView;
 
 /**
  * Represents application preferences.
@@ -7,13 +9,13 @@ package com.universalquantification.examgrader;
  */
 public class ExamPreferences extends javax.swing.JFrame
 {
-    MainApplication application;
+    GUIView application;
 
     /**
      * Creates new form ExamPreferences
      * @param application the application to use
      */
-    public ExamPreferences(MainApplication application)
+    public ExamPreferences(GUIView application)
     {
         initComponents();
 
@@ -29,7 +31,8 @@ public class ExamPreferences extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         examImagePreference = new java.awt.Checkbox();
@@ -41,8 +44,10 @@ public class ExamPreferences extends javax.swing.JFrame
 
         examImagePreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
         examImagePreference.setLabel("Display a full image, instead of a partial image, for each test on the results webpages.");
-        examImagePreference.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+        examImagePreference.addItemListener(new java.awt.event.ItemListener()
+        {
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
+            {
                 examImagePreferenceItemStateChanged(evt);
             }
         });
@@ -55,8 +60,10 @@ public class ExamPreferences extends javax.swing.JFrame
 
         examCorrectAnswerDisplayPreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
         examCorrectAnswerDisplayPreference.setLabel("Display answers that were answered correctly for each test on the results webpages.");
-        examCorrectAnswerDisplayPreference.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+        examCorrectAnswerDisplayPreference.addItemListener(new java.awt.event.ItemListener()
+        {
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
+            {
                 examCorrectAnswerDisplayPreferenceItemStateChanged(evt);
             }
         });
@@ -70,8 +77,10 @@ public class ExamPreferences extends javax.swing.JFrame
         examIncorrectAnswerDisplayPreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
         examIncorrectAnswerDisplayPreference.setLabel("Display answers that were answered incorrectly for each test on the results webpages.");
         examIncorrectAnswerDisplayPreference.setName(""); // NOI18N
-        examIncorrectAnswerDisplayPreference.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+        examIncorrectAnswerDisplayPreference.addItemListener(new java.awt.event.ItemListener()
+        {
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
+            {
                 examIncorrectAnswerDisplayPreferenceItemStateChanged(evt);
             }
         });

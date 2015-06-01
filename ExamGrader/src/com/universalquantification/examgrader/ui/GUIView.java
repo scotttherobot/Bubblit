@@ -1,4 +1,4 @@
-package com.universalquantification.examgrader;
+package com.universalquantification.examgrader.ui;
 
 import com.universalquantification.examgrader.controller.Controller;
 import com.universalquantification.examgrader.controller.ControllerFactory;
@@ -39,6 +39,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -48,7 +49,7 @@ import org.apache.commons.cli.ParseException;
  *
  * @author Luis
  */
-public class MainApplication extends javax.swing.JFrame implements AppView,
+public class GUIView extends javax.swing.JFrame implements AppView,
     Observer
 {
     private Controller controller;
@@ -57,7 +58,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
     /**
      * Creates new form NewApplication
      */
-    public MainApplication() throws IOException
+    public GUIView() throws IOException
     {
         controller = new Controller(this);
         initComponents();
@@ -111,7 +112,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
                                 + new File(fileLocation).getParent() + "\n");
                         }
 
-                        JOptionPane.showMessageDialog(MainApplication.this,
+                        JOptionPane.showMessageDialog(GUIView.this,
                             successMessage, "Success!",
                             JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -203,7 +204,8 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
@@ -245,8 +247,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         getContentPane().add(jLabel1, gridBagConstraints);
 
         addFileButton.setText("Add Exam File");
-        addFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addFileButtonActionPerformed(evt);
             }
         });
@@ -259,8 +263,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
 
         removeFileButton.setText("Remove Exam File");
         removeFileButton.setToolTipText("");
-        removeFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        removeFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 removeFileButtonActionPerformed(evt);
             }
         });
@@ -277,8 +283,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         fileList.setAutoscrolls(false);
         fileList.setFixedCellHeight(24);
         fileList.setFocusCycleRoot(true);
-        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+        {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+            {
                 fileListValueChanged(evt);
             }
         });
@@ -314,8 +322,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
 
         addRosterFileButton.setText("Select Roster File");
         addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
-        addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addRosterFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addRosterFileButtonActionPerformed(evt);
             }
         });
@@ -343,8 +353,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         gradeButton.setAlignmentX(0.5F);
         gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
         gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
-        gradeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        gradeButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 gradeButtonActionPerformed(evt);
             }
         });
@@ -374,8 +386,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Preferences");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 preferencesMenuItemSelected(evt);
             }
         });
@@ -385,8 +399,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -400,8 +416,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("User Manual");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 contentsMenuItemActionPerformed(evt);
             }
         });
@@ -411,8 +429,10 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 aboutMenuItemActionPerformed(evt);
             }
         });
@@ -495,7 +515,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         }
         catch (IOException ex)
         {
-            Logger.getLogger(MainApplication.class.getName()).log(Level.SEVERE,
+            Logger.getLogger(GUIView.class.getName()).log(Level.SEVERE,
                 null, ex);
         }
     }//GEN-LAST:event_contentsMenuItemActionPerformed
@@ -612,24 +632,28 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
         }
         catch (ClassNotFoundException ex)
         {
-            java.util.logging.Logger.getLogger(MainApplication.class.getName()).
+            java.util.logging.Logger.getLogger(GUIView.class.getName()).
                 log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (InstantiationException ex)
         {
-            java.util.logging.Logger.getLogger(MainApplication.class.getName()).
+            java.util.logging.Logger.getLogger(GUIView.class.getName()).
                 log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (IllegalAccessException ex)
         {
-            java.util.logging.Logger.getLogger(MainApplication.class.getName()).
+            java.util.logging.Logger.getLogger(GUIView.class.getName()).
                 log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
-            java.util.logging.Logger.getLogger(MainApplication.class.getName()).
+            java.util.logging.Logger.getLogger(GUIView.class.getName()).
                 log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -670,7 +694,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
             {
                 try
                 {
-                    final MainApplication app = new MainApplication();
+                    final GUIView app = new GUIView();
                     app.setVisible(true);
 
                     Thread.setDefaultUncaughtExceptionHandler(
@@ -687,86 +711,7 @@ public class MainApplication extends javax.swing.JFrame implements AppView,
 
     }
 
-    private static void runCli(String outputDir, String rosterFile,
-        String[] inputFiles)
-    {
-        ConsoleView view = new ConsoleView(kNameAndVersion, rosterFile,
-            inputFiles, outputDir, new PrintWriter(System.out),
-                new ControllerFactory());
-    }
 
-    private static void printHelp(Options options)
-    {
-        System.out.println(
-            "java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
-
-        System.out.println("-v: Display version and team info.");
-        System.out.println("-h: Display syntax help info.");
-        System.out.println("-i: Path to PDF Input Exam File(s).");
-        System.out.println(
-            "-r: Path to student roster TSV file (relative or absolute).");
-        System.out.println("-o: Path to folder for placing result files.");
-        System.out.println("Correct flag usage syntax:");
-        System.out.println(
-            "java -jar Bubblit2.0.jar -r <TSV Roster File> -i <PDF Exam(s) separated by spaces> -o <Path to results folder>");
-
-    }
-
-    /**
-     * Run the application.
-     * @param args command arguments
-     * @throws ParseException 
-     */
-    public static void main(String[] args) throws ParseException
-    {
-        CommandLineParser parser = new GnuParser();
-
-        CommandLine cmd = null;
-        try
-        {
-            cmd = parser.parse(kCommandLineOptions, args);
-        }
-        catch (ParseException ex)
-        {
-            System.err.println(ex.getMessage());
-            System.exit(1);
-        }
-
-        //check for -v flag to print out the version of the application
-        //   and team information.
-        if (cmd.hasOption("v"))
-        {
-            System.out.println(kNameAndVersion);
-            return;
-        }
-
-        //check for -h flag to print out the syntax help information.
-        if (cmd.hasOption("h"))
-        {
-            printHelp(kCommandLineOptions);
-            return;
-        }
-
-        String oArg = cmd.getOptionValue("o");
-        String rArg = cmd.getOptionValue("r");
-        String[] iArgs = cmd.getOptionValues("i");
-
-        if (args.length != 0)
-        {
-
-            if (rArg == null || iArgs == null)
-            {
-                System.out.println("Argument missing. See the --help option.");
-                System.exit(1);
-            }
-            
-            runCli(oArg, rArg, iArgs);
-        }
-        else
-        {
-            runGui();
-        }
-    }
     //private GradeExams task;
 
     // Variables for creation
