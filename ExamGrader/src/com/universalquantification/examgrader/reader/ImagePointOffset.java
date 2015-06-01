@@ -12,7 +12,14 @@ package com.universalquantification.examgrader.reader;
  */
 public class ImagePointOffset
 {
+    /**
+     * The x coordinate
+     */
     public final double pX;
+    
+    /**
+     * The y coordinate
+     */
     public final double pY;
 
     /**
