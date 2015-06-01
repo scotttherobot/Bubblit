@@ -15,60 +15,77 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- *
+ * Represents the console version view of the app.
  * @author jenwang
  */
 public class ConsoleView implements AppView, Observer
 {
     private Writer outWriter;
     private Controller controller;
-    
+
+    /**
+     * Create a new console view.
+     * @param nameAndVersion The name and version
+     * @param rosterPath The path to the roster file
+     * @param inputPaths the paths to input files
+     * @param outputDir the path for outputting results
+     * @param outWriter the write that writes results
+     * @param controllerFactory the factory that generates {@link Controller}s
+     */
     public ConsoleView(String nameAndVersion, String rosterPath,
-            String[] inputPaths, String outputDir, Writer outWriter,
-            ControllerFactory controllerFactory)
+        String[] inputPaths, String outputDir, Writer outWriter,
+        ControllerFactory controllerFactory)
     {
         this.outWriter = outWriter;
-        
+
         this.controller = controllerFactory.buildController(this);
-        
+
+        // make sure the output directory exists
         if (outputDir != null)
         {
             PreferencesManager.getInstance().set(PreferencesManager.kOverrideDir,
-                new File(outputDir));
+                    new File(outputDir));
         }
-        
+
         write(nameAndVersion + "\n");
-        
+
         this.controller.changeRosterFile(new File(rosterPath));
-        
+
         write(rosterPath + " validated\n");
-        
+
         File[] files = new File[inputPaths.length];
-        for (int i = 0; i < inputPaths.length; i++)
-        {
-            files[i] = new File(inputPaths[i]);
-        }
         
-        for (File file: files)
+        // add all the files to our list of files
+        for (int onFile = 0; onFile < inputPaths.length; onFile++)
+        {
+            files[onFile] = new File(inputPaths[onFile]);
+        }
+
+        // grade each file
+        for (File file : files)
         {
             write("Grading " + file.getName() + "\n");
             this.controller.addInputFile(file);
             this.controller.grade();
-        }   
+        }
     }
 
+    /**
+     * Show an error
+     * @param error the error to display
+     */
     @Override
     public final void showError(String error)
     {
         write(error);
         System.exit(1);
     }
-        
+
     private void write(String msg)
     {
         try
-        {   
-            outWriter.write(msg);        
+        {
+            outWriter.write(msg);
             outWriter.flush();
         }
         catch (IOException e)
@@ -77,20 +94,35 @@ public class ConsoleView implements AppView, Observer
         }
     }
 
+    /**
+     * Check that students were matched correctly. The console view has no way to
+     * do this so just write the results.
+     * @param results the graded results
+     * @param roster the roster to read student information from
+     */
     @Override
-    public void checkRoster(Map<File, GradedExamCollection> results, List<RosterEntry> roster)
+    public void checkRoster(Map<File, GradedExamCollection> results,
+        List<RosterEntry> roster)
     {
         controller.writeReports(results);
     }
 
+    /**
+     * Handle updates from objects
+     * @param o the object that was updated
+     * @param arg the payload
+     */
     @Override
     public void update(Observable o, Object arg)
     {
+        // check if we've received an update from a Grader instance
         if (o instanceof Grader)
         {
             Grader grader = (Grader) o;
-            double percent = 100 * 1.0 * grader.getPagesGraded() / grader.getTotalPagesToGrade();
+            double percent = 
+                100 * 1.0 * grader.getPagesGraded() / grader.getTotalPagesToGrade();
             write((int) percent + "%");
+            // check if we're done grading
             if (percent == 100)
             {
                 write("\nDone!\n");
@@ -99,8 +131,8 @@ public class ConsoleView implements AppView, Observer
             {
                 write("... ");
             }
-            
+
         }
     }
-    
+
 }
