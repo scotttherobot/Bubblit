@@ -460,10 +460,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             
             controller.addInputFile(file);
         }
-        else
-        {
-            System.out.println("File access cancelled by user.");
-        }
     }//GEN-LAST:event_addFileButtonActionPerformed
 
     private void gradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradeButtonActionPerformed
