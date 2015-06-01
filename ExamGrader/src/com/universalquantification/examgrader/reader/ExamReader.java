@@ -43,7 +43,7 @@ public class ExamReader
     /**
      * The minimum ratio of blackness that a bubble must have to be filled in.
      */
-    private static final double kFillRatioMultiplier = 1.3;
+    private static final double kFillRatioMultiplier = 1.22;
 
     /**
      * The gateway that we send images to for OCR detection.
