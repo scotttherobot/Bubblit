@@ -67,6 +67,13 @@ public class GradedExamCollectionTest extends TestCase {
     public void testGet() {
         assertEquals(gradedExamCollection.get(0), studentExams.get(0));
     }
+    
+    public void testGetStudents() {
+        assertEquals(gradedExamCollection.getAllStudents(),
+                Arrays.asList(studentExams.get(0).getStudentRecord(),
+                        studentExams.get(1).getStudentRecord(),
+                        studentExams.get(2).getStudentRecord()));
+    }
 
     /**
      * Test of getQuestions method, of class GradedExamCollection.
