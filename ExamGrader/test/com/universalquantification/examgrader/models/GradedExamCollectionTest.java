@@ -8,11 +8,9 @@ import java.util.Map;
 import junit.framework.TestCase;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import static com.universalquantification.examgrader.helpers.ExamHelper.createExam;
-import static com.universalquantification.examgrader.helpers.ExamHelper.createAnswer;
 
 /**
  *
