@@ -70,7 +70,7 @@ public class AggregateReport
         this.scope = new HashMap<String, Object>();
         this.scope.put("exams", this.exams);
         this.scope.put("filename",
-         this.exams.getAnswerKey().getExamFile().getFile().getName());
+         this.exams.getAnswerKey().getExamFileName());
         
         String date = new SimpleDateFormat("MMM d, yyyy hh:mm:ss a").format(new Date());
         this.scope.put("creationDate", date);

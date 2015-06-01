@@ -84,6 +84,11 @@ public class Exam
         }
     } 
     
+    public String getExamFileName()
+    {
+        return examFile.getFile().getName();
+    }
+    
     /**
      * Returns the input page the exam was created from.
      * 
