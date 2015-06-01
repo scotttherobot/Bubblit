@@ -18,12 +18,7 @@ public final class PreferencesManager
      * Instantiates a new singleton object.
      */
     private PreferencesManager()
-    {
-        if (INSTANCE != null)
-        {
-            throw new IllegalStateException("Already instantiated!");
-        }
-        
+    {      ;
         prefs = new HashMap<String, Object>();
         
           // Init our preferences to false. We should do this later, but it will
