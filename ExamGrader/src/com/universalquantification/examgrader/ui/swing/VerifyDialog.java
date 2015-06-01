@@ -47,7 +47,7 @@ public class VerifyDialog extends javax.swing.JFrame
                 new JTableButtonRenderer(defaultRenderer));
         
         nameTable.getColumnModel().getColumn(0).setPreferredWidth(260);
-        nameTable.getColumnModel().getColumn(1).setPreferredWidth(260);
+        nameTable.getColumnModel().getColumn(2).setPreferredWidth(260);
         nameTable.getColumnModel().getColumn(5).setPreferredWidth(100);
         
         TableColumn chooseColumn = nameTable.getColumnModel().getColumn(5);
@@ -71,8 +71,8 @@ public class VerifyDialog extends javax.swing.JFrame
         String[] columnNames =
         {
             "First Name Image",
-            "Last Name Image",
             "First Name",
+            "Last Name Image",
             "Last Name",
             "Confidence",
             "Change Name",
@@ -119,11 +119,11 @@ public class VerifyDialog extends javax.swing.JFrame
             }
             else if (col == 1)
             {
-                return new ImageIcon(student.getLastNameImage());
+                return student.getFirstName();
             }
             else if (col == 2)
             {
-                return student.getFirstName();
+                return new ImageIcon(student.getLastNameImage());
             }
             else if (col == 3)
             {
@@ -146,7 +146,7 @@ public class VerifyDialog extends javax.swing.JFrame
         @Override
         public boolean isCellEditable(int row, int col)
         {
-            return true;
+            return (col == 2 || col == 3);
         }
 
         @Override
@@ -164,7 +164,7 @@ public class VerifyDialog extends javax.swing.JFrame
 
         public void setValueAt(Object value, int row, int col)
         {
-            if (col == 2)
+            if (col == 1)
             {
                 matchResults.get(row).setFirstName(value.toString());
             }
@@ -257,8 +257,7 @@ public class VerifyDialog extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
@@ -285,6 +284,7 @@ public class VerifyDialog extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bubblit Verification Dialog");
+        setPreferredSize(new java.awt.Dimension(1280, 720));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         InstructionLabel.setText("Please verify that the students have been correctly identified.");
@@ -333,10 +333,8 @@ public class VerifyDialog extends javax.swing.JFrame
         listRoster.setRequestFocusEnabled(false);
         listRoster.setValueIsAdjusting(true);
         listRoster.setVisibleRowCount(4);
-        listRoster.addListSelectionListener(new javax.swing.event.ListSelectionListener()
-        {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
-            {
+        listRoster.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 listRosterValueChanged(evt);
             }
         });
@@ -358,8 +356,9 @@ public class VerifyDialog extends javax.swing.JFrame
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 10, 10);
         getContentPane().add(jSeparator2, gridBagConstraints);
 
-        VerifyButton.setText("Verify");
+        VerifyButton.setText("Accept");
         VerifyButton.setToolTipText("");
+        VerifyButton.setActionCommand("Accept");
         VerifyButton.setMargin(new java.awt.Insets(2, 20, 2, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 4;
