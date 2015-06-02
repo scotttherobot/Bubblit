@@ -7,6 +7,7 @@ import com.universalquantification.examgrader.grader.GradingException;
 import com.universalquantification.examgrader.models.GradedExamCollection;
 import com.universalquantification.examgrader.models.InputFile;
 import com.universalquantification.examgrader.models.InputFileList;
+import com.universalquantification.examgrader.reader.InvalidExamException;
 import com.universalquantification.examgrader.reporter.ReportWriter;
 import com.universalquantification.examgrader.ui.AppView;
 import java.io.File;

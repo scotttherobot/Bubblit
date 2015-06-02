@@ -5,6 +5,7 @@
  */
 package com.universalquantification.examgrader.models;
 
+import com.universalquantification.examgrader.reader.InvalidExamException;
 import java.io.File;
 import java.io.IOException;
 import junit.framework.TestCase;
@@ -39,7 +40,7 @@ public class InputFileTest extends TestCase {
         assertNotNull(file.toString());
     }
     
-    public void testMetaImage()
+    public void testMetaImage() throws InvalidExamException
     {
         assertNotNull(file.getAnswerKeyPage().getMetaBufferedImage());
     }

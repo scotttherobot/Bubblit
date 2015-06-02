@@ -171,6 +171,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                 public void run()
                 {
                     progressBar.setIndeterminate(false);
+                    progressBar.setValue(0);
                     progressBar.setString("");
                 }
             });

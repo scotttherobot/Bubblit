@@ -1,6 +1,7 @@
 package com.universalquantification.examgrader.models;
 
 import com.sun.pdfview.PDFFile;
+import com.universalquantification.examgrader.reader.InvalidExamException;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -63,22 +64,29 @@ public class InputFile
         
     }
 
-    private void addPages()
+    private void addPages() throws InvalidExamException
     {
-        // FOR each page in pdf
-        pages = new ArrayList<InputPage>();
-        
-        // go through every page in the PDF and create an InputPage from it.
-        for (int onPage = 1; onPage < pdf.getNumPages() + 1; onPage++)
+        try
         {
-            // INIT inputPage as InputPage with page    
-            InputPage inputPage = new InputPage(file, pdf.getPage(onPage));
-            // ADD inputPage to pages
-            pages.add(inputPage);
+            // FOR each page in pdf
+            pages = new ArrayList<InputPage>();
+
+            // go through every page in the PDF and create an InputPage from it.
+            for (int onPage = 1; onPage < pdf.getNumPages() + 1; onPage++)
+            {
+                // INIT inputPage as InputPage with page    
+                InputPage inputPage = new InputPage(file, pdf.getPage(onPage));
+                // ADD inputPage to pages
+                pages.add(inputPage);
+            }
+            // END FOR */
+            pagesGenerated = true;
+            pdf = null;
         }
-        // END FOR */
-        pagesGenerated = true;
-        pdf = null;
+        catch (Exception e)
+        {
+            throw new InvalidExamException();
+        }
     }
 
     /**
@@ -96,7 +104,7 @@ public class InputFile
      *
      * @return the answer key pages
      */
-    public InputPage getAnswerKeyPage()
+    public InputPage getAnswerKeyPage() throws InvalidExamException
     {
         // get pages if the haven't been added yet
         if(!pagesGenerated)
@@ -113,7 +121,7 @@ public class InputFile
      *
      * @return all student exam pages
      */
-    public List<InputPage> getStudentExamPages()
+    public List<InputPage> getStudentExamPages() throws InvalidExamException
     {
         // get pages if the haven't been added yet
         if(!pagesGenerated)
@@ -131,7 +139,7 @@ public class InputFile
      *
      * @return number of pages in the exam
      */
-    public int getNumPages()
+    public int getNumPages() throws InvalidExamException
     {
         // get pages if the haven't been added yet
         if(!pagesGenerated)
