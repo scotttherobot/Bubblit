@@ -22,6 +22,7 @@ public class ExamPreferences extends javax.swing.JFrame
 
     /**
      * Creates new form ExamPreferences
+     *
      * @param application the application to use
      */
     public ExamPreferences(GUIView application)
@@ -29,55 +30,71 @@ public class ExamPreferences extends javax.swing.JFrame
         initComponents();
 
         this.setIconImage(new ImageIcon("Icon.PNG").getImage());
-        
+
         setLocationRelativeTo(null);
 
         this.application = application;
-        
+
         folderChooser = new JFileChooser();
-        
+
         folderChooser.setDialogTitle("Bubblit - Please choose a directory.");
-        
+
         folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
         folderChooser.setAcceptAllFileFilterUsed(false);
-        
-        AppFileFilter filter = new AppFileFilter("Directory/Folder", new String [] {});
-        
+
+        AppFileFilter filter = new AppFileFilter("Directory/Folder",
+            new String[]
+            {
+            });
+
         folderChooser.setFileFilter(filter);
-        
-        this.addComponentListener(new ComponentListener() {
+
+        this.addComponentListener(new ComponentListener()
+        {
             @Override
-            public void componentResized(ComponentEvent e) {
+            public void componentResized(ComponentEvent e)
+            {
             }
 
             @Override
-            public void componentMoved(ComponentEvent e) {
+            public void componentMoved(ComponentEvent e)
+            {
             }
 
             @Override
-            public void componentShown(ComponentEvent e) {
+            public void componentShown(ComponentEvent e)
+            {
                 resetToCurrentSettings();
             }
 
             @Override
-            public void componentHidden(ComponentEvent e) {
+            public void componentHidden(ComponentEvent e)
+            {
             }
         });
     }
-    
-    private void resetToCurrentSettings() {
-        path = (String) PreferencesManager.getInstance().get(PreferencesManager.kOverrideDir);
-        
-        if (path != null) {
+
+    private void resetToCurrentSettings()
+    {
+        path = (String) PreferencesManager.getInstance().get(
+            PreferencesManager.kOverrideDir);
+
+        // make sure that we have a valid path to write to
+        if (path != null)
+        {
             OutputDirectoryLabel.setText(path);
         }
-        else {
+        else
+        {
             OutputDirectoryLabel.setText("No directory selected.");
         }
 
-        examCorrectAnswerDisplayPreference.setState((boolean) PreferencesManager.getInstance().get("show-correct-answers"));
-        examImagePreference.setState((boolean) PreferencesManager.getInstance().get("show-full-image"));
+        examCorrectAnswerDisplayPreference.setState(
+            (boolean) PreferencesManager.getInstance().get(
+                "show-correct-answers"));
+        examImagePreference.setState((boolean) 
+            PreferencesManager.getInstance().get("show-full-image"));
     }
 
     /**
@@ -210,12 +227,13 @@ public class ExamPreferences extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void SetOutputButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SetOutputButtonActionPerformed
+        // set the output folder
         if (folderChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
         {
             File selectedDirectory = folderChooser.getSelectedFile();
-            
+
             path = selectedDirectory.getAbsolutePath() + File.separator;
-            
+
             OutputDirectoryLabel.setText(path);
         }
     }//GEN-LAST:event_SetOutputButtonActionPerformed
@@ -226,14 +244,14 @@ public class ExamPreferences extends javax.swing.JFrame
 
     private void ApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplyButtonActionPerformed
         PreferencesManager.getInstance().set(
-                    PreferencesManager.kOverrideDir,
-                    path);
-        
+            PreferencesManager.kOverrideDir,
+            path);
+
         application.setShowCorrectAnswerPreference(
             examCorrectAnswerDisplayPreference.getState());
-        
+
         application.setTestImagePreference(examImagePreference.getState());
-        
+
         this.dispose();
     }//GEN-LAST:event_ApplyButtonActionPerformed
 
