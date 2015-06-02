@@ -45,7 +45,7 @@ import org.apache.commons.cli.Options;
  * @author Luis
  */
 public class GUIView extends javax.swing.JFrame implements AppView,
-    Observer
+        Observer
 {
     private Controller controller;
     private List<String> fileLocations;
@@ -56,9 +56,9 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     public GUIView() throws IOException
     {
         controller = new Controller(this);
-        
+
         initComponents();
-        
+
         removeFileButton.setEnabled(false);
 
         setLocationRelativeTo(null);
@@ -76,11 +76,18 @@ public class GUIView extends javax.swing.JFrame implements AppView,
      */
     @Override
     public void checkRoster(final Map<File, GradedExamCollection> results,
-        final List<RosterEntry> roster)
+            final List<RosterEntry> roster)
     {
-        progressBar.setString("Reporting...");
-        progressBar.setIndeterminate(true);
-        
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressBar.setString("Reporting...");
+                progressBar.setIndeterminate(true);
+            }
+        });
+
         final List<Student> bigList = new ArrayList<Student>();
 
         // add each collection to the list
@@ -88,9 +95,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         {
             bigList.addAll(collection.getAllStudents());
         }
-        
-        
-        
+
         java.awt.EventQueue.invokeLater(new Runnable()
         {
 
@@ -99,7 +104,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             {
 
                 final VerifyDialog dialog = new VerifyDialog(bigList, roster);
-                
+
                 ActionListener finishedListener = new ActionListener()
                 {
 
@@ -107,21 +112,21 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                     public void actionPerformed(ActionEvent evt)
                     {
                         String successMessage
-                            = "Success! Your score reports have been written to:\n\n";
+                                = "Success! Your score reports have been written to:\n\n";
 
                         dialog.setVisible(false);
                         dialog.dispose();
                         controller.writeReports(results);
 
-                        String overrideDir = (String)PreferencesManager.getInstance()
-                                .get("output-path");
-                        
+                        String overrideDir = 
+                            (String) PreferencesManager.getInstance().get("output-path");
+
                         for (File fileLocation : results.keySet())
                         {
                             if (overrideDir == null)
                             {
-                                successMessage = successMessage.concat("\t•  " +
-                                        fileLocation.getParent()
+                                successMessage = successMessage.concat("\t•  "
+                                        + fileLocation.getParent()
                                         + "\n");
                             }
                             else
@@ -131,16 +136,23 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                                         + "\n");
                             }
                         }
-                        progressBar.setIndeterminate(false);
-                        progressBar.setString("");
-                        progressBar.setValue(0);
+                        java.awt.EventQueue.invokeLater(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                progressBar.setIndeterminate(false);
+                                progressBar.setString("");
+                                progressBar.setValue(0);
+                            }
+                        });
                         JOptionPane.showMessageDialog(GUIView.this,
-                            successMessage, "Success!",
-                            JOptionPane.INFORMATION_MESSAGE);
-                        
+                                successMessage, "Success!",
+                                JOptionPane.INFORMATION_MESSAGE);
+
                     }
                 };
-                
+
                 dialog.addFinishedListener(finishedListener);
 
                 dialog.setVisible(true);
@@ -153,10 +165,17 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     {
         if (this.isDisplayable())
         {
-            progressBar.setIndeterminate(false);
-            progressBar.setString("");
+            java.awt.EventQueue.invokeLater(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setString("");
+                }
+            });
             JOptionPane.showMessageDialog(this, e, "Error! ):",
-                JOptionPane.ERROR_MESSAGE);        
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -178,13 +197,13 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                 {
                     progressBar.setIndeterminate(false);
                     int pagesGraded = grader.getPagesGraded();
-                    
+
                     progressBar.setMaximum(grader.getTotalPagesToGrade());
                     progressBar.setValue(pagesGraded);
 
                     progressBar.setString(NumberFormat.getPercentInstance()
-                                .format(progressBar.getPercentComplete()) +
-                                " of pages graded");
+                            .format(progressBar.getPercentComplete())
+                            + " of pages graded");
                     progressBar.setStringPainted(true);
 
                 }
@@ -537,8 +556,12 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     }// </editor-fold>//GEN-END:initComponents
 
     private void addFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFileButtonActionPerformed
-        AppFileFilter filter = new AppFileFilter("Portable Document Format (*.pdf)", new String [] {"PDF"});
-        
+        AppFileFilter filter = new AppFileFilter(
+                "Portable Document Format (*.pdf)", new String[]
+                {
+                    "PDF"
+                });
+
         fileChooser.resetChoosableFileFilters();
         fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle("Bubblit - Please choose a PDF File");
@@ -548,7 +571,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
             File file = fileChooser.getSelectedFile();
-            
+
             controller.addInputFile(file);
         }
         else
@@ -574,13 +597,16 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                     fileLocations.add(new File(
                             model.getElementAt(onFile) + "").getName());
                 }
-                
+
                 progressBar.setIndeterminate(true);
-                
+
                 progressBar.setString("Preparing to grade...");
                 progressBar.setStringPainted(true);
 
-                if (!controller.grade()) progressBar.setIndeterminate(false);
+                if (!controller.grade())
+                {
+                    progressBar.setIndeterminate(false);
+                }
 
                 return null;
             }
@@ -605,43 +631,50 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
     private void contentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentsMenuItemActionPerformed
         String url = "http://cytancy.github.io/BubblitUserManual/";
-        
-        if (Desktop.isDesktopSupported()) {
+
+        if (Desktop.isDesktopSupported())
+        {
             try
             {
                 Desktop.getDesktop().browse(new URL(url).toURI());
             }
             catch (IOException | URISyntaxException ex)
             {
-                JTextArea textarea = new JTextArea("There was an error opening your browser. "
-                    + "Please visit " + url + " to view the User Manaual.");
-                
+                JTextArea textarea = new JTextArea(
+                        "There was an error opening your browser. "
+                        + "Please visit " + url + " to view the User Manaual.");
+
                 JOptionPane.showMessageDialog(this, textarea,
-                "User Manual", JOptionPane.INFORMATION_MESSAGE);
+                        "User Manual", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        else{
+        else
+        {
             Runtime runtime = Runtime.getRuntime();
-            
-            try {
+
+            try
+            {
                 runtime.exec("xdg-open " + url);
-            } catch (IOException e) {
-                JTextArea textarea = new JTextArea("There was an error opening your browser. "
-                    + "Please visit " + url + " to view the User Manaual.");
-                
+            }
+            catch (IOException e)
+            {
+                JTextArea textarea = new JTextArea(
+                        "There was an error opening your browser. "
+                        + "Please visit " + url + " to view the User Manaual.");
+
                 JOptionPane.showMessageDialog(this,
-                textarea,
-                "User Manual", JOptionPane.INFORMATION_MESSAGE);
+                        textarea,
+                        "User Manual", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-            
+
     }//GEN-LAST:event_contentsMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this,
-            "Welcome to Bubblit, a grading software that uses computer vision to grade tests. Created by Universal Quantification.",
-            "About", JOptionPane.INFORMATION_MESSAGE);
+                "Welcome to Bubblit, a grading software that uses computer vision to grade tests. Created by Universal Quantification.",
+                "About", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void removeFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFileButtonActionPerformed
@@ -660,8 +693,12 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     }//GEN-LAST:event_fileListValueChanged
 
     private void addRosterFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRosterFileButtonActionPerformed
-        AppFileFilter filter = new AppFileFilter("Tab Separated Values (*.tsv)", new String [] {"TSV"});
-        
+        AppFileFilter filter = new AppFileFilter("Tab Separated Values (*.tsv)",
+                new String[]
+                {
+                    "TSV"
+                });
+
         fileChooser.resetChoosableFileFilters();
         fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle("Bubblit - Please choose a TSV File");
@@ -673,7 +710,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         {
             File file = fileChooser.getSelectedFile();
             boolean succeeded = controller.changeRosterFile(file);
-            
+
             // check that the file has a valid extension
             if (succeeded)
             {
@@ -696,14 +733,15 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     }//GEN-LAST:event_preferencesMenuItemSelected
 
     private static final String kNameAndVersion
-        = "Bubblit V2.0 by Universal Quantification";
+            = "Bubblit V2.0 by Universal Quantification";
 
     private static final Options kCommandLineOptions = new Options()
     {
+        
         {
             // add v option, with no arguments
             this.addOption("v", "version", false,
-                "display version and team info.");
+                    "display version and team info.");
             this.addOption("h", "help", false, "display syntax help info.");
             // add r flag with argument boolean SET to true
             Option inputFile = Option.builder("i")
@@ -716,10 +754,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             // add i flag with argument boolean SET to true 
             this.addOption(inputFile);
             this.addOption("r", "roster", true,
-                "Path to student roster TSV file (relative or absolute)");
+                    "Path to student roster TSV file (relative or absolute)");
             // add o flag with argument boolean SET to true
             this.addOption("o", "outputDirectoryOverride", true,
-                "Path to folder for placing result files");
+                    "Path to folder for placing result files");
         }
     };
 
@@ -737,7 +775,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         try
         {
             for (javax.swing.UIManager.LookAndFeelInfo info
-                : javax.swing.UIManager.getInstalledLookAndFeels())
+                    : javax.swing.UIManager.getInstalledLookAndFeels())
             {
                 if ("Nimbus".equals(info.getName()))
                 {
@@ -750,22 +788,22 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         catch (ClassNotFoundException ex)
         {
             java.util.logging.Logger.getLogger(GUIView.class.getName()).
-                log(java.util.logging.Level.SEVERE, null, ex);
+                    log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (InstantiationException ex)
         {
             java.util.logging.Logger.getLogger(GUIView.class.getName()).
-                log(java.util.logging.Level.SEVERE, null, ex);
+                    log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (IllegalAccessException ex)
         {
             java.util.logging.Logger.getLogger(GUIView.class.getName()).
-                log(java.util.logging.Level.SEVERE, null, ex);
+                    log(java.util.logging.Level.SEVERE, null, ex);
         }
         catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
             java.util.logging.Logger.getLogger(GUIView.class.getName()).
-                log(java.util.logging.Level.SEVERE, null, ex);
+                    log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -776,13 +814,14 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         //</editor-fold>
         //</editor-fold>
 
-          // Mac Compatbilitiy
+        // Mac Compatbilitiy
         try
         {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.
-                setProperty("com.apple.mrj.application.apple.menu.about.name",
-                    "Bubblit Version 1 - Universal Quanitification");
+                    setProperty(
+                            "com.apple.mrj.application.apple.menu.about.name",
+                            "Bubblit Version 1 - Universal Quanitification");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (ClassNotFoundException e)
@@ -800,7 +839,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         catch (UnsupportedLookAndFeelException e)
         {
             System.out.println("UnsupportedLookAndFeelException: " + e.
-                getMessage());
+                    getMessage());
         }
 
         /* Create and display the form */
@@ -815,7 +854,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                     app.setVisible(true);
 
                     Thread.setDefaultUncaughtExceptionHandler(
-                        new AppViewExceptionHandler(app));
+                            new AppViewExceptionHandler(app));
 
                 }
                 catch (IOException e)
@@ -828,9 +867,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
     }
 
-
     //private GradeExams task;
-
     // Variables for creation
     private ExamPreferences preferencesWindow;
 
