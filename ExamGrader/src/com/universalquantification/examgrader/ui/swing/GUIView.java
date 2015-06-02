@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -33,6 +35,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import sun.swing.ImageIconUIResource;
 
 /**
  * main program
@@ -57,8 +60,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         removeFileButton.setEnabled(false);
 
         setLocationRelativeTo(null);
-        
-        this.setIconImage(new ImageIcon("Icon.PNG").getImage());
+        String rs = "resources/Icon.PNG";
+        InputStream stream = this.getClass().getResourceAsStream(rs);
+        ImageIcon appIcon = new ImageIcon(ImageIO.read(stream));
+        this.setIconImage(appIcon.getImage());
     }
 
     /**
