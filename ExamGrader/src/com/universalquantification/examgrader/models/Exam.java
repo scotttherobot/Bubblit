@@ -212,7 +212,10 @@ public class Exam
         return correctQuestions.contains(question);
     }
 
-    
+    /**
+     * Get a list of all responses to every question.
+     * @return the set of all responses mapping question number to response.
+     */
     public Set<Map.Entry<String, String>> getAllResponses()
     {
         Map<String, String> feedback = new LinkedHashMap<String, String>();
@@ -223,14 +226,17 @@ public class Exam
         {
             StringBuilder fbStr = new StringBuilder();
             
-            // GET THE ANSWER FROM THE CORRECT ANSWER MAP
             Answer thisAnswer = (Answer)answerMap.get(onQ);
+            // GET THE ANSWER FROM THE CORRECT ANSWER MAP
             if (thisAnswer != null) 
             {
                 fbStr.append(thisAnswer.toString());
             }
             
-            if (!isQuestionCorrect(onQ) && (boolean)PreferencesManager.getInstance().get("show-correct-answers"))
+            // check if the question is correct and add correctness if it
+            // was set in the preferences.
+            if (!isQuestionCorrect(onQ) && 
+                (boolean)PreferencesManager.getInstance().get("show-correct-answers"))
             {
                 Answer correctAnswer = (Answer)correctAnswerMap.get(onQ);
                 fbStr.append(" (");
