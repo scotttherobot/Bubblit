@@ -229,8 +229,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
@@ -260,8 +259,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
         fileChooser.setDialogTitle("Choose PDF or CSV");
 
-        jList1.setModel(new javax.swing.AbstractListModel()
-        {
+        jList1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -277,6 +275,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 136, 228));
         jLabel1.setText("Bubblit");
+        jLabel1.setToolTipText("What a clever name.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -291,12 +290,11 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         ButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         addFileButton.setText("Add Exam File");
+        addFileButton.setToolTipText("Add an exam file in PDF format to the queue.");
         addFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        addFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        addFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFileButtonActionPerformed(evt);
             }
         });
@@ -311,13 +309,11 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         ButtonPanel.add(addFileButton, gridBagConstraints);
 
         removeFileButton.setText("Remove Exam File");
-        removeFileButton.setToolTipText("");
+        removeFileButton.setToolTipText("Remove the selected exam file from the queue.");
         removeFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         removeFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        removeFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        removeFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeFileButtonActionPerformed(evt);
             }
         });
@@ -344,13 +340,12 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
         listModel = new DefaultListModel();
         fileList.setModel(listModel);
+        fileList.setToolTipText("The exam file queue. Files in this queue will be graded by the 'Grade!' button.");
         fileList.setAutoscrolls(false);
         fileList.setFixedCellHeight(24);
         fileList.setFocusCycleRoot(true);
-        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
-        {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
-            {
+        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 fileListValueChanged(evt);
             }
         });
@@ -387,12 +382,11 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         getContentPane().add(rosterFileLabel, gridBagConstraints);
 
         addRosterFileButton.setText("Select Roster File");
+        addRosterFileButton.setToolTipText("Select a roster file, in TSV format, to be used for matching exams to students.");
         addRosterFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
-        addRosterFileButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addRosterFileButtonActionPerformed(evt);
             }
         });
@@ -420,15 +414,13 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gradePanel.setLayout(new java.awt.GridBagLayout());
 
         gradeButton.setText("Grade!");
-        gradeButton.setToolTipText("");
+        gradeButton.setToolTipText("Grade all exam files currently in the queue.");
         gradeButton.setAlignmentX(0.5F);
         gradeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
         gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
-        gradeButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        gradeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gradeButtonActionPerformed(evt);
             }
         });
@@ -446,6 +438,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
         getContentPane().add(gradePanel, gridBagConstraints);
 
+        progressBar.setToolTipText("A progress bar that shows the progress of the grading process.");
         progressBar.setMinimumSize(new java.awt.Dimension(10, 10));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -463,10 +456,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Preferences");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 preferencesMenuItemSelected(evt);
             }
         });
@@ -476,10 +467,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -493,10 +482,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("User Manual");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentsMenuItemActionPerformed(evt);
             }
         });
@@ -506,10 +493,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 aboutMenuItemActionPerformed(evt);
             }
         });

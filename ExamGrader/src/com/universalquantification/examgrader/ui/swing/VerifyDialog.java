@@ -366,6 +366,7 @@ public class VerifyDialog extends javax.swing.JFrame
         NameSelectionPane.setRequestFocusEnabled(false);
 
         listRoster.setModel(createListModel());
+        listRoster.setToolTipText("This panel allows you set names to exams via the \"Choose Name\" button. ");
         listRoster.setAutoscrolls(false);
         listRoster.setPreferredSize(new java.awt.Dimension(200, 0));
         listRoster.setRequestFocusEnabled(false);
@@ -398,7 +399,7 @@ public class VerifyDialog extends javax.swing.JFrame
         getContentPane().add(jSeparator2, gridBagConstraints);
 
         VerifyButton.setText("Accept");
-        VerifyButton.setToolTipText("");
+        VerifyButton.setToolTipText("Accept that these name-to-exam pairs will be used for scoring results.");
         VerifyButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         VerifyButton.setMargin(new java.awt.Insets(8, 24, 8, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();

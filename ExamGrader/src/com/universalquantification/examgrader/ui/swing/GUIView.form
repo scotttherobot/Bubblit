@@ -141,6 +141,7 @@
           <Color blue="e4" green="88" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Bubblit"/>
+        <Property name="toolTipText" type="java.lang.String" value="What a clever name."/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -170,6 +171,7 @@
         <Component class="javax.swing.JButton" name="addFileButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add Exam File"/>
+            <Property name="toolTipText" type="java.lang.String" value="Add an exam file in PDF format to the queue."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -189,7 +191,7 @@
         <Component class="javax.swing.JButton" name="removeFileButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Remove Exam File"/>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="toolTipText" type="java.lang.String" value="Remove the selected exam file from the queue."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -225,6 +227,7 @@
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="listModel" type="code"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="The exam file queue. Files in this queue will be graded by the &apos;Grade!&apos; button."/>
             <Property name="autoscrolls" type="boolean" value="false"/>
             <Property name="fixedCellHeight" type="int" value="24"/>
             <Property name="focusCycleRoot" type="boolean" value="true"/>
@@ -264,6 +267,7 @@
     <Component class="javax.swing.JButton" name="addRosterFileButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Select Roster File"/>
+        <Property name="toolTipText" type="java.lang.String" value="Select a roster file, in TSV format, to be used for matching exams to students."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -312,7 +316,7 @@
         <Component class="javax.swing.JButton" name="gradeButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Grade!"/>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="toolTipText" type="java.lang.String" value="Grade all exam files currently in the queue."/>
             <Property name="alignmentX" type="float" value="0.5"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
@@ -337,6 +341,7 @@
     </Container>
     <Component class="javax.swing.JProgressBar" name="progressBar">
       <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="A progress bar that shows the progress of the grading process."/>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[10, 10]"/>
         </Property>
