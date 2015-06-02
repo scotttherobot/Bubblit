@@ -3,6 +3,8 @@ package com.universalquantification.examgrader.ui.swing;
 import com.universalquantification.examgrader.ui.swing.GUIView;
 import com.universalquantification.examgrader.utils.AppFileFilter;
 import com.universalquantification.examgrader.utils.PreferencesManager;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import javax.swing.JFileChooser;
 
@@ -13,8 +15,9 @@ import javax.swing.JFileChooser;
  */
 public class ExamPreferences extends javax.swing.JFrame
 {
-    GUIView application;
-    JFileChooser folderChooser;
+    private final GUIView application;
+    private final JFileChooser folderChooser;
+    private String path;
 
     /**
      * Creates new form ExamPreferences
@@ -39,6 +42,39 @@ public class ExamPreferences extends javax.swing.JFrame
         AppFileFilter filter = new AppFileFilter("Directory/Folder", new String [] {});
         
         folderChooser.setFileFilter(filter);
+        
+        this.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                resetToCurrentSettings();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+        });
+    }
+    
+    private void resetToCurrentSettings() {
+        path = (String) PreferencesManager.getInstance().get(PreferencesManager.kOverrideDir);
+        
+        if (path != null) {
+            OutputDirectoryLabel.setText(path);
+        }
+        else {
+            OutputDirectoryLabel.setText("No directory selected.");
+        }
+
+        examCorrectAnswerDisplayPreference.setState((boolean) PreferencesManager.getInstance().get("show-correct-answers"));
+        examImagePreference.setState((boolean) PreferencesManager.getInstance().get("show-full-image"));
     }
 
     /**
@@ -53,22 +89,21 @@ public class ExamPreferences extends javax.swing.JFrame
 
         examImagePreference = new java.awt.Checkbox();
         examCorrectAnswerDisplayPreference = new java.awt.Checkbox();
-        examIncorrectAnswerDisplayPreference = new java.awt.Checkbox();
         jSeparator1 = new javax.swing.JSeparator();
         OutputDirectoryLabel = new javax.swing.JLabel();
         SetOutputButton = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
+        ButtonPanel = new javax.swing.JPanel();
+        ApplyButton = new javax.swing.JButton();
+        CancelButton = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Bubblit Preferences");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        examImagePreference.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         examImagePreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
         examImagePreference.setLabel("Display a full image, instead of a partial image, for each test on the results webpages.");
-        examImagePreference.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                examImagePreferenceItemStateChanged(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -78,51 +113,31 @@ public class ExamPreferences extends javax.swing.JFrame
         getContentPane().add(examImagePreference, gridBagConstraints);
 
         examCorrectAnswerDisplayPreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
-        examCorrectAnswerDisplayPreference.setLabel("Display answers that were answered correctly for each test on the results webpages.");
-        examCorrectAnswerDisplayPreference.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                examCorrectAnswerDisplayPreferenceItemStateChanged(evt);
-            }
-        });
+        examCorrectAnswerDisplayPreference.setLabel("Display correct answers for each test on the results webpages.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(4, 10, 4, 10);
+        gridBagConstraints.insets = new java.awt.Insets(4, 10, 10, 10);
         getContentPane().add(examCorrectAnswerDisplayPreference, gridBagConstraints);
-
-        examIncorrectAnswerDisplayPreference.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
-        examIncorrectAnswerDisplayPreference.setLabel("Display answers that were answered incorrectly for each test on the results webpages.");
-        examIncorrectAnswerDisplayPreference.setName(""); // NOI18N
-        examIncorrectAnswerDisplayPreference.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                examIncorrectAnswerDisplayPreferenceItemStateChanged(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(4, 10, 10, 10);
-        getContentPane().add(examIncorrectAnswerDisplayPreference, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+        gridBagConstraints.weighty = 1.0E-4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 8, 10);
         getContentPane().add(jSeparator1, gridBagConstraints);
 
         OutputDirectoryLabel.setText("No directory selected.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 12, 10, 152);
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 0, 152);
         getContentPane().add(OutputDirectoryLabel, gridBagConstraints);
 
         SetOutputButton.setText("Set Output Directory");
@@ -133,57 +148,98 @@ public class ExamPreferences extends javax.swing.JFrame
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         getContentPane().add(SetOutputButton, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 14, 10);
+        gridBagConstraints.weighty = 1.0E-4;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jSeparator2, gridBagConstraints);
+
+        ButtonPanel.setMinimumSize(new java.awt.Dimension(200, 23));
+        ButtonPanel.setLayout(new java.awt.GridBagLayout());
+
+        ApplyButton.setText("Apply");
+        ApplyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApplyButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        ButtonPanel.add(ApplyButton, gridBagConstraints);
+
+        CancelButton.setText("Cancel");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 0);
+        ButtonPanel.add(CancelButton, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0E-4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
+        getContentPane().add(ButtonPanel, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void examImagePreferenceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_examImagePreferenceItemStateChanged
-        application.setTestImagePreference(examImagePreference.getState());
-    }//GEN-LAST:event_examImagePreferenceItemStateChanged
-
-    private void examCorrectAnswerDisplayPreferenceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_examCorrectAnswerDisplayPreferenceItemStateChanged
-        application.setShowCorrectAnswerPreference(
-            examCorrectAnswerDisplayPreference.getState());
-    }//GEN-LAST:event_examCorrectAnswerDisplayPreferenceItemStateChanged
-
-    private void examIncorrectAnswerDisplayPreferenceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_examIncorrectAnswerDisplayPreferenceItemStateChanged
-        application.setShowIncorrectAnswerPreference(
-            examIncorrectAnswerDisplayPreference.getState());
-    }//GEN-LAST:event_examIncorrectAnswerDisplayPreferenceItemStateChanged
 
     private void SetOutputButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SetOutputButtonActionPerformed
         if (folderChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
         {
             File selectedDirectory = folderChooser.getSelectedFile();
-            String selectedPath = selectedDirectory.getAbsolutePath() + File.separator;
             
-            OutputDirectoryLabel.setText(selectedPath);
+            path = selectedDirectory.getAbsolutePath() + File.separator;
             
-            PreferencesManager.getInstance().set(
-                    PreferencesManager.kOverrideDir,
-                    selectedDirectory);
+            System.out.println(path);
+            OutputDirectoryLabel.setText(path);
         }
     }//GEN-LAST:event_SetOutputButtonActionPerformed
 
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_CancelButtonActionPerformed
+
+    private void ApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplyButtonActionPerformed
+        PreferencesManager.getInstance().set(
+                    PreferencesManager.kOverrideDir,
+                    path);
+        
+        application.setShowCorrectAnswerPreference(
+            examCorrectAnswerDisplayPreference.getState());
+        
+        application.setTestImagePreference(examImagePreference.getState());
+        
+        this.dispose();
+    }//GEN-LAST:event_ApplyButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ApplyButton;
+    private javax.swing.JPanel ButtonPanel;
+    private javax.swing.JButton CancelButton;
     private javax.swing.JLabel OutputDirectoryLabel;
     private javax.swing.JButton SetOutputButton;
     private java.awt.Checkbox examCorrectAnswerDisplayPreference;
     private java.awt.Checkbox examImagePreference;
-    private java.awt.Checkbox examIncorrectAnswerDisplayPreference;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables

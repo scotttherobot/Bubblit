@@ -14,7 +14,7 @@ public final class PreferencesManager
     /**
      * The directory that is set by default.
      */
-    public static final String kOverrideDir = "override_dir";
+    public static final String kOverrideDir = null;
 
     private static final PreferencesManager kInstance = new PreferencesManager();
 
@@ -32,7 +32,6 @@ public final class PreferencesManager
         set("show-full-image", false);
         set("show-incorrect-answers", false);
         set("show-correct-answers", false);
-
     }
 
     /**
