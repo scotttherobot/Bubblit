@@ -166,7 +166,7 @@ public class VerifyDialog extends javax.swing.JFrame
         public void setNameFromRoster(String value, int row)
         {
             String[] name = value.split(", ");
-            setValueAt(name[1], row, 2);
+            setValueAt(name[1], row, 1);
             setValueAt(name[0], row, 3);
         }
 
