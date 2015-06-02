@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.models;
 
+import com.universalquantification.examgrader.reader.InvalidExamException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
@@ -71,8 +72,9 @@ public class InputFileList extends Observable
      * Returns the sum of all the pages in the InputFiles
      *
      * @return total number of pages
+     * @throws com.universalquantification.examgrader.reader.InvalidExamException
      */
-    public int getTotalPages()
+    public int getTotalPages() throws InvalidExamException
     {
         int total = 0;
         // RETURN length of files

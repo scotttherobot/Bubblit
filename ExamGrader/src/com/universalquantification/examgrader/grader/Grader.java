@@ -75,11 +75,12 @@ public class Grader extends Observable
      * @param inputFileList list of files to grade.
      * @param examReader reader to be used for reading the inputFiles.
      * @param rosterEntries the entries in the roster
+     * @throws com.universalquantification.examgrader.reader.InvalidExamException
      * @pre inputFiles have been read in and confirmed to be of the correct
      * format
      */
     public Grader(InputFileList inputFileList, ExamReader examReader,
-        List<RosterEntry> rosterEntries)
+        List<RosterEntry> rosterEntries) throws InvalidExamException
     {
         // SET this.inputFiles to inputFileList
         // SET this.examReader to examReader
