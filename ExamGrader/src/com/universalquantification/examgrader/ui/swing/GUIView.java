@@ -8,8 +8,6 @@ import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.models.Student;
 import com.universalquantification.examgrader.ui.AppView;
 import com.universalquantification.examgrader.ui.AppViewExceptionHandler;
-import com.universalquantification.examgrader.ui.swing.ExamPreferences;
-import com.universalquantification.examgrader.ui.swing.VerifyDialog;
 import com.universalquantification.examgrader.utils.AppFileFilter;
 import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.awt.Desktop;
@@ -73,6 +71,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     public void checkRoster(final Map<File, GradedExamCollection> results,
         final List<RosterEntry> roster)
     {
+        progressBar.setIndeterminate(true);
+        
         final List<Student> bigList = new ArrayList<Student>();
 
         // add each collection to the list
@@ -80,7 +80,9 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         {
             bigList.addAll(collection.getAllStudents());
         }
-
+        
+        
+        
         java.awt.EventQueue.invokeLater(new Runnable()
         {
 
@@ -121,13 +123,14 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                                         + "\n");
                             }
                         }
-
+                        progressBar.setIndeterminate(false);
                         JOptionPane.showMessageDialog(GUIView.this,
                             successMessage, "Success!",
                             JOptionPane.INFORMATION_MESSAGE);
+                        
                     }
                 };
-
+                
                 dialog.addFinishedListener(finishedListener);
 
                 dialog.setVisible(true);
@@ -140,8 +143,9 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     {
         if (this.isDisplayable())
         {
+            progressBar.setIndeterminate(false);
             JOptionPane.showMessageDialog(this, e, "Error! ):",
-                JOptionPane.ERROR_MESSAGE);
+                JOptionPane.ERROR_MESSAGE);        
         }
     }
 
@@ -220,7 +224,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
@@ -250,7 +255,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
         fileChooser.setDialogTitle("Choose PDF or CSV");
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        jList1.setModel(new javax.swing.AbstractListModel()
+        {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -282,8 +288,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         addFileButton.setText("Add Exam File");
         addFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        addFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addFileButtonActionPerformed(evt);
             }
         });
@@ -301,8 +309,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         removeFileButton.setToolTipText("");
         removeFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         removeFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        removeFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        removeFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 removeFileButtonActionPerformed(evt);
             }
         });
@@ -332,8 +342,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         fileList.setAutoscrolls(false);
         fileList.setFixedCellHeight(24);
         fileList.setFocusCycleRoot(true);
-        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+        {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+            {
                 fileListValueChanged(evt);
             }
         });
@@ -372,8 +384,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         addRosterFileButton.setText("Select Roster File");
         addRosterFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
-        addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addRosterFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addRosterFileButtonActionPerformed(evt);
             }
         });
@@ -406,8 +420,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gradeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
         gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
-        gradeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        gradeButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 gradeButtonActionPerformed(evt);
             }
         });
@@ -442,8 +458,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Preferences");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 preferencesMenuItemSelected(evt);
             }
         });
@@ -453,8 +471,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -468,8 +488,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("User Manual");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 contentsMenuItemActionPerformed(evt);
             }
         });
@@ -479,8 +501,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 aboutMenuItemActionPerformed(evt);
             }
         });
@@ -523,7 +547,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             {
                 ListModel<Class<?>> model = fileList.getModel();
 
-                fileLocations = new ArrayList<>();
+                fileLocations = new ArrayList<String>();
 
                 // get all selected files
                 for (int onFile = 0; onFile < model.getSize(); onFile++)
@@ -567,10 +591,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             }
             catch (IOException | URISyntaxException ex)
             {
-                JTextArea textarea = new JTextArea("There was an error opening your browser. Please visit " + url + " to view the User Manaual.");
+                JTextArea textarea = new JTextArea("There was an error opening your browser. "
+                    + "Please visit " + url + " to view the User Manaual.");
                 
-                JOptionPane.showMessageDialog(this,
-                textarea,
+                JOptionPane.showMessageDialog(this, textarea,
                 "User Manual", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -580,7 +604,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             try {
                 runtime.exec("xdg-open " + url);
             } catch (IOException e) {
-                JTextArea textarea = new JTextArea("There was an error opening your browser. Please visit " + url + " to view the User Manaual.");
+                JTextArea textarea = new JTextArea("There was an error opening your browser. "
+                    + "Please visit " + url + " to view the User Manaual.");
                 
                 JOptionPane.showMessageDialog(this,
                 textarea,
