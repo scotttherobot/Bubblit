@@ -32,6 +32,7 @@ public final class PreferencesManager
         set("show-full-image", false);
         set("show-incorrect-answers", false);
         set("show-correct-answers", false);
+        set("output-path", kOverrideDir);
     }
 
     /**

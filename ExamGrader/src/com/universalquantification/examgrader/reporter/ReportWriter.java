@@ -35,8 +35,9 @@ public class ReportWriter
     {
         File parent;
 
-        Object outputDirectory = PreferencesManager.getInstance().get(
-            PreferencesManager.kOverrideDir);
+        String outputDirectory = (String)PreferencesManager.getInstance().get(
+            "output-path");
+        System.out.println("out pus i" + outputDirectory);
         // make sure that the output directory exists
         if (outputDirectory == null)
         {
@@ -44,7 +45,12 @@ public class ReportWriter
         }
         else
         {
-            parent = (File) outputDirectory;
+            parent = new File(outputDirectory);
+            if(!parent.exists())
+            {
+                
+            }
+            
         }
         return parent;
     }

@@ -8,6 +8,7 @@ import java.awt.event.ComponentListener;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  * Represents application preferences.
@@ -236,8 +237,17 @@ public class ExamPreferences extends javax.swing.JFrame
             File selectedDirectory = folderChooser.getSelectedFile();
 
             path = selectedDirectory.getAbsolutePath() + File.separator;
-
-            OutputDirectoryLabel.setText(path);
+            File parent = new File(path);
+            if(parent.exists())
+            {
+                OutputDirectoryLabel.setText(path);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "That path does not exist.", "Invalid path",
+                JOptionPane.ERROR_MESSAGE);
+            }
+            
         }
     }//GEN-LAST:event_SetOutputButtonActionPerformed
 
@@ -247,9 +257,8 @@ public class ExamPreferences extends javax.swing.JFrame
 
     private void ApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplyButtonActionPerformed
         PreferencesManager.getInstance().set(
-            PreferencesManager.kOverrideDir,
+            "output-path",
             path);
-
         application.setShowCorrectAnswerPreference(
             examCorrectAnswerDisplayPreference.getState());
 
