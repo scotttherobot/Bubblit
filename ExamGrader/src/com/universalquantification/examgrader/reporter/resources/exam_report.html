@@ -402,47 +402,31 @@
 			<div class="header-divider"></div>
 			<div class="header-background"></div>
 		</div>
-
 		<div class="bubblit-scroll-container">
 			<div class="bubblit-item-container">
 				<!-- You can put as many images as you need to inside a bubblit-exam-image div -->
 				{{#showFullImage}}
 				<div class="bubblit-exam-image bubblit-item">
-                  <img alt="exam image" src="data:image/png;base64,{{getExamImageB64}}">
+                                    <img alt="exam image" src="data:image/png;base64,{{getExamImageB64}}">
 				</div>
 				{{/showFullImage}}
-				{{^showFullImage}}
-            <div class="bubblit-exam-image bubblit-item">
-                  <img alt="exam image" src="data:image/png;base64,{{getNameImageB64}}">
-				</div>
-            {{/showFullImage}}
-
-            {{#showCorrect}}
-				<div class="exam-correct-answers bubblit-item">
-					<div class="set-title">Correct Answers</div>
-					<p class="set-description">You got these ones right!
-					Here's what we thought you bubbled in.</p>
-					
-					<div class="questions-list">
-					   {{#getCorrectFeedback}}
-						<div class="question-number">{{key}})<div class="question-letter">{{value}}</div></div>
-						{{/getCorrectFeedback}}
-					</div>
-				</div>
-				{{/showCorrect}}
-            {{#showIncorrect}}
-				<div class="exam-incorrect-answers bubblit-item">
-					<div class="set-title">Incorrect Answers</div>
-					<p class="set-description">You answered these ones incorrectly.
-					Here're the correct answers.</p>
-
-					<div class="questions-list">
-					   {{#getIncorrectFeedback}}
-						<div class="question-number">{{key}})<div class="question-letter">{{value}}</div></div>
-						{{/getIncorrectFeedback}}
-					</div>
-				</div>
-				{{/showIncorrect}}
+                                {{^showFullImage}}
+                                <div class="bubblit-exam-image bubblit-item">
+                                    <img alt="exam image" src="data:image/png;base64,{{getNameImageB64}}">
+                                </div>
+                                {{/showFullImage}}
+                                <div class="exam-correct-answers bubblit-item">
+                                    <div class="set-title">Your Responses</div>
+                                    <p class="set-description">You got {{getRawScore}} correct (out of {{getMaxScore}}).</p>
+                                    {{#showCorrect}}
+                                    <p class="set-description">Correct answers are shown <b>in parenthesis</b>.</p>
+                                    {{/showCorrect}}
+                                    <div class="questions-list">
+                                        {{#getAllResponses}}
+                                        <div class="question-number">{{key}})<div class="question-letter">{{{value}}}</div></div>
+                                        {{/getAllResponses}}
+                                    </div>
+                                </div>
 			</div>
 		</div>
 	</body>

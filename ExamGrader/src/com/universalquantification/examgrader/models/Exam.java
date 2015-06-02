@@ -1,5 +1,6 @@
 package com.universalquantification.examgrader.models;
 
+import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -211,6 +212,37 @@ public class Exam
         return correctQuestions.contains(question);
     }
 
+    
+    public Set<Map.Entry<String, String>> getAllResponses()
+    {
+        Map<String, String> feedback = new LinkedHashMap<String, String>();
+        //List<String> feedback = new ArrayList<String>();
+
+        // go through every correct question and generate feedback for it.
+        for (Integer onQ : correctAnswerMap.keySet())
+        {
+            StringBuilder fbStr = new StringBuilder();
+            
+            // GET THE ANSWER FROM THE CORRECT ANSWER MAP
+            Answer thisAnswer = (Answer)answerMap.get(onQ);
+            if (thisAnswer != null) 
+            {
+                fbStr.append(thisAnswer.toString());
+            }
+            
+            if (!isQuestionCorrect(onQ) && (boolean)PreferencesManager.getInstance().get("show-correct-answers"))
+            {
+                Answer correctAnswer = (Answer)correctAnswerMap.get(onQ);
+                fbStr.append(" (");
+                fbStr.append(correctAnswer.toString());
+                fbStr.append(")");
+            }
+            
+            feedback.put(onQ.toString(), fbStr.toString());
+        }
+
+        return feedback.entrySet();
+    }
 
     /**
      * Returns a list of the correct answers for the incorrect responses.
