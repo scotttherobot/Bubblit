@@ -142,14 +142,17 @@ public class Controller
     /**
      * Sets the grader to grade the roster files and then generates reports for
      * the results. This sets an error on the UI if grading fails.
+     * 
+     * @return Boolean representing whether or not grading has succeeded.
      */
-    public void grade()
+    public boolean grade()
     {
         // check that we have files to grade
         if (inputFileList.getInputFiles().isEmpty())
         {
             appView.showError("You must add an input file.");
-            return;
+            
+            return false;
         }
 
         // check that we have roster entries
@@ -157,7 +160,8 @@ public class Controller
         {
             appView.showError("You must add a roster file that contains "
                 + "students.");
-            return;
+            
+            return false;
         }
         // INIT grader
         Grader grader = graderFactory.buildNewGrader(inputFileList,
@@ -197,8 +201,9 @@ public class Controller
 
             grader.deleteObserver(appView);
         }
+        
+        return true;
         // END
-
     }
 
     /**

@@ -6,6 +6,7 @@ import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
 /**
@@ -27,6 +28,8 @@ public class ExamPreferences extends javax.swing.JFrame
     {
         initComponents();
 
+        this.setIconImage(new ImageIcon("Icon.PNG").getImage());
+        
         setLocationRelativeTo(null);
 
         this.application = application;
@@ -141,6 +144,7 @@ public class ExamPreferences extends javax.swing.JFrame
         getContentPane().add(OutputDirectoryLabel, gridBagConstraints);
 
         SetOutputButton.setText("Set Output Directory");
+        SetOutputButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         SetOutputButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SetOutputButtonActionPerformed(evt);
@@ -165,6 +169,7 @@ public class ExamPreferences extends javax.swing.JFrame
         ButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         ApplyButton.setText("Apply");
+        ApplyButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         ApplyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ApplyButtonActionPerformed(evt);
@@ -179,6 +184,7 @@ public class ExamPreferences extends javax.swing.JFrame
         ButtonPanel.add(ApplyButton, gridBagConstraints);
 
         CancelButton.setText("Cancel");
+        CancelButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         CancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CancelButtonActionPerformed(evt);
@@ -210,7 +216,6 @@ public class ExamPreferences extends javax.swing.JFrame
             
             path = selectedDirectory.getAbsolutePath() + File.separator;
             
-            System.out.println(path);
             OutputDirectoryLabel.setText(path);
         }
     }//GEN-LAST:event_SetOutputButtonActionPerformed

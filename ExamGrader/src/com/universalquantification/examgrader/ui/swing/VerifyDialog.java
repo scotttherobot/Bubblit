@@ -3,8 +3,6 @@ package com.universalquantification.examgrader.ui.swing;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -14,13 +12,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-
 import com.universalquantification.examgrader.grader.RosterEntry;
-import com.universalquantification.examgrader.models.Exam;
 import com.universalquantification.examgrader.models.Student;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
@@ -40,9 +34,13 @@ public class VerifyDialog extends javax.swing.JFrame
     public VerifyDialog(List<Student> matchResults, List<RosterEntry> roster)
     {
         this.roster = roster;
+        
         tableModel = new MyTableModel(matchResults);
 
         initComponents();
+        
+        this.setIconImage(new ImageIcon("Icon.PNG").getImage());
+        
         TableCellRenderer defaultRenderer = nameTable.getDefaultRenderer(
                 JButton.class);
         nameTable.setDefaultRenderer(JButton.class,
@@ -373,13 +371,14 @@ public class VerifyDialog extends javax.swing.JFrame
 
         VerifyButton.setText("Accept");
         VerifyButton.setToolTipText("");
-        VerifyButton.setMargin(new java.awt.Insets(2, 20, 2, 20));
+        VerifyButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        VerifyButton.setMargin(new java.awt.Insets(8, 24, 8, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 8, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
         getContentPane().add(VerifyButton, gridBagConstraints);
 
         pack();

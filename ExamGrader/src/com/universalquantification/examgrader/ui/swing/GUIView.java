@@ -1,7 +1,6 @@
 package com.universalquantification.examgrader.ui.swing;
 
 import com.universalquantification.examgrader.controller.Controller;
-import com.universalquantification.examgrader.controller.ControllerFactory;
 import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.GradedExamCollection;
@@ -13,41 +12,29 @@ import com.universalquantification.examgrader.ui.swing.ExamPreferences;
 import com.universalquantification.examgrader.ui.swing.VerifyDialog;
 import com.universalquantification.examgrader.utils.AppFileFilter;
 import com.universalquantification.examgrader.utils.PreferencesManager;
-import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.FileNameMap;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 
 /**
  * main program
@@ -66,10 +53,14 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     public GUIView() throws IOException
     {
         controller = new Controller(this);
+        
         initComponents();
+        
         removeFileButton.setEnabled(false);
 
         setLocationRelativeTo(null);
+        
+        this.setIconImage(new ImageIcon("Icon.PNG").getImage());
     }
 
     /**
@@ -170,8 +161,14 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                 @Override
                 public void run()
                 {
-                    progressBar.setMaximum(grader.getTotalPagesToGrade());
-                    progressBar.setValue(grader.getPagesGraded());
+                    int pagesGraded = grader.getPagesGraded();
+                    
+                    if (pagesGraded != 0) {
+                        progressBar.setMaximum(grader.getTotalPagesToGrade());
+                        progressBar.setValue(pagesGraded);
+                        
+                        progressBar.setIndeterminate(false);
+                    }
                 }
             });
         }
@@ -283,6 +280,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         ButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         addFileButton.setText("Add Exam File");
+        addFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
         addFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -301,6 +299,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
         removeFileButton.setText("Remove Exam File");
         removeFileButton.setToolTipText("");
+        removeFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         removeFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
         removeFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -371,6 +370,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         getContentPane().add(rosterFileLabel, gridBagConstraints);
 
         addRosterFileButton.setText("Select Roster File");
+        addRosterFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
         addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -403,6 +403,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gradeButton.setText("Grade!");
         gradeButton.setToolTipText("");
         gradeButton.setAlignmentX(0.5F);
+        gradeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
         gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
         gradeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -522,7 +523,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             {
                 ListModel<Class<?>> model = fileList.getModel();
 
-                fileLocations = new ArrayList<String>();
+                fileLocations = new ArrayList<>();
 
                 // get all selected files
                 for (int onFile = 0; onFile < model.getSize(); onFile++)
@@ -531,7 +532,9 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                             model.getElementAt(onFile) + "").getName());
                 }
 
-                controller.grade();
+                progressBar.setIndeterminate(true);
+
+                if (!controller.grade()) progressBar.setIndeterminate(false);
 
                 return null;
             }
