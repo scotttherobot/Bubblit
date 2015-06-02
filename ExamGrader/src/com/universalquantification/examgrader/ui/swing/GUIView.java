@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -35,7 +38,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import sun.swing.ImageIconUIResource;
 
 /**
  * main program
@@ -76,6 +78,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     public void checkRoster(final Map<File, GradedExamCollection> results,
         final List<RosterEntry> roster)
     {
+        progressBar.setString("Reporting...");
         progressBar.setIndeterminate(true);
         
         final List<Student> bigList = new ArrayList<Student>();
@@ -129,6 +132,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                             }
                         }
                         progressBar.setIndeterminate(false);
+                        progressBar.setString("");
+                        progressBar.setValue(0);
                         JOptionPane.showMessageDialog(GUIView.this,
                             successMessage, "Success!",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -149,6 +154,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         if (this.isDisplayable())
         {
             progressBar.setIndeterminate(false);
+            progressBar.setString("");
             JOptionPane.showMessageDialog(this, e, "Error! ):",
                 JOptionPane.ERROR_MESSAGE);        
         }
@@ -170,14 +176,17 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                 @Override
                 public void run()
                 {
+                    progressBar.setIndeterminate(false);
                     int pagesGraded = grader.getPagesGraded();
                     
-                    if (pagesGraded != 0) {
-                        progressBar.setMaximum(grader.getTotalPagesToGrade());
-                        progressBar.setValue(pagesGraded);
-                        
-                        progressBar.setIndeterminate(false);
-                    }
+                    progressBar.setMaximum(grader.getTotalPagesToGrade());
+                    progressBar.setValue(pagesGraded);
+
+                    progressBar.setString(NumberFormat.getPercentInstance()
+                                .format(progressBar.getPercentComplete()) +
+                                " of pages graded");
+                    progressBar.setStringPainted(true);
+
                 }
             });
         }
@@ -565,8 +574,11 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                     fileLocations.add(new File(
                             model.getElementAt(onFile) + "").getName());
                 }
-
+                
                 progressBar.setIndeterminate(true);
+                
+                progressBar.setString("Preparing to grade...");
+                progressBar.setStringPainted(true);
 
                 if (!controller.grade()) progressBar.setIndeterminate(false);
 

@@ -1,0 +1,5 @@
+Exception in thread "main" java.lang.NoSuchMethodError: com.universalquantification.examgrader.controller.Controller.grade()V
+	at com.universalquantification.examgrader.ui.console.ConsoleView.<init>(ConsoleView.java:70)
+	at com.universalquantification.examgrader.AppRunner.runCli(AppRunner.java:68)
+	at com.universalquantification.examgrader.AppRunner.run(AppRunner.java:122)
+	at com.universalquantification.examgrader.AppRunner.main(AppRunner.java:149)
