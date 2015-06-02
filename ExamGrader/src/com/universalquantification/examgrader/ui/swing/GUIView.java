@@ -110,8 +110,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                         dialog.dispose();
                         controller.writeReports(results);
 
-                        Object overrideDir = PreferencesManager.getInstance()
-                                .get(PreferencesManager.kOverrideDir);
+                        String overrideDir = (String)PreferencesManager.getInstance()
+                                .get("output-path");
                         
                         for (File fileLocation : results.keySet())
                         {
@@ -124,7 +124,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                             else
                             {
                                 successMessage = successMessage.concat("\t•  "
-                                        + ((File) overrideDir).getPath()
+                                        + overrideDir
                                         + "\n");
                             }
                         }
@@ -229,7 +229,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         fileChooser = new javax.swing.JFileChooser();
@@ -259,7 +260,8 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
         fileChooser.setDialogTitle("Choose PDF or CSV");
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        jList1.setModel(new javax.swing.AbstractListModel()
+        {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -293,8 +295,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         addFileButton.setToolTipText("Add an exam file in PDF format to the queue.");
         addFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        addFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addFileButtonActionPerformed(evt);
             }
         });
@@ -312,8 +316,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         removeFileButton.setToolTipText("Remove the selected exam file from the queue.");
         removeFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         removeFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        removeFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        removeFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 removeFileButtonActionPerformed(evt);
             }
         });
@@ -344,8 +350,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         fileList.setAutoscrolls(false);
         fileList.setFixedCellHeight(24);
         fileList.setFocusCycleRoot(true);
-        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        fileList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+        {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+            {
                 fileListValueChanged(evt);
             }
         });
@@ -385,8 +393,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         addRosterFileButton.setToolTipText("Select a roster file, in TSV format, to be used for matching exams to students.");
         addRosterFileButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addRosterFileButton.setMargin(new java.awt.Insets(2, 12, 2, 12));
-        addRosterFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        addRosterFileButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 addRosterFileButtonActionPerformed(evt);
             }
         });
@@ -419,8 +429,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gradeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gradeButton.setMaximumSize(new java.awt.Dimension(110, 23));
         gradeButton.setMinimumSize(new java.awt.Dimension(110, 23));
-        gradeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        gradeButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 gradeButtonActionPerformed(evt);
             }
         });
@@ -456,8 +468,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Preferences");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 preferencesMenuItemSelected(evt);
             }
         });
@@ -467,8 +481,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -482,8 +498,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         contentsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
         contentsMenuItem.setMnemonic('c');
         contentsMenuItem.setText("User Manual");
-        contentsMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        contentsMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 contentsMenuItemActionPerformed(evt);
             }
         });
@@ -493,8 +511,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 aboutMenuItemActionPerformed(evt);
             }
         });
