@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -221,8 +221,11 @@ public class Exam
         Map<String, String> feedback = new LinkedHashMap<String, String>();
         //List<String> feedback = new ArrayList<String>();
 
+        
+        ArrayList<Integer> questions = new ArrayList<Integer>(correctAnswerMap.keySet());
+        Collections.sort(questions);
         // go through every correct question and generate feedback for it.
-        for (Integer onQ : correctAnswerMap.keySet())
+        for (Integer onQ : questions)
         {
             StringBuilder fbStr = new StringBuilder();
             
