@@ -37,7 +37,6 @@ public class ReportWriter
 
         String outputDirectory = (String)PreferencesManager.getInstance().get(
             "output-path");
-        System.out.println("out pus i" + outputDirectory);
         // make sure that the output directory exists
         if (outputDirectory == null)
         {
@@ -46,10 +45,6 @@ public class ReportWriter
         else
         {
             parent = new File(outputDirectory);
-            if(!parent.exists())
-            {
-                
-            }
             
         }
         return parent;

@@ -235,17 +235,18 @@ public class ExamPreferences extends javax.swing.JFrame
         if (folderChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
         {
             File selectedDirectory = folderChooser.getSelectedFile();
-
-            path = selectedDirectory.getAbsolutePath() + File.separator;
-            File parent = new File(path);
-            if(parent.exists())
+            String testPath = selectedDirectory.getAbsolutePath() + File.separator;
+            File testFile = new File(testPath);
+            // check if the file exists
+            if(testFile.exists())
             {
+                path = testPath;
                 OutputDirectoryLabel.setText(path);
             }
             else
             {
-                JOptionPane.showMessageDialog(this, "That path does not exist.", "Invalid path",
-                JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "That path does not exist.",
+                    "Invalid path", JOptionPane.ERROR_MESSAGE);
             }
             
         }
