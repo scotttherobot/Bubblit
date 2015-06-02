@@ -230,7 +230,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        ButtonPanel = new javax.swing.JPanel();
         addFileButton = new javax.swing.JButton();
         removeFileButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -264,7 +264,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         setTitle("Bubblit Version 2 - Universal Quantification");
         setForeground(java.awt.Color.white);
         setPreferredSize(new java.awt.Dimension(460, 420));
-        setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -277,13 +276,14 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 0);
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(240, 18));
-        jPanel1.setPreferredSize(new java.awt.Dimension(240, 18));
-        jPanel1.setRequestFocusEnabled(false);
-        jPanel1.setVerifyInputWhenFocusTarget(false);
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        ButtonPanel.setMinimumSize(new java.awt.Dimension(280, 18));
+        ButtonPanel.setPreferredSize(new java.awt.Dimension(280, 18));
+        ButtonPanel.setRequestFocusEnabled(false);
+        ButtonPanel.setVerifyInputWhenFocusTarget(false);
+        ButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         addFileButton.setText("Add Exam File");
+        addFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
         addFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFileButtonActionPerformed(evt);
@@ -297,10 +297,11 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0E-4;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 6);
-        jPanel1.add(addFileButton, gridBagConstraints);
+        ButtonPanel.add(addFileButton, gridBagConstraints);
 
         removeFileButton.setText("Remove Exam File");
         removeFileButton.setToolTipText("");
+        removeFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
         removeFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeFileButtonActionPerformed(evt);
@@ -314,18 +315,18 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0E-4;
-        jPanel1.add(removeFileButton, gridBagConstraints);
+        ButtonPanel.add(removeFileButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0E-4;
         gridBagConstraints.insets = new java.awt.Insets(8, 10, 2, 10);
-        getContentPane().add(jPanel1, gridBagConstraints);
+        getContentPane().add(ButtonPanel, gridBagConstraints);
 
         listModel = new DefaultListModel();
         fileList.setModel(listModel);
@@ -784,6 +785,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     private ExamPreferences preferencesWindow;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel ButtonPanel;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addFileButton;
     private javax.swing.JButton addRosterFileButton;
@@ -799,7 +801,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList jList1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
