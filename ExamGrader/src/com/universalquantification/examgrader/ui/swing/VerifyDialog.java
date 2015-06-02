@@ -30,6 +30,8 @@ public class VerifyDialog extends javax.swing.JFrame
 
     /**
      * Creates new form VerifyDialog
+     * @param matchResults the results from matching entries to students
+     * @param roster the roster to get student info from.
      */
     public VerifyDialog(List<Student> matchResults, List<RosterEntry> roster)
     {
@@ -51,9 +53,9 @@ public class VerifyDialog extends javax.swing.JFrame
         nameTable.getColumnModel().getColumn(4).setPreferredWidth(60);
         nameTable.getColumnModel().getColumn(5).setPreferredWidth(100);
         
-        ((DefaultTableCellRenderer)nameTable.getTableHeader().
-                getDefaultRenderer()).
-                setHorizontalAlignment(JLabel.CENTER);
+        ((DefaultTableCellRenderer)
+            nameTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(
+                JLabel.CENTER);
         
         listRoster.setEnabled(false);
         listRoster.setBackground(new Color(240, 240, 240));
@@ -66,17 +68,24 @@ public class VerifyDialog extends javax.swing.JFrame
         // saved in the instance field "chosenTableRow".
         // then disable the JList.
         
-         setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
     }
     
+    /**
+     * Add a listener that listens for verification completion
+     * @param listener the listener
+     */
     public void addFinishedListener(ActionListener listener)
     {
         VerifyButton.addActionListener(listener);  
     }
 
+    /**
+     * Represents a table model
+     */
     class MyTableModel extends AbstractTableModel
     {
-        String[] columnNames =
+        private String[] columnNames =
         {
             "First Name Image",
             "First Name",
@@ -95,11 +104,11 @@ public class VerifyDialog extends javax.swing.JFrame
         MyTableModel(List<Student> matchResults)
         {
             this.matchResults = matchResults;
-            this.buttons = new ArrayList<>();
-            
-            for (int i = 0; i < matchResults.size(); i++)
+            this.buttons = new ArrayList<JButton>();
+            // add all match results to the table
+            for (int onMatch = 0; onMatch < matchResults.size(); onMatch++)
             {
-                buttons.add(mkChooseBtn(i));
+                buttons.add(mkChooseBtn(onMatch));
             }
         }
 
@@ -121,26 +130,32 @@ public class VerifyDialog extends javax.swing.JFrame
         public Object getValueAt(int row, int col)
         {
             Student student = matchResults.get(row);
+            // show the first name image
             if (col == 0)
             {
                 return new ImageIcon(student.getFirstNameImage());
             }
+            // show the first name string
             else if (col == 1)
             {
                 return student.getFirstName();
             }
+            // show the lastname image
             else if (col == 2)
             {
                 return new ImageIcon(student.getLastNameImage());
             }
+            // show the last name string
             else if (col == 3)
             {
                 return student.getLastName();
             }
+            // show the match confidence
             else if (col == 4)
             {
                 return student.getConfidence();
             }
+            // show the button to change the matched student
             else if (col == 5)
             {  
                 return buttons.get(row);
@@ -172,10 +187,12 @@ public class VerifyDialog extends javax.swing.JFrame
 
         public void setValueAt(Object value, int row, int col)
         {
+            // set the first name string
             if (col == 1)
             {
                 matchResults.get(row).setFirstName(value.toString());
             }
+            // set the last name string
             else if (col == 3)
             {   
                 matchResults.get(row).setlastName(value.toString());
@@ -184,6 +201,9 @@ public class VerifyDialog extends javax.swing.JFrame
         }
     }
 
+    /**
+     * Renders a button in a cell
+     */
     class JTableButtonRenderer implements TableCellRenderer
     {
         private TableCellRenderer defaultRenderer;
@@ -199,6 +219,7 @@ public class VerifyDialog extends javax.swing.JFrame
                 boolean hasFocus,
                 int row, int column)
         {
+            // check thta the button can be clicked
             if (value instanceof Component)
             {
                 return (Component) value;
@@ -208,9 +229,12 @@ public class VerifyDialog extends javax.swing.JFrame
         }
     }
 
+    /**
+     * represents a column of buttons
+     */
     class ButtonColumn extends AbstractCellEditor implements TableCellEditor
     {
-        JButton tempButton;
+        private JButton tempButton;
 
         @Override
         public Object getCellEditorValue()
@@ -230,6 +254,7 @@ public class VerifyDialog extends javax.swing.JFrame
     private DefaultListModel createListModel()
     {
         DefaultListModel aModel = new DefaultListModel();
+        // add all entries to the table
         for (RosterEntry rosterEntry : roster)
         {
             aModel.addElement(rosterEntry.getLast() + ", " + rosterEntry.getFirst());
@@ -245,6 +270,9 @@ public class VerifyDialog extends javax.swing.JFrame
         return btn;
     }
 
+    /**
+     * Listens for clicks on "choose" button
+     */
     class ChooseBtnListener implements ActionListener
     {
         @Override
@@ -388,9 +416,9 @@ public class VerifyDialog extends javax.swing.JFrame
         int index = listRoster.getSelectedIndex();
         String desiredName = (String) listRoster.getSelectedValue();
         MyTableModel tModel = (MyTableModel) nameTable.getModel();
-        //TODO: We might want to search the table to see if the desiredName
-        // is already in the table, and if so, change it to "unknown".
-        if (desiredName != null) {
+        // check that we chose a desired name
+        if (desiredName != null)
+        {
             tModel.setNameFromRoster(desiredName, chosenTableRow);
 
             listRoster.setEnabled(false);
