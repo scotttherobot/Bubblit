@@ -64,11 +64,10 @@ public class ReportWriterTest extends TestCase {
 
     public void testWriteReports() throws IOException
     {
-        Path overrideDir = Files.createTempDirectory("override");;
+        Path overrideDir = Files.createTempDirectory("override");
         File dirFile = new File(overrideDir.toUri());
         dirFile.deleteOnExit();
-        PreferencesManager.getInstance().set(PreferencesManager.kOverrideDir,
-                dirFile);
+        PreferencesManager.getInstance().set("output-path", dirFile.getAbsolutePath());
         ReportWriter writer = new ReportWriter();
         
         Map<File, GradedExamCollection> map = Maps.newHashMap();
