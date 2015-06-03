@@ -17,6 +17,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The Controller mediates between a view of the app, handling input from the
@@ -26,8 +28,7 @@ import java.util.Map;
  * @author Jenny Wang
  * @version 2.0
  */
-public class Controller
-{
+public class Controller {
 
     /**
      * The InputFileList tied to the Controller.
@@ -46,10 +47,9 @@ public class Controller
      *
      * @param view the AppView to use
      */
-    public Controller(AppView view)
-    {
+    public Controller(AppView view) {
         this(view, new InputFileList(), new ReportWriter(),
-            new GraderFactory());
+                new GraderFactory());
 
     }
 
@@ -63,8 +63,7 @@ public class Controller
      * @param graderFactory factory used to build a grader
      */
     Controller(AppView view, InputFileList inputFileList,
-        ReportWriter reportWriter, GraderFactory graderFactory)
-    {
+            ReportWriter reportWriter, GraderFactory graderFactory) {
         this.appView = view;
         // INIT a new InputFileList as inputFileList field
         this.inputFileList = inputFileList;
@@ -84,14 +83,10 @@ public class Controller
      *
      * @param results the collection of results
      */
-    public void writeReports(Map<File, GradedExamCollection> results)
-    {
-        try
-        {
+    public void writeReports(Map<File, GradedExamCollection> results) {
+        try {
             reportWriter.writeReports(results);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             appView.showError("Failed to write reports.");
         }
@@ -104,35 +99,28 @@ public class Controller
      * @param rosterFile new roster file to use
      * @return whether the change was successful.
      */
-    public boolean changeRosterFile(File rosterFile)
-    {
-        try
-        {
+    public boolean changeRosterFile(File rosterFile) {
+        try {
             this.rosterEntries = RosterParser.parseRoster(new Roster(
-                new FileReader(rosterFile)));
-        }
-        catch (FileNotFoundException e)
-        {
+                    new FileReader(rosterFile)));
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             appView.showError("The file could not be found.");
             return false;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //The roster file format was incorrect
             appView.showError("You may only add roster "
-                + "files in the roster file format."
-                + "Please see the user manual available in the 'Help' "
-                + "menu \nfor more information.");
+                    + "files in the roster file format."
+                    + "Please see the user manual available in the 'Help' "
+                    + "menu \nfor more information.");
             return false;
         }
 
         // check that we actually got some roster entries
-        if (rosterEntries.isEmpty())
-        {
+        if (rosterEntries.isEmpty()) {
             appView.showError(
-                "No students were found in the roster file. Please"
-                + "try another file.");
+                    "No students were found in the roster file. Please"
+                    + "try another file.");
             return false;
         }
 
@@ -142,34 +130,32 @@ public class Controller
     /**
      * Sets the grader to grade the roster files and then generates reports for
      * the results. This sets an error on the UI if grading fails.
-     * 
+     *
      * @return Boolean representing whether or not grading has succeeded.
      */
-    public boolean grade()
-    {
+    public boolean grade() {
         // check that we have files to grade
-        if (inputFileList.getInputFiles().isEmpty())
-        {
+        if (inputFileList.getInputFiles().isEmpty()) {
             appView.showError("You must add an input file.");
-            
+
             return false;
         }
 
         // check that we have roster entries
-        if (rosterEntries.isEmpty())
-        {
+        if (rosterEntries.isEmpty()) {
             appView.showError("You must add a roster file that contains "
-                + "students.");
-            
+                    + "students.");
+
             return false;
         }
         // INIT grader
-        Grader grader = graderFactory.buildNewGrader(inputFileList,
-            rosterEntries);
-        grader.addObserver(appView);
+        Grader grader = null;
+
         //BEGIN
-        try
-        {
+        try {
+            grader = graderFactory.buildNewGrader(inputFileList,
+                    rosterEntries);
+            grader.addObserver(appView);
             // CALL grade grader RETURNING gradingResults
             Map<File, GradedExamCollection> results = grader.grade();
 
@@ -182,26 +168,33 @@ public class Controller
             // CALL writeReports reportWriter
 //            new ReportWriter(null).writeReports(results);
             grader.deleteObserver(appView);
-        }
-        // EXCEPTION GradingException
-        catch (InvalidExamException e)
-        {
-            int pageNum = grader.getPagesGraded() + 1;
-            int totalPages = grader.getTotalPagesToGrade();
-            appView.showError("Page " + pageNum + " of " + totalPages 
-                + " does not contain a valid exam. "
-                + "Please remove it from the PDF and grade again.");
-        }
-        catch (Exception e)
-        {
+        } // EXCEPTION GradingException
+        catch (InvalidExamException e) {
+            if (grader != null) {
+                int pageNum = grader.getPagesGraded() + 1;
+                int totalPages = grader.getTotalPagesToGrade();
+                appView.showError("Page " + pageNum + " of " + totalPages
+                        + " does not contain a valid exam. "
+                        + "Please remove it from the PDF and grade again.");
+            }
+            else 
+            {
+                 appView.showError("There was an error reading the PDF. Please make "
+                 + "sure its compatible with Acrobat 4.0.");
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
             appView.showError("An error occured with message: " + e.getMessage());
             // CALL setError view "Grading failed. Please check that the
             // format is correct"
-
-            grader.deleteObserver(appView);
+            if(grader != null)
+            {
+                grader.deleteObserver(appView);
+            }
+            
         }
-        
+
         return true;
         // END
     }
@@ -212,24 +205,18 @@ public class Controller
      *
      * @param inputFile input file to be processed
      */
-    public void addInputFile(File inputFile)
-    {
+    public void addInputFile(File inputFile) {
         // BEGIN
-        try
-        {
+        try {
             // CALL addInputFile inputFileList WITH inputFile
             inputFileList.addInputFile(inputFile);
 
-        }
-        // EXCEPTION PDFParseException
-        catch (PDFParseException e)
-        {
+        } // EXCEPTION PDFParseException
+        catch (PDFParseException e) {
             appView.showError("You may only add exam files of "
-                + "Portable Document Format (PDF). ");
-        }
-        // EXCEPTION IOException
-        catch (IOException e)
-        {
+                    + "Portable Document Format (PDF). ");
+        } // EXCEPTION IOException
+        catch (IOException e) {
             // CALL setError view WITH "We could not read the file."
             appView.showError("We could not read the file.");
         }
@@ -242,8 +229,7 @@ public class Controller
      * @param ndx index of the input file in the current list of input files to
      * be processed
      */
-    public void deleteInputFile(int ndx)
-    {
+    public void deleteInputFile(int ndx) {
         // CALL deleteInputFile inputFileList WITH ndx
         inputFileList.deleteInputFile(ndx);
     }

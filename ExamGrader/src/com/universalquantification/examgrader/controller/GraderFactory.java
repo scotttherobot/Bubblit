@@ -9,6 +9,7 @@ import com.universalquantification.examgrader.grader.Grader;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.InputFileList;
 import com.universalquantification.examgrader.reader.ExamReader;
+import com.universalquantification.examgrader.reader.InvalidExamException;
 import com.universalquantification.examgrader.reader.NameRecognitionGateway;
 import java.util.List;
 
@@ -24,9 +25,10 @@ public class GraderFactory
      * @param inputFileList the list of input files
      * @param rosterEntries the list of roster entries
      * @return the newly created Grader
+     * @throws com.universalquantification.examgrader.reader.InvalidExamException
      */
     public Grader buildNewGrader(InputFileList inputFileList,
-        List<RosterEntry> rosterEntries)
+        List<RosterEntry> rosterEntries) throws InvalidExamException
     {
         return new Grader(inputFileList,
             new ExamReader(new NameRecognitionGateway()), rosterEntries);
