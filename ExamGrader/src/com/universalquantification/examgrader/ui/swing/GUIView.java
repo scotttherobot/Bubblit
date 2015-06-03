@@ -718,10 +718,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                 rosterFileLabel.setText(file.getName());
             }
         }
-        else
-        {
-            System.out.println("File access cancelled by user.");
-        }
     }//GEN-LAST:event_addRosterFileButtonActionPerformed
 
     private void preferencesMenuItemSelected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesMenuItemSelected
