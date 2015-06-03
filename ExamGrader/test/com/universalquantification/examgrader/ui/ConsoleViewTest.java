@@ -34,15 +34,19 @@ public class ConsoleViewTest extends TestCase {
     
     public ConsoleViewTest(String testName) {
         super(testName);
-        
-        controllerFactory = mock(ControllerFactory.class);
-        when(controllerFactory.buildController(any(AppView.class))).
-                thenReturn(mock(Controller.class));
+       
     }
     
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        
+        Controller ct = mock(Controller.class);
+        when(ct.grade()).thenReturn(true);
+        
+        controllerFactory = mock(ControllerFactory.class);
+        when(controllerFactory.buildController(any(AppView.class))).
+                thenReturn(ct);
     }
     
     @Override
