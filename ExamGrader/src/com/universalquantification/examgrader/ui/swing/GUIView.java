@@ -53,7 +53,15 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     /**
      * Creates new form NewApplication
      */
-    public GUIView() throws IOException
+    public GUIView()
+    {
+       
+    }
+    
+    /**
+     * Starts the UI.
+     */
+    public void start() throws IOException
     {
         controller = new Controller(this);
 
@@ -848,6 +856,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                 try
                 {
                     final GUIView app = new GUIView();
+                    app.start();
                     app.setVisible(true);
 
                     Thread.setDefaultUncaughtExceptionHandler(
