@@ -55,6 +55,7 @@ public class ConsoleView implements AppView, Observer
      */
     public void run()
     {
+        // reuse old controller if already run before
         if (controller == null)
         {
             controller = controllerFactory.buildController(this);

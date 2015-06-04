@@ -54,6 +54,20 @@ public class ConsoleViewTest extends TestCase {
         super.tearDown();
     }
 
+    public void testRerun() {
+        String[] inputPaths = {
+            "a"
+        };
+        
+        StringWriter stringWriter = new StringWriter();
+        Grader grader = mock(Grader.class);
+        
+        ConsoleView consoleView = new ConsoleView("bubblit", "roster",
+                inputPaths, null, stringWriter, controllerFactory);
+        consoleView.run();
+        consoleView.run();
+    }
+
     public void testUpdate() {        
         String[] inputPaths = {
             "a"
