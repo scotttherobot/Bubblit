@@ -64,6 +64,7 @@ public class ConsoleViewTest extends TestCase {
         
         ConsoleView consoleView = new ConsoleView("bubblit", "roster",
                 inputPaths, null, stringWriter, controllerFactory);
+        consoleView.run();
         
         when(grader.getPagesGraded()).thenReturn(0, 2);
         when(grader.getTotalPagesToGrade()).thenReturn(2);
@@ -92,6 +93,7 @@ public class ConsoleViewTest extends TestCase {
         
         ConsoleView consoleView = new ConsoleView("bubblit", "roster",
                 inputPaths, "asdf", stringWriter, controllerFactory);
+        consoleView.run();
         
         assertEquals(PreferencesManager.getInstance().get(
                 PreferencesManager.kOverrideDir), new File("asdf"));
@@ -107,6 +109,7 @@ public class ConsoleViewTest extends TestCase {
         {
             ConsoleView consoleView = new ConsoleView("bubblit", "roster",
                 new String[] {}, null, writer, controllerFactory);
+            consoleView.run();
         }
         catch (RuntimeException e)
         {

@@ -68,6 +68,7 @@ public class AppRunner
         ConsoleView view = new ConsoleView(nameAndVersion, rosterFile,
                 inputFiles, outputDir, new PrintWriter(System.out),
                 new ControllerFactory());
+        view.run();
     }
 
     /**

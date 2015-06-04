@@ -22,6 +22,11 @@ import java.util.Observer;
 public class ConsoleView implements AppView, Observer
 {
     private Writer outWriter;
+    private String nameAndVersion;
+    private ControllerFactory controllerFactory;
+    private String outputDir;
+    private String rosterPath;
+    private String[] inputPaths;
     private Controller controller;
 
     /**
@@ -38,8 +43,22 @@ public class ConsoleView implements AppView, Observer
         ControllerFactory controllerFactory)
     {
         this.outWriter = outWriter;
-
-        this.controller = controllerFactory.buildController(this);
+        this.outputDir = outputDir;
+        this.rosterPath = rosterPath;
+        this.nameAndVersion = nameAndVersion;
+        this.inputPaths = inputPaths;
+        this.controllerFactory = controllerFactory;
+    }
+    
+    /**
+     * Runs the application.
+     */
+    public void run()
+    {
+        if (controller == null)
+        {
+            controller = controllerFactory.buildController(this);
+        }
 
         // make sure the output directory exists
         if (outputDir != null)
@@ -50,7 +69,7 @@ public class ConsoleView implements AppView, Observer
 
         write(nameAndVersion + "\n");
 
-        this.controller.changeRosterFile(new File(rosterPath));
+        controller.changeRosterFile(new File(rosterPath));
 
         write(rosterPath + " validated\n");
 
@@ -66,9 +85,10 @@ public class ConsoleView implements AppView, Observer
         for (File file : files)
         {
             write("Grading " + file.getName() + "\n");
-            this.controller.addInputFile(file);
-            this.controller.grade();
+            controller.addInputFile(file);
+            controller.grade();
         }
+        
     }
 
     /**
@@ -100,6 +120,7 @@ public class ConsoleView implements AppView, Observer
      * do this so just write the results.
      * @param results the graded results
      * @param roster the roster to read student information from
+     * @pre Must be called after run()
      */
     @Override
     public void checkRoster(Map<File, GradedExamCollection> results,
