@@ -33,6 +33,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class VerifyDialog extends javax.swing.JFrame
 { 
     private final List<RosterEntry> roster;
+    private boolean verificationSuccessful;
 
     /**
      * Creates new form VerifyDialog
@@ -47,6 +48,8 @@ public class VerifyDialog extends javax.swing.JFrame
         this.roster = roster;
         
         tableModel = new MyTableModel(matchResults);
+        
+        verificationSuccessful = false;
 
         initComponents();
         
@@ -95,6 +98,23 @@ public class VerifyDialog extends javax.swing.JFrame
         VerifyButton.addActionListener(listener);  
     }
 
+    /**
+     * Confirms that the results were successfully verified.
+     */
+    public void setVerificationToSuccessful() {
+        verificationSuccessful = true;
+    }
+    
+    /**
+     * Returns the verification button for the dialog.
+     * 
+     * @return The verification button for the dialog. 
+     */
+    public JButton getVerifyButton() {
+        return VerifyButton;
+    }
+
+    
     /**
      * Represents a table model
      */
@@ -284,7 +304,7 @@ public class VerifyDialog extends javax.swing.JFrame
         btn.addActionListener(new ChooseBtnListener());
         return btn;
     }
-
+    
     /**
      * Listens for clicks on "choose" button
      */
@@ -476,9 +496,11 @@ public class VerifyDialog extends javax.swing.JFrame
     }//GEN-LAST:event_CloseButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        JOptionPane.showMessageDialog(this, "Verification was cancelled, the"
-            + " resulting scores files were not generated.",
-            "Notice", JOptionPane.INFORMATION_MESSAGE);
+        if (!verificationSuccessful) {
+            JOptionPane.showMessageDialog(this, "Verification was cancelled, "
+                    + "the resulting scores files were not generated.",
+                "Notice", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_formWindowClosed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

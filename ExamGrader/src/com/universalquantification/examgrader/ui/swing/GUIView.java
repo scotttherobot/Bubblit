@@ -107,17 +107,11 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                 try {
                     final VerifyDialog dialog = new VerifyDialog(bigList, roster);
                     
-                    ActionListener finishedListener = new ActionListener()
-                    {
-                        
-                        @Override
-                        public void actionPerformed(ActionEvent evt)
-                        {
-                            String successMessage
-                                    = "Success! Your score reports have been written to:\n\n";
-                            
-                            dialog.setVisible(false);
-                            dialog.dispose();
+                    dialog.getVerifyButton().addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            String successMessage = "Success! Your score "
+                                    + "reports have been written to:\n\n";
+                                                        
                             controller.writeReports(results);
                             
                             progressBar.setStringPainted(true);
@@ -153,9 +147,23 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                                     progressBar.setValue(0); 
                                 }
                             });
+                            
+                            dialog.setVerificationToSuccessful();
+                            
+                            dialog.dispose();
+                                                        
                             JOptionPane.showMessageDialog(GUIView.this,
                                     successMessage, "Success!",
                                     JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    });;
+                    ActionListener finishedListener = new ActionListener()
+                    {
+                        
+                        @Override
+                        public void actionPerformed(ActionEvent evt)
+                        {
+                            
                             
                         }
                     };
@@ -577,10 +585,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             File file = fileChooser.getSelectedFile();
 
             controller.addInputFile(file);
-        }
-        else
-        {
-            System.out.println("File access cancelled by user.");
         }
     }//GEN-LAST:event_addFileButtonActionPerformed
 
