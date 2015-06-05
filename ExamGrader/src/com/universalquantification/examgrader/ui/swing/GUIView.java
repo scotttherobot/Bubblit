@@ -109,6 +109,10 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                     
                     dialog.getVerifyButton().addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            dialog.setVerificationToSuccessful();
+                            
+                            dialog.dispose();
+                            
                             String successMessage = "Success! Your score "
                                     + "reports have been written to:\n\n";
                                                         
@@ -147,10 +151,6 @@ public class GUIView extends javax.swing.JFrame implements AppView,
                                     progressBar.setValue(0); 
                                 }
                             });
-                            
-                            dialog.setVerificationToSuccessful();
-                            
-                            dialog.dispose();
                                                         
                             JOptionPane.showMessageDialog(GUIView.this,
                                     successMessage, "Success!",
