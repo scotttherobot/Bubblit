@@ -15,25 +15,32 @@ import javax.swing.table.TableColumn;
 import com.universalquantification.examgrader.grader.RosterEntry;
 import com.universalquantification.examgrader.models.Student;
 import java.awt.Color;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * Partially functioning prototype of a verify dialog.
+ * 
  * @author jdalbey
  */
 public class VerifyDialog extends javax.swing.JFrame
 { 
-    private List<RosterEntry> roster;
+    private final List<RosterEntry> roster;
 
     /**
      * Creates new form VerifyDialog
-     * @param matchResults the results from matching entries to students
-     * @param roster the roster to get student info from.
+     * 
+     * @param matchResults The results from matching entries to students
+     * @param roster The roster to get student info from.
+     * 
+     * @throws java.io.IOException
      */
-    public VerifyDialog(List<Student> matchResults, List<RosterEntry> roster)
+    public VerifyDialog(List<Student> matchResults, List<RosterEntry> roster) throws IOException
     {
         this.roster = roster;
         
@@ -69,6 +76,12 @@ public class VerifyDialog extends javax.swing.JFrame
         // then disable the JList.
         
         setLocationRelativeTo(null);
+        
+        // Redundancy needed for some Windows platforms
+        String rs = "resources/Icon.PNG";
+        InputStream stream = this.getClass().getResourceAsStream(rs);
+        ImageIcon appIcon = new ImageIcon(ImageIO.read(stream));
+        this.setIconImage(appIcon.getImage());
     }
     
     /**

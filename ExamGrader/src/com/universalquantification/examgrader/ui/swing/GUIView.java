@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -40,7 +42,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 /**
- * main program
+ * The main GUI window for the Bubblit application.
  *
  * @author Luis
  */
@@ -70,6 +72,7 @@ public class GUIView extends javax.swing.JFrame implements AppView,
         removeFileButton.setEnabled(false);
 
         setLocationRelativeTo(null);
+        
         String rs = "resources/Icon.PNG";
         InputStream stream = this.getClass().getResourceAsStream(rs);
         ImageIcon appIcon = new ImageIcon(ImageIO.read(stream));
@@ -111,59 +114,63 @@ public class GUIView extends javax.swing.JFrame implements AppView,
             public void run()
             {
 
-                final VerifyDialog dialog = new VerifyDialog(bigList, roster);
-
-                ActionListener finishedListener = new ActionListener()
-                {
-
-                    @Override
-                    public void actionPerformed(ActionEvent evt)
+                try {
+                    final VerifyDialog dialog = new VerifyDialog(bigList, roster);
+                    
+                    ActionListener finishedListener = new ActionListener()
                     {
-                        String successMessage
-                                = "Success! Your score reports have been written to:\n\n";
-
-                        dialog.setVisible(false);
-                        dialog.dispose();
-                        controller.writeReports(results);
-
-                        String overrideDir = 
-                            (String) PreferencesManager.getInstance().get("output-path");
-
-                        for (File fileLocation : results.keySet())
+                        
+                        @Override
+                        public void actionPerformed(ActionEvent evt)
                         {
-                            if (overrideDir == null)
+                            String successMessage
+                                    = "Success! Your score reports have been written to:\n\n";
+                            
+                            dialog.setVisible(false);
+                            dialog.dispose();
+                            controller.writeReports(results);
+                            
+                            String overrideDir =
+                                    (String) PreferencesManager.getInstance().get("output-path");
+                            
+                            for (File fileLocation : results.keySet())
                             {
-                                successMessage = successMessage.concat("\t•  "
-                                        + fileLocation.getParent()
-                                        + "\n");
+                                if (overrideDir == null)
+                                {
+                                    successMessage = successMessage.concat("\t•  "
+                                            + fileLocation.getParent()
+                                            + "\n");
+                                }
+                                else
+                                {
+                                    successMessage = successMessage.concat("\t•  "
+                                            + overrideDir
+                                            + "\n");
+                                }
                             }
-                            else
+                            java.awt.EventQueue.invokeLater(new Runnable()
                             {
-                                successMessage = successMessage.concat("\t•  "
-                                        + overrideDir
-                                        + "\n");
-                            }
+                                @Override
+                                public void run()
+                                {
+                                    progressBar.setIndeterminate(false);
+                                    progressBar.setString("");
+                                    progressBar.setValue(0);
+                                }
+                            });
+                            JOptionPane.showMessageDialog(GUIView.this,
+                                    successMessage, "Success!",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            
                         }
-                        java.awt.EventQueue.invokeLater(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                progressBar.setIndeterminate(false);
-                                progressBar.setString("");
-                                progressBar.setValue(0);
-                            }
-                        });
-                        JOptionPane.showMessageDialog(GUIView.this,
-                                successMessage, "Success!",
-                                JOptionPane.INFORMATION_MESSAGE);
-
-                    }
-                };
-
-                dialog.addFinishedListener(finishedListener);
-
-                dialog.setVisible(true);
+                    };
+                    
+                    dialog.addFinishedListener(finishedListener);
+                    
+                    dialog.setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(GUIView.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -731,7 +738,11 @@ public class GUIView extends javax.swing.JFrame implements AppView,
     private void preferencesMenuItemSelected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesMenuItemSelected
         if (preferencesWindow == null)
         {
-            preferencesWindow = new ExamPreferences(this);
+            try {
+                preferencesWindow = new ExamPreferences(this);
+            } catch (IOException ex) {
+                Logger.getLogger(GUIView.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         preferencesWindow.setVisible(true);

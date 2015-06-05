@@ -6,6 +6,9 @@ import com.universalquantification.examgrader.utils.PreferencesManager;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -24,16 +27,24 @@ public class ExamPreferences extends javax.swing.JFrame
     /**
      * Creates new form ExamPreferences
      *
-     * @param application the application to use
+     * @param application The GUIView application parent.
+     * 
+     * @throws java.io.IOException
      */
-    public ExamPreferences(GUIView application)
+    public ExamPreferences(GUIView application) throws IOException
     {
         initComponents();
 
         this.setIconImage(new ImageIcon("Icon.PNG").getImage());
 
         setLocationRelativeTo(null);
-
+        
+        // Redundancy needed for some Windows platforms
+        String rs = "resources/Icon.PNG";
+        InputStream stream = this.getClass().getResourceAsStream(rs);
+        ImageIcon appIcon = new ImageIcon(ImageIO.read(stream));
+        this.setIconImage(appIcon.getImage());
+        
         this.application = application;
 
         folderChooser = new JFileChooser();
