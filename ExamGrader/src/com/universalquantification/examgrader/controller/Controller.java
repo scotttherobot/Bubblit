@@ -122,8 +122,8 @@ public class Controller
         catch (Exception e)
         {
             //The roster file format was incorrect
-            appView.showError("You may only add roster "
-                + "files in the roster file format."
+            appView.showError("You may only add roster files in the "
+                + "Tab Separated Values (TSV) format. "
                 + "Please see the user manual available in the 'Help' "
                 + "menu \nfor more information.");
             return false;

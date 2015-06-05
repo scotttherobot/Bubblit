@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -319,6 +321,7 @@ public class VerifyDialog extends javax.swing.JFrame
         listRoster = new javax.swing.JList();
         jSeparator2 = new javax.swing.JSeparator();
         VerifyButton = new javax.swing.JButton();
+        CloseButton = new javax.swing.JButton();
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -331,9 +334,14 @@ public class VerifyDialog extends javax.swing.JFrame
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Bubblit Verification Dialog");
         setPreferredSize(new java.awt.Dimension(1280, 720));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         InstructionLabel.setText("Please verify that the students have been correctly identified.");
@@ -374,14 +382,13 @@ public class VerifyDialog extends javax.swing.JFrame
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
-        NameSelectionPane.setMinimumSize(new java.awt.Dimension(0, 0));
-        NameSelectionPane.setPreferredSize(new java.awt.Dimension(240, 66));
+        NameSelectionPane.setMinimumSize(new java.awt.Dimension(200, 0));
+        NameSelectionPane.setPreferredSize(new java.awt.Dimension(240, 6));
         NameSelectionPane.setRequestFocusEnabled(false);
 
         listRoster.setModel(createListModel());
         listRoster.setToolTipText("This panel allows you set names to exams via the \"Choose Name\" button. ");
         listRoster.setAutoscrolls(false);
-        listRoster.setPreferredSize(new java.awt.Dimension(200, 0));
         listRoster.setRequestFocusEnabled(false);
         listRoster.setValueIsAdjusting(true);
         listRoster.setVisibleRowCount(4);
@@ -414,14 +421,37 @@ public class VerifyDialog extends javax.swing.JFrame
         VerifyButton.setText("Accept");
         VerifyButton.setToolTipText("Accept that these name-to-exam pairs will be used for scoring results.");
         VerifyButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        VerifyButton.setMargin(new java.awt.Insets(8, 24, 8, 24));
+        VerifyButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        VerifyButton.setMaximumSize(new java.awt.Dimension(85, 35));
+        VerifyButton.setNextFocusableComponent(CloseButton);
+        VerifyButton.setPreferredSize(new java.awt.Dimension(85, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 102);
         getContentPane().add(VerifyButton, gridBagConstraints);
+
+        CloseButton.setText("Cancel");
+        CloseButton.setToolTipText("Does the same thing as the close button!");
+        CloseButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CloseButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        CloseButton.setMaximumSize(new java.awt.Dimension(85, 35));
+        CloseButton.setMinimumSize(new java.awt.Dimension(85, 35));
+        CloseButton.setPreferredSize(new java.awt.Dimension(85, 35));
+        CloseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CloseButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+        getContentPane().add(CloseButton, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -441,7 +471,18 @@ public class VerifyDialog extends javax.swing.JFrame
         }
     }//GEN-LAST:event_listRosterValueChanged
 
+    private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_CloseButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        JOptionPane.showMessageDialog(this, "Verification was cancelled, the"
+            + " resulting scores files were not generated.",
+            "Notice", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_formWindowClosed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CloseButton;
     private javax.swing.JLabel InstructionLabel;
     private javax.swing.JScrollPane NameSelectionPane;
     private javax.swing.JButton VerifyButton;
