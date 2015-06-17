@@ -1,0 +1,3 @@
+[submodule "BubblitUserManual"]
+	path = BubblitUserManual
+	url = git@github.com:Cytancy/BubblitUserManual.git
